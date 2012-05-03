@@ -11,8 +11,7 @@ INC_DIR = $(TOPDIR)/inc
 
 PROGRAM = extractor
 
-#SOURCES := $(shell find $(SRC_DIR) -type f -name "*.cpp")
-SOURCES = ./src/RootWriter.cpp ./src/Event.cpp ./src/Particle.cpp ./src/Extractor.cpp ./src/Prefifi.cpp
+SOURCES := $(shell find $(SRC_DIR) -type f -name "*.cpp")
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
 #INCLUDES := $(shell find $(INC_DIR) -type f -name "*.h" | grep -v "linkdef.h" | grep -v "Prefifi.h")
 #INCLUDES += $(INC_DIR)/linkdef.h
@@ -38,6 +37,6 @@ clean:
 	@rm -rf $(PROGRAM) ./lib
 
 realclean:
-	@rm $(PROGRAM)
-	@rm -r ./lib
-	@rm Dict.*
+	@rm -f $(PROGRAM)
+	@rm -rf ./lib
+	@rm -f Dict.*

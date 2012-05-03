@@ -24,20 +24,30 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	float 	phi_b[3][12],
 		phiSq_b[3][12];
 	int	n_b[3][12];
-	string targettype;
+	TString targettype;
 
-	bool with_fifivsbpar;
-	if(fifivsbpar.compare("NONE"))
+	bool with_fifivsbpar = false;
+	if(!(fifivsbpar.compare("NONE")))
 		with_fifivsbpar = false;
-	else if(fifivsbpar.compare("EMPTY"))
+	else if(!(fifivsbpar.compare("EMPTY")))
 	{
 		with_fifivsbpar = true;
 		targettype = "EMPTY";
 	}
-	else if(fifivsbpar.compare("FULL"))
+	else if(!(fifivsbpar.compare("FULL")))
 	{
 		with_fifivsbpar = true;
 		targettype = "FULL";
+	}
+	else if(!(fifivsbpar.compare("VENUS")))
+	{
+		with_fifivsbpar = true;
+		targettype = "VENUS";
+	}
+	else if(!(fifivsbpar.compare("VGCALOR")))
+	{
+		with_fifivsbpar = true;
+		targettype = "VGCALOR";
 	}
 	else
 	{
@@ -47,14 +57,17 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 	if(with_fifivsbpar)
 	{
-		char prefifi_b_filename[50];
-		char ch_targettype[targettype.size()];
-
-		targettype.copy(ch_targettype, targettype.size());
-
+		TString prefifi_b_filename;
+		
+		cout << "Saving to:" << endl;
 		for(int j=0; j<12; j++)
 		{
-			sprintf(prefifi_b_filename,"PhiphiVsBpar_%s/B%d.txt",ch_targettype, j);
+			prefifi_b_filename = "PhiphiVsBpar_";
+			prefifi_b_filename += targettype;
+			prefifi_b_filename += "/B";
+			prefifi_b_filename += j;
+			prefifi_b_filename += ".txt";
+			cout << prefifi_b_filename << endl;
 			prefifi_b_file[j].open(prefifi_b_filename);             
 		}
 		
