@@ -16,7 +16,7 @@
 
 using namespace std;
 
-void mainanalyze(TTree *particletree, const unsigned zeros, bool write_to_root, const float energy, string fifivsbpar)
+void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const float energy, string fifivsbpar)
 {
 	ofstream prefifi_file("Pre_fifi.txt");
 	ofstream debugfile("Debug.txt");
@@ -269,7 +269,7 @@ void mainanalyze(TTree *particletree, const unsigned zeros, bool write_to_root, 
 	//event--;
 
 	cout << endl << "Filling with zeros" << endl;
-	unsigned zero_event = 0;
+	int zero_event = 0;
 	
 	if(with_fifivsbpar)
 	{
