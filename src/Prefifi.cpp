@@ -95,7 +95,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	int	n[3];
 	UInt_t	i,j;
 
-	unsigned correlations = 0, pos_correlations = 0, neg_correlations = 0, all_correlations = 0;;
+	unsigned correlations = 0, pos_correlations = 0, neg_correlations = 0, all_correlations = 0, unlike_correlations = 0;
 
 	Event *event = new Event();
 	Particle *particleA, *particleB;
@@ -120,6 +120,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	for(ev=0; ev<treeNentries; ++ev)
 	{
 		particletree->GetEntry(ev);
+		debugfile << event->GetNpa() << endl;
 
 		phi[Neg] = phi[All] = phi[Pos]= 0.;
 		phiSq[Neg] = phiSq[All] = phiSq[Pos] = 0.;
@@ -207,6 +208,12 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 							++neg_correlations;
 							histos.histDyDphiNeg->Fill(angle_diff, y_diff);
 							histos.histDetaDphiNeg->Fill(angle_diff, eta_diff);
+					}
+					else
+					{
+						++unlike_correlations;
+						histos.histDyDphiUnlike->Fill(angle_diff, y_diff);
+						histos.histDetaDphiUnlike->Fill(angle_diff, eta_diff);
 					}
 				}
 			}

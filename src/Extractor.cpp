@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 {
 	if(argc < 5)
 	{
-		cout << "USAGE: extractor <path_to_particle_base> <energy> <root_file> <fifivsbpar=NONE>" << endl;
+		cout << "USAGE: extractor <path_to_particle_tree> <energy> <root_file> <fifivsbpar=NONE>" << endl;
 		return -1;
 	}
 

@@ -39,9 +39,11 @@ void Histos::init()
 	histDyDphiAll = new TH2F("histDyDphiAll","#Deltay versus #Delta#phi;#Delta#phi [rad]; #Deltay_{#pi}",200,0,3.2,200,0,6.5);
 	histDyDphiPos = new TH2F("histDyDphiPos","#Deltay versus #Delta#phi, pos.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,3.2,200,0,6.5);
 	histDyDphiNeg = new TH2F("histDyDphiNeg","#Deltay versus #Delta#phi, neg.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,3.2,200,0,6.5);
+	histDyDphiUnlike = new TH2F("histDyDphiUnlike","#Deltay versus #Delta#phi, unlike-sign;#Delta#phi [rad]; #Deltay_{#pi}",200,0,3.2,200,0,6.5);
 	histDetaDphiAll = new TH2F("histDetaDphiAll","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta versus #Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
+	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta versus #Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 }
 
 void Histos::write()
@@ -78,9 +80,11 @@ void Histos::write()
 	histDyDphiAll->Write();
 	histDyDphiPos->Write();
 	histDyDphiNeg->Write();
+	histDyDphiUnlike->Write();
 	histDetaDphiAll->Write();
 	histDetaDphiPos->Write();
 	histDetaDphiNeg->Write();
+	histDetaDphiUnlike->Write();
 }
 
 void Histos::clear()
@@ -117,9 +121,11 @@ void Histos::clear()
 	delete histDyDphiAll;
 	delete histDyDphiPos;
 	delete histDyDphiNeg;
+	delete histDyDphiUnlike;
 	delete histDetaDphiAll;
 	delete histDetaDphiPos;
 	delete histDetaDphiNeg;
+	delete histDetaDphiUnlike;
 }	
 
 float mk_angle3(float  angle1)
