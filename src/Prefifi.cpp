@@ -73,6 +73,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		
 	}
 
+	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
+
 	float 	phi[3],
 		phiSq[3],
 		angle,
@@ -80,7 +82,9 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 		p1, p2,
 		pt1, pt2,
+		pz_cms1, pz_cms2,
 		E1, E2,
+		gbE1, gbE2,
 		theta1, theta2,
 		y1, y2,
 		eta1, eta2,
@@ -110,7 +114,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	if(write_to_root)
 	{
 		histos.init();
-		particles.init(&histos);
+		particles.init(&histos, energy);
 		particles.newEvent(true);
 		root_output_file = new TFile("Extracted_distributions.root","recreate");
 	}
@@ -163,24 +167,46 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
 
-					E1 = TMath::Sqrt(0.1396*0.1396+p1*p1);
-					E2 = TMath::Sqrt(0.1396*0.1396+p2*p2);
+					//cout << "p1 = " << p1 << " | p2 = " << p2 << endl;
 
-					y1 = lab2cms(0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())),energy);
-					y2 = lab2cms(0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())),energy);
+					E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
+					E2 = TMath::Sqrt(pion_mass*pion_mass+p2*p2);
 
-					theta1 = TMath::ATan(pt1/(particleA->GetPz()));
-					theta2 = TMath::ATan(pt2/(particleB->GetPz()));
+					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
 
-					if(theta1 > 0)
+					gbE1 = particles.calc_gbE(E1);
+					gbE2 = particles.calc_gbE(E2);
+
+					//cout << "Beta factor: " << particles.beta << endl;
+					//cout << "Gamma factor: " << particles.gamma << endl;
+					//cout << "gamma*beta*E1: " << gbE1 << " | gamma*beta*E2: " << gbE2 << endl;
+
+					pz_cms1 = particles.gamma*particleA->GetPz() - gbE1;
+					pz_cms2 = particles.gamma*particleB->GetPz() - gbE2;
+
+					//cout << "pz_cms1 = " << pz_cms1 << " | pz_cms2 = " << pz_cms2 << endl;
+
+					y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
+					y2 = 0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())) - particles.y_cms;
+
+					//cout << "y1 = " << y1 << " | y2 = " << y2 << endl;
+
+					theta1 = TMath::Abs(TMath::ATan2(pt1,pz_cms1));
+					theta2 = TMath::Abs(TMath::ATan2(pt2,pz_cms2));
+
+					//cout << "theta1 = " << theta1 << " | theta2 = " << theta2 << endl;
+
+					if(theta1 != 0)
 						eta1 = -TMath::Log(0.5*theta1);
 					else
 						eta1 = 0.;
 
-					if(theta2 > 0)
+					if(theta2 != 0)
 						eta2 = -TMath::Log(0.5*theta2);
 					else
 						eta2 = 0.;
+
+					//cout << "eta1 = " << eta1 << " | eta2 = " << eta2 << endl;
 
 					positive_j = particleB->isPositive();
 					angle_j = TMath::ATan2(particleB->GetPy(), particleB->GetPx());
@@ -280,7 +306,9 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			}
 		}
 
-		cout << "\rEvent " << ev;
+		//cout << "\rEvent " << ev;
+		if(!(ev%5000))
+			cout << "Event " << ev << endl;
 
 		if(write_to_root)
 			particles.newEvent();
