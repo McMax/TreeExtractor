@@ -27,8 +27,18 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	TString targettype;
 
 	bool with_fifivsbpar = false;
+	bool with_prefifi = true;
+
 	if(!(fifivsbpar.compare("NONE")))
+	{
 		with_fifivsbpar = false;
+		with_prefifi = false;
+	}
+	else if(!(fifivsbpar.compare("PREFIFI")))
+	{
+		with_fifivsbpar = false;
+		with_prefifi = true;
+	}
 	else if(!(fifivsbpar.compare("EMPTY")))
 	{
 		with_fifivsbpar = true;
@@ -124,8 +134,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	for(ev=0; ev<treeNentries; ++ev)
 	{
 		particletree->GetEntry(ev);
-		debugfile << event->GetNpa() << endl;
-
+		//debugfile << event->GetNpa() << endl;
+		
 		phi[Neg] = phi[All] = phi[Pos]= 0.;
 		phiSq[Neg] = phiSq[All] = phiSq[Pos] = 0.;
 		n[Neg] = n[All] = n[Pos] = 0;
@@ -140,7 +150,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			}
 		}
 
-		debugfile << ev << endl;
+		debugfile << ev << "\t" << event->GetNpa() << endl;
 
 		for(i=0; i<event->GetNpa(); ++i)
 		{
@@ -148,11 +158,13 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			if(write_to_root)
 				particles.analyze(particleA,energy);
 
+			debugfile << particleA->GetPx() << "\t" << particleA->GetPy() << "\t" << particleA->GetPz() << endl;
+
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 			//angle = TMath::Sqrt(TMath::Power(particleA->GetPx(),2) + TMath::Power(particleA->GetPy(),2));
 			positive = particleA->isPositive();
 
-			debugfile << (positive ? "1 " : "-1 ") << angle << endl;
+			//debugfile << (positive ? "1 " : "-1 ") << angle << endl;
 			if(!positive)
 				angle3 = mk_angle3(angle);
 
@@ -196,15 +208,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 					//cout << "theta1 = " << theta1 << " | theta2 = " << theta2 << endl;
 
-					if(theta1 != 0)
-						eta1 = -TMath::Log(0.5*theta1);
-					else
-						eta1 = 0.;
-
-					if(theta2 != 0)
-						eta2 = -TMath::Log(0.5*theta2);
-					else
-						eta2 = 0.;
+					eta1 = -TMath::Log(TMath::Tan(0.5*theta1));
+					eta2 = -TMath::Log(TMath::Tan(0.5*theta2));
 
 					//cout << "eta1 = " << eta1 << " | eta2 = " << eta2 << endl;
 
@@ -290,11 +295,14 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			}
 		}	
 
-		debugfile << "----------" << endl;
+		//debugfile << "----------" << endl;
 
-		prefifi_file << 10000 << "\t\t" << n[All] << "\t" << phi[All] << "\t" << phiSq[All] << "\t\t" << 
+		if(with_prefifi)
+		{
+			prefifi_file << 10000 << "\t\t" << n[All] << "\t" << phi[All] << "\t" << phiSq[All] << "\t\t" << 
 				n[Neg] << "\t" << phi[Neg] << "\t" << phiSq[Neg] << "\t\t" << 
 				n[Pos] << "\t" << phi[Pos] << "\t" << phiSq[Pos] << endl;
+		}
 
 		if(with_fifivsbpar)
 		{
@@ -336,7 +344,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		for(j=0; j<12; ++j)
 			prefifi_b_file[j].close();
 	}
-	else
+	else if(with_prefifi)
 	{
 		while(zero_event+1 <= zeros)
 		{
@@ -347,15 +355,17 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		cout << endl << (ev+zero_event) << " lines written to Pre_fifi" << endl;
 		prefifi_file.close();
 	}
+	else
+		prefifi_file.close();
 
 	cout << "All correlations: " << all_correlations << endl;
 	cout << "Like-sign correlations: " << correlations << endl;
 	cout << "Positive correlations: " << pos_correlations << endl;
 	cout << "Negative correlations: " << neg_correlations << endl;
-	debugfile << "All correlations: " << all_correlations << endl;
-	debugfile << "\nLike-sign correlations: " << correlations << endl;
-	debugfile << "Positive correlations: " << pos_correlations << endl;
-	debugfile << "Negative correlations: " << neg_correlations << endl;
+	//debugfile << "All correlations: " << all_correlations << endl;
+	//debugfile << "\nLike-sign correlations: " << correlations << endl;
+	//debugfile << "Positive correlations: " << pos_correlations << endl;
+	//debugfile << "Negative correlations: " << neg_correlations << endl;
 
 	debugfile.close();
 

@@ -4,6 +4,7 @@
 #include "TH1I.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TCutG.h"
 #include "Particle.h"
 
 const float pion_mass = 0.13957018; //GeV/c^2
@@ -65,6 +66,7 @@ struct Histos
 	TH2F	*histPtVsYAll;
 	TH2F	*histPtVsYNeg;
 	TH2F	*histPtVsYPos;
+	TH2F	*histPtVsYAll_cut;
 
 	TH2F	*histPhiVsPtAll;
 	TH2F	*histPhiVsPtPos;
@@ -79,9 +81,12 @@ struct Histos
 	TH2F	*histDetaDphiNeg;
 	TH2F	*histDetaDphiUnlike;
 
+	TCutG	*cutg;
+
 	void init();
 	void write();
 	void clear();
+	void init_dEdxCut();
 };
 
 class Particles //klasa liczaca zmienne wszystkich trackow w JEDNYM evencie
