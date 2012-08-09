@@ -13,13 +13,14 @@
 #include "RootWriter.h"
 #include "Event.h"
 #include "Particle.h"
+#include "AccCut.h"
 
 using namespace std;
 
 void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const float energy, string fifivsbpar)
 {
 	ofstream prefifi_file("Pre_fifi.txt");
-	ofstream debugfile("Debug.txt");
+	//ofstream debugfile("Debug.txt");
 	ofstream prefifi_b_file[12];
 	float 	phi_b[3][12],
 		phiSq_b[3][12];
@@ -28,6 +29,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 	bool with_fifivsbpar = false;
 	bool with_prefifi = true;
+	bool with_na61accmap = true;
 
 	if(!(fifivsbpar.compare("NONE")))
 	{
@@ -120,6 +122,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	Particles particles;
 	Histos histos;
 	TFile *root_output_file;
+	AccCut acceptance_cut;
 
 	if(write_to_root)
 	{
@@ -127,6 +130,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		particles.init(&histos, energy);
 		particles.newEvent(true);
 		root_output_file = new TFile("Extracted_distributions.root","recreate");
+		if(with_na61accmap)
+			acceptance_cut.openMapFile("acceptance-map-medium.root",energy);
 	}
 
 	cout << "Writing events" << endl;
@@ -150,17 +155,32 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			}
 		}
 
-		debugfile << ev << "\t" << event->GetNpa() << endl;
+		//debugfile << ev << "\t" << event->GetNpa() << endl;
+
+		//Przypadki do liczenia korelacji
+		//if((event->GetNneg()) < 7)
+		//	continue;
 
 		for(i=0; i<event->GetNpa(); ++i)
 		{
 			particleA = event->GetParticle(i);
+			if((TMath::Abs(particleA->GetBx()) > 4) || (TMath::Abs(particleA->GetBy()) > 2))
+				continue;
+			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
+			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
+			E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
+			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
+			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
+
+			//CIECIE NA AKCEPTACJE
+		//	if(!(acceptance_cut.acceptanceCut(particleA->GetPx(),pt1,particleA->GetCharge(),y1,angle)))
+		//		continue;
+
 			if(write_to_root)
 				particles.analyze(particleA,energy);
 
-			debugfile << particleA->GetPx() << "\t" << particleA->GetPy() << "\t" << particleA->GetPz() << endl;
+			//debugfile << particleA->GetPx() << "\t" << particleA->GetPy() << "\t" << particleA->GetPz() << endl;
 
-			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 			//angle = TMath::Sqrt(TMath::Power(particleA->GetPx(),2) + TMath::Power(particleA->GetPy(),2));
 			positive = particleA->isPositive();
 
@@ -173,15 +193,14 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				for(j=i+1; j<event->GetNpa(); ++j)
 				{
 					particleB = event->GetParticle(j);
-					pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
+					if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
+						continue;
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
 
-					p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
 
 					//cout << "p1 = " << p1 << " | p2 = " << p2 << endl;
 
-					E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
 					E2 = TMath::Sqrt(pion_mass*pion_mass+p2*p2);
 
 					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
@@ -198,8 +217,13 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 					//cout << "pz_cms1 = " << pz_cms1 << " | pz_cms2 = " << pz_cms2 << endl;
 
-					y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 					y2 = 0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())) - particles.y_cms;
+
+					angle_j = TMath::ATan2(particleB->GetPy(), particleB->GetPx());
+
+					//CIECIE NA AKCEPTACJE
+		//			if(!(acceptance_cut.acceptanceCut(particleB->GetPx(),pt2,particleB->GetCharge(),y2,angle_j)))
+		//				continue;
 
 					//cout << "y1 = " << y1 << " | y2 = " << y2 << endl;
 
@@ -212,9 +236,9 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					eta2 = -TMath::Log(TMath::Tan(0.5*theta2));
 
 					//cout << "eta1 = " << eta1 << " | eta2 = " << eta2 << endl;
+					//cout << "angle1 = " << angle << " | angle2 = " << angle_j << endl;
 
 					positive_j = particleB->isPositive();
-					angle_j = TMath::ATan2(particleB->GetPy(), particleB->GetPx());
 					if((angle_diff = TMath::Abs(angle-angle_j)) > TMath::Pi())
 						angle_diff = 2*TMath::Pi()-angle_diff;
 					y_diff = TMath::Abs(y1-y2);
@@ -367,7 +391,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	//debugfile << "Positive correlations: " << pos_correlations << endl;
 	//debugfile << "Negative correlations: " << neg_correlations << endl;
 
-	debugfile.close();
+	//debugfile.close();
 
 	if(write_to_root)
 	{
@@ -377,6 +401,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		histos.histCharged->ResetStats();
 		histos.histChargedNeg->ResetStats();
 		histos.histChargedPos->ResetStats();
+		root_output_file->cd();
 		histos.write();
 		histos.clear();
 		root_output_file->Close();

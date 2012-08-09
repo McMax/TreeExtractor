@@ -59,8 +59,8 @@ void Histos::init()
 	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta versus #Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta versus #Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
-	init_dEdxCut();
-	histPtVsYAll_cut = new TH2F("histPtVsYAll_cut","TEST CUT! Trans. momentum vs. rapidity; y^{*}_{#pi}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
+	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,149,40,0,2,36,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,149,40,0,2,36,-TMath::Pi(),TMath::Pi());
 }
 
 void Histos::write()
@@ -117,7 +117,8 @@ void Histos::write()
 	histDetaDphiPos->Write();
 	histDetaDphiNeg->Write();
 	histDetaDphiUnlike->Write();
-	histPtVsYAll_cut->Write();
+	histPartPopMatrixPos->Write();
+	histPartPopMatrixNeg->Write();
 }
 
 void Histos::clear()
@@ -174,22 +175,8 @@ void Histos::clear()
 	delete histDetaDphiPos;
 	delete histDetaDphiNeg;
 	delete histDetaDphiUnlike;
-	delete histPtVsYAll_cut;
-}	
-
-void Histos::init_dEdxCut()
-{
-   cutg = new TCutG("cutg",8);
-   cutg->SetVarX("pT");
-   cutg->SetVarY("y");
-   cutg->SetPoint(0,2.43182,0.66375);
-   cutg->SetPoint(1,2.23864,0.54375);
-   cutg->SetPoint(2,2.78409,0.2175);
-   cutg->SetPoint(3,3.10227,0.0675);
-   cutg->SetPoint(4,3.94318,0.00749999);
-   cutg->SetPoint(5,3.97727,0.165);
-   cutg->SetPoint(6,2.55682,0.6975);
-   cutg->SetPoint(7,2.43182,0.66375);
+	delete histPartPopMatrixPos;	
+	delete histPartPopMatrixNeg;	
 }
 
 float mk_angle3(float  angle1)
@@ -319,10 +306,6 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histPtVsYAll->Fill(y_pi_cms, pt);
 	histos->histPhiVsPtAll->Fill(angle, pt);
 
-	//TESTING GRAPHICAL CUT
-	//if(histos->cutg->IsInside(y_pi_cms,pt) == 0)
-	//	histos->histPtVsYAll_cut->Fill(y_pi_cms,pt);
-
 	if(particle->isPositive())
 	{
 		n[Pos]++;
@@ -339,6 +322,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histThetaPos->Fill(theta);
 		histos->histThetacmsPos->Fill(theta_cms);
 		histos->histPhiVsPtPos->Fill(angle, pt);
+		histos->histPartPopMatrixPos->Fill(p,pt,angle);
 	}
 	else
 	{
@@ -358,6 +342,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histEtacmsNeg->Fill(eta_cms);
 		histos->histPtVsYNeg->Fill(y_pi_cms,pt);
 		histos->histPhiVsPtNeg->Fill(angle, pt);
+		histos->histPartPopMatrixNeg->Fill(p,pt,angle);
 	}
 }
 

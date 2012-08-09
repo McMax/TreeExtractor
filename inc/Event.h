@@ -9,6 +9,8 @@ class Event : public TObject
 	UInt_t fEid;			//Event number
 	TClonesArray* fParticles;	//Array of particles
 	UInt_t fNpa;
+	UInt_t fNneg;
+	UInt_t fNpos;
 
 public:
 	Event();
@@ -17,6 +19,8 @@ public:
 	
 	inline UInt_t GetEid() const { return fEid;}
 	inline UInt_t GetNpa() const { return fNpa;}
+	inline UInt_t GetNneg() const { return fNneg;}
+	inline UInt_t GetNpos() const { return fNpos;}
 	inline TClonesArray* GetParticles() const { return fParticles;}
 	Particle* GetParticle(UInt_t) const;
 
@@ -25,7 +29,6 @@ public:
 	void AddParticle(UInt_t, Short_t, Float_t, Float_t, Float_t, Float_t, Float_t);
 	void AddParticle(const Particle&);
 	void Clear();
-	void RemoveAt(Int_t);
 
 	ClassDef(Event,1);
 };
