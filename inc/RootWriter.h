@@ -81,12 +81,14 @@ struct Histos
 	TH2F	*histDetaDphiNeg;
 	TH2F	*histDetaDphiUnlike;
 
+	TH2F	*histDedx;
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;
 
 	void init();
 	void write();
 	void clear();
+	void LogBinning(TH2F*);
 };
 
 class Particles //klasa liczaca zmienne wszystkich trackow w JEDNYM evencie

@@ -59,8 +59,28 @@ void Histos::init()
 	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta versus #Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta versus #Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
-	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,149,40,0,2,36,-TMath::Pi(),TMath::Pi());
-	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,149,40,0,2,36,-TMath::Pi(),TMath::Pi());
+	histDedx = new TH2F("histDedx","dE/dx",400,-3,3,400,0,3);
+	LogBinning(histDedx);
+	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
+}
+
+void Histos::LogBinning(TH2F *hist)
+{
+	TAxis *axis = hist->GetXaxis();
+	int bins = axis->GetNbins();
+
+	Axis_t from = axis->GetXmin();
+	Axis_t to = axis->GetXmax();
+	Axis_t width = (to - from) / bins;
+	Axis_t *new_bins = new Axis_t[bins + 1];
+
+	for (int i = 0; i <= bins; i++) {
+		new_bins[i] = TMath::Power(10, from + i * width);
+
+	}
+	axis->Set(bins, new_bins);
+	delete new_bins;
 }
 
 void Histos::write()
@@ -117,6 +137,7 @@ void Histos::write()
 	histDetaDphiPos->Write();
 	histDetaDphiNeg->Write();
 	histDetaDphiUnlike->Write();
+	histDedx->Write();
 	histPartPopMatrixPos->Write();
 	histPartPopMatrixNeg->Write();
 }
@@ -175,6 +196,7 @@ void Histos::clear()
 	delete histDetaDphiPos;
 	delete histDetaDphiNeg;
 	delete histDetaDphiUnlike;
+	delete histDedx;
 	delete histPartPopMatrixPos;	
 	delete histPartPopMatrixNeg;	
 }
@@ -305,6 +327,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histPzcmsAll->Fill(pz_cms);
 	histos->histPtVsYAll->Fill(y_pi_cms, pt);
 	histos->histPhiVsPtAll->Fill(angle, pt);
+	histos->histDedx->Fill(p,particle->GetdEdx());
 
 	if(particle->isPositive())
 	{
@@ -327,6 +350,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	else
 	{
 		n[Neg]++;
+		histos->histPartPopMatrixNeg->Fill(p,pt,angle);
 		histos->histAngleNegNotrot->Fill(angle);	//bez obrotu (angle2)
 		angle = mk_angle3(angle);			//obrot (angle2 -> angle3)
 		histos->histAngleNeg->Fill(angle);		//z obrotem (angle3)
@@ -342,7 +366,6 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histEtacmsNeg->Fill(eta_cms);
 		histos->histPtVsYNeg->Fill(y_pi_cms,pt);
 		histos->histPhiVsPtNeg->Fill(angle, pt);
-		histos->histPartPopMatrixNeg->Fill(p,pt,angle);
 	}
 }
 
