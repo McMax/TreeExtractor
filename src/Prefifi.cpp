@@ -17,7 +17,12 @@
 
 using namespace std;
 
-void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const float energy, string fifivsbpar)
+void mainanalyzePb(TTree *particletree, const float energy, const TString output_filename="Extracted_distributions.root")
+{
+	mainanalyze(particletree, 0, true, energy, "NONE", output_filename);
+}
+
+void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const float energy, string fifivsbpar, const TString output_filename="Extracted_distributions.root")
 {
 	ofstream prefifi_file("Pre_fifi.txt");
 	//ofstream debugfile("Debug.txt");
@@ -129,7 +134,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		histos.init();
 		particles.init(&histos, energy);
 		particles.newEvent(true);
-		root_output_file = new TFile("Extracted_distributions.root","recreate");
+		root_output_file = new TFile(output_filename,"recreate");
 		if(with_na61accmap)
 			acceptance_cut.openMapFile("acceptance-map-medium.root",energy);
 	}
@@ -339,7 +344,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		}
 
 		//cout << "\rEvent " << ev;
-		if(!(ev%5000))
+		if(!(ev%50))
 			cout << "Event " << ev << endl;
 
 		if(write_to_root)
