@@ -82,6 +82,8 @@ struct Histos
 	TH2F	*histDetaDphiUnlike;
 
 	TH2F	*histDedx;
+	TH2F	*histDedxPos;
+	TH2F	*histDedxNeg;
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;
 

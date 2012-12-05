@@ -13,7 +13,6 @@
 #include "RootWriter.h"
 #include "Event.h"
 #include "Particle.h"
-#include "AccCut.h"
 
 using namespace std;
 
@@ -127,7 +126,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	Particles particles;
 	Histos histos;
 	TFile *root_output_file;
-	AccCut acceptance_cut;
 
 	if(write_to_root)
 	{
@@ -135,8 +133,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		particles.init(&histos, energy);
 		particles.newEvent(true);
 		root_output_file = new TFile(output_filename,"recreate");
-		if(with_na61accmap)
-			acceptance_cut.openMapFile("acceptance-map-medium.root",energy);
 	}
 
 	cout << "Writing events" << endl;
@@ -176,10 +172,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
-
-			//CIECIE NA AKCEPTACJE
-		//	if(!(acceptance_cut.acceptanceCut(particleA->GetPx(),pt1,particleA->GetCharge(),y1,angle)))
-		//		continue;
 
 			if(write_to_root)
 				particles.analyze(particleA,energy);
@@ -225,10 +217,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					y2 = 0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())) - particles.y_cms;
 
 					angle_j = TMath::ATan2(particleB->GetPy(), particleB->GetPx());
-
-					//CIECIE NA AKCEPTACJE
-		//			if(!(acceptance_cut.acceptanceCut(particleB->GetPx(),pt2,particleB->GetCharge(),y2,angle_j)))
-		//				continue;
 
 					//cout << "y1 = " << y1 << " | y2 = " << y2 << endl;
 
