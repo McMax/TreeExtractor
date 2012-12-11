@@ -84,6 +84,19 @@ struct Histos
 	TH2F	*histDedx;
 	TH2F	*histDedxPos;
 	TH2F	*histDedxNeg;
+
+	TH2F	*histDedxVtpc1;
+	TH2F	*histDedxVtpc1Pos;
+	TH2F	*histDedxVtpc1Neg;
+
+	TH2F	*histDedxVtpc2;
+	TH2F	*histDedxVtpc2Pos;
+	TH2F	*histDedxVtpc2Neg;
+
+	TH2F	*histDedxMtpc;
+	TH2F	*histDedxMtpcPos;
+	TH2F	*histDedxMtpcNeg;
+
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;
 

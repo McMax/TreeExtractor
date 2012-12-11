@@ -32,9 +32,9 @@ Particle* Event::GetParticle(UInt_t index) const
 	return ((Particle*) fParticles->At(index));
 }
 
-void Event::AddParticle(UInt_t pid, Short_t charge, Float_t bx, Float_t by, Float_t px, Float_t py, Float_t pz, Float_t dedx)
+void Event::AddParticle(UInt_t pid, Short_t charge, Float_t bx, Float_t by, Float_t px, Float_t py, Float_t pz, Float_t dedx, Float_t dedx_vtpc1, Float_t dedx_vtpc2, Float_t dedx_mtpc)
 {
-	new ((*fParticles) [fNpa]) Particle(pid, charge, bx, by, px, py, pz, dedx);
+	new ((*fParticles) [fNpa]) Particle(pid, charge, bx, by, px, py, pz, dedx, dedx_vtpc1, dedx_vtpc2, dedx_mtpc);
 	fNpa++;
 	(charge < 0) ? (fNneg++) : (fNpos++);
 }
