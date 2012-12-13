@@ -395,9 +395,9 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histPhiVsPtPos->Fill(angle, pt);
 		histos->histPartPopMatrixPos->Fill(p,pt,angle);
 		histos->histDedxPos->Fill(p,particle->GetdEdx());
-		histos->histDedxVtpc1Pos->Fill(p,particle->GetdEdx());
-		histos->histDedxVtpc2Pos->Fill(p,particle->GetdEdx());
-		histos->histDedxMtpcPos->Fill(p,particle->GetdEdx());
+		histos->histDedxVtpc1Pos->Fill(p,particle->GetdEdxVtpc1());
+		histos->histDedxVtpc2Pos->Fill(p,particle->GetdEdxVtpc2());
+		histos->histDedxMtpcPos->Fill(p,particle->GetdEdxMtpc1());
 	}
 	else
 	{
@@ -419,9 +419,9 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histPtVsYNeg->Fill(y_pi_cms,pt);
 		histos->histPhiVsPtNeg->Fill(angle, pt);
 		histos->histDedxNeg->Fill(p,particle->GetdEdx());
-		histos->histDedxVtpc1Neg->Fill(p,particle->GetdEdx());
-		histos->histDedxVtpc2Neg->Fill(p,particle->GetdEdx());
-		histos->histDedxMtpcNeg->Fill(p,particle->GetdEdx());
+		histos->histDedxVtpc1Neg->Fill(p,particle->GetdEdxVtpc1());
+		histos->histDedxVtpc2Neg->Fill(p,particle->GetdEdxVtpc2());
+		histos->histDedxMtpcNeg->Fill(p,particle->GetdEdxMtpc());
 	}
 }
 
