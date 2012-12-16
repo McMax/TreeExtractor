@@ -397,7 +397,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histDedxPos->Fill(p,particle->GetdEdx());
 		histos->histDedxVtpc1Pos->Fill(p,particle->GetdEdxVtpc1());
 		histos->histDedxVtpc2Pos->Fill(p,particle->GetdEdxVtpc2());
-		histos->histDedxMtpcPos->Fill(p,particle->GetdEdxMtpc1());
+		histos->histDedxMtpcPos->Fill(p,particle->GetdEdxMtpc());
 	}
 	else
 	{
