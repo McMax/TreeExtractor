@@ -16,10 +16,16 @@ class Particle : public TObject
 	Float_t fdEdxVtpc1;	//Particle energy loss in VTPC1
 	Float_t fdEdxVtpc2;	//Particle energy loss in VTPC2
 	Float_t fdEdxMtpc;	//Particle energy loss in MTPCs
+	Int_t fNdEdx;		//Number of dE/dx points
+	Int_t fNdEdxVtpc1;	//Number of dE/dx points in VTPC1
+	Int_t fNdEdxVtpc2;	//Number of dE/dx points in VTPC2
+	Int_t fNdEdxMtpc;	//Number of dE/dx points in MTPCs
 
 public:
 	Particle();
-	Particle(UInt_t, Short_t, Float_t, Float_t, Float_t, Float_t, Float_t, Float_t, Float_t, Float_t, Float_t);
+	Particle(UInt_t, Short_t, Float_t, Float_t, Float_t, Float_t, Float_t,
+		Float_t, Float_t, Float_t, Float_t,	//dE/dx global, dE/dx VTPC1, dE/dx VTPC2, dE/dx MTPC
+		Int_t, Int_t, Int_t, Int_t);	//number of dE/dx points: global, VTPC1, VTPC2, MTPC
 	virtual ~Particle();
 
 	inline UInt_t GetPid() const { return fPid;}
@@ -34,6 +40,10 @@ public:
 	inline Float_t GetdEdxVtpc1() const { return fdEdxVtpc1;}
 	inline Float_t GetdEdxVtpc2() const { return fdEdxVtpc2;}
 	inline Float_t GetdEdxMtpc() const { return fdEdxMtpc;}
+	inline Int_t GetNdEdx() const { return fNdEdx;}
+	inline Int_t GetNdEdxVtpc1() const { return fNdEdxVtpc1;}
+	inline Int_t GetNdEdxVtpc2() const { return fNdEdxVtpc2;}
+	inline Int_t GetNdEdxMtpc() const { return fNdEdxMtpc;}
 	
 	inline void SetPid(UInt_t pid) { fPid = pid;}
 	inline void SetCharge(Short_t charge) { fCharge = charge;}
@@ -46,6 +56,10 @@ public:
 	inline void SetdEdxVtpc1(Float_t dedx_vtpc1) { fdEdxVtpc1 = dedx_vtpc1;}
 	inline void SetdEdxVtpc2(Float_t dedx_vtpc2) { fdEdxVtpc2 = dedx_vtpc2;}
 	inline void SetdEdxMtpc(Float_t dedx_mtpc) { fdEdxMtpc = dedx_mtpc;}
+	inline void SetNdEdx(Int_t ndedx) { fNdEdx = ndedx;}
+	inline void SetNdEdxVtpc1(Int_t ndedx_vtpc1) { fNdEdxVtpc1 = ndedx_vtpc1;}
+	inline void SetNdEdxVtpc2(Int_t ndedx_vtpc2) { fNdEdxVtpc2 = ndedx_vtpc2;}
+	inline void SetNdEdxMtpc(Int_t ndedx_mtpc) { fNdEdxMtpc = ndedx_mtpc;}
 
 	ClassDef(Particle,1);
 };
