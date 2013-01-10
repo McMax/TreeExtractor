@@ -73,18 +73,18 @@ void Histos::init()
 	histDedxMtpcPos = new TH2F("histDedxMtpcPos","dE/dx (MTPC, pos. charged)",400,-3,3,400,0,3);
 	histDedxMtpcNeg = new TH2F("histDedxMtpcNeg","dE/dx (MTPC, neg. charged)",400,-3,3,400,0,3);
 
-	histnDedx = new TH1I("histnDedx","No. of dE/dx points (all charged)",51,0,50);
-	histnDedxPos = new TH1I("histnDedxPos","No. of dE/dx points (pos. charged)",51,0,50);
-	histnDedxNeg = new TH1I("histnDedxNeg","No. of dE/dx points (neg. charged)",51,0,50);
-	histnDedxVtpc1 = new TH1I("histnDedxVtpc1","No. of dE/dx points (VTPC1, all charged)",51,0,50);
-	histnDedxVtpc1Pos = new TH1I("histnDedxVtpc1Pos","No. of dE/dx points (VTPC1, pos. charged)",51,0,50);
-	histnDedxVtpc1Neg = new TH1I("histnDedxVtpc1Neg","No. of dE/dx points (VTPC1, neg. charged)",51,0,50);
-	histnDedxVtpc2 = new TH1I("histnDedxVtpc2","No. of dE/dx points (VTPC2, all charged)",51,0,50);
-	histnDedxVtpc2Pos = new TH1I("histnDedxVtpc2Pos","No. of dE/dx points (VTPC2, pos. charged)",51,0,50);
-	histnDedxVtpc2Neg = new TH1I("histnDedxVtpc2Neg","No. of dE/dx points (VTPC2, neg. charged)",51,0,50);
-	histnDedxMtpc = new TH1I("histnDedxMtpc","No. of dE/dx points (MTPC, all charged)",51,0,50);
-	histnDedxMtpcPos = new TH1I("histnDedxMtpcPos","No. of dE/dx points (MTPC, pos. charged)",51,0,50);
-	histnDedxMtpcNeg = new TH1I("histnDedxMtpcNeg","No. of dE/dx points (MTPC, neg. charged)",51,0,50);
+	histnDedx = new TH1I("histnDedx","No. of dE/dx points (all charged)",201,0,200);
+	histnDedxPos = new TH1I("histnDedxPos","No. of dE/dx points (pos. charged)",201,0,200);
+	histnDedxNeg = new TH1I("histnDedxNeg","No. of dE/dx points (neg. charged)",201,0,200);
+	histnDedxVtpc1 = new TH1I("histnDedxVtpc1","No. of dE/dx points (VTPC1, all charged)",101,0,100);
+	histnDedxVtpc1Pos = new TH1I("histnDedxVtpc1Pos","No. of dE/dx points (VTPC1, pos. charged)",101,0,100);
+	histnDedxVtpc1Neg = new TH1I("histnDedxVtpc1Neg","No. of dE/dx points (VTPC1, neg. charged)",101,0,100);
+	histnDedxVtpc2 = new TH1I("histnDedxVtpc2","No. of dE/dx points (VTPC2, all charged)",101,0,100);
+	histnDedxVtpc2Pos = new TH1I("histnDedxVtpc2Pos","No. of dE/dx points (VTPC2, pos. charged)",101,0,100);
+	histnDedxVtpc2Neg = new TH1I("histnDedxVtpc2Neg","No. of dE/dx points (VTPC2, neg. charged)",101,0,100);
+	histnDedxMtpc = new TH1I("histnDedxMtpc","No. of dE/dx points (MTPC, all charged)",151,0,150);
+	histnDedxMtpcPos = new TH1I("histnDedxMtpcPos","No. of dE/dx points (MTPC, pos. charged)",151,0,150);
+	histnDedxMtpcNeg = new TH1I("histnDedxMtpcNeg","No. of dE/dx points (MTPC, neg. charged)",151,0,150);
 
 	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
 	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
