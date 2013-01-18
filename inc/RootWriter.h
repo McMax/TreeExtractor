@@ -85,6 +85,10 @@ struct Histos
 	TH2F	*histDedxPos;
 	TH2F	*histDedxNeg;
 
+	TH2F	*histDedxSelected;
+	TH2F	*histDedxPosSelected;
+	TH2F	*histDedxNegSelected;
+
 	TH2F	*histDedxVtpc1;
 	TH2F	*histDedxVtpc1Pos;
 	TH2F	*histDedxVtpc1Neg;
@@ -146,6 +150,7 @@ public:
 	void init(Histos *histograms, const float ener);
 	void newEvent(bool first = false);
 	void analyze(Particle*, const int);
+	Float_t choose_dedx(Particle*);
 	static float inline calc_beta(float ener) { return (ener/(ener+nucleon_mass));}
 	static float inline calc_gamma(float ener) { return (1/(TMath::Sqrt(1-TMath::Power(calc_beta(ener),2))));}
 	float inline calc_gbE(float ener) { return (gamma_beta_e = beta*gamma*ener);}
