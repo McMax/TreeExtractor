@@ -54,7 +54,4 @@ int main(int argc, char** argv)
 		cout << "OR: extractor <path_to_particle_tree> <energy> <outputfile>" << endl;
 		return -1;
 	}
-
-
-
 }
