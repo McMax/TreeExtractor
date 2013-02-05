@@ -60,6 +60,9 @@ void Histos::init()
 	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta versus #Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
 
+	histDedx_DyDphiUnlike_05 = new TH2F("histDedx_DyDphiUnlike_05","dE/dx (#Deltay vs. #Delta#phi, unlike-sign < (0.5,0.5));#Delta#phi [rad]; #Deltay", 400,-3,3,400,0,3);
+	histDedx_DetaDphiUnlike_05 = new TH2F("histDedx_DetaDphiUnlike_05","dE/dx (#Delta#eta vs. #Delta#phi, unlike-sign < (0.5,0.5));#Delta#phi [rad]; #Delta#eta", 400,-3,3,400,0,3);
+
 	histDedx = new TH2F("histDedx","dE/dx (all charged)",400,-3,3,400,0,3);
 	histDedxPos = new TH2F("histDedxPos","dE/dx (pos. charged)",400,-3,3,400,0,3);
 	histDedxNeg = new TH2F("histDedxNeg","dE/dx (neg. charged)",400,-3,3,400,0,3);
@@ -107,6 +110,7 @@ void Histos::init()
 	LogBinning(histDedxMtpc);
 	LogBinning(histDedxMtpcPos);
 	LogBinning(histDedxMtpcNeg);
+	LogBinning(histDedx_DetaDphiUnlike_05);
 }
 
 void Histos::LogBinning(TH2F *hist)
@@ -181,6 +185,8 @@ void Histos::write()
 	histDetaDphiPos->Write();
 	histDetaDphiNeg->Write();
 	histDetaDphiUnlike->Write();
+	histDedx_DyDphiUnlike_05->Write();
+	histDedx_DetaDphiUnlike_05->Write();
 	histDedx->Write();
 	histDedxPos->Write();
 	histDedxNeg->Write();
@@ -266,6 +272,8 @@ void Histos::clear()
 	delete histDetaDphiPos;
 	delete histDetaDphiNeg;
 	delete histDetaDphiUnlike;
+	delete histDedx_DyDphiUnlike_05;
+	delete histDedx_DetaDphiUnlike_05;
 	delete histDedx;
 	delete histDedxPos;
 	delete histDedxNeg;
@@ -378,7 +386,8 @@ void Particles::newEvent(bool first)
 	}
 }
 
-Float_t Particles::choose_dedx(Particle *particle)
+/*
+static Float_t Particles::choose_dedx(Particle *particle)
 {
 	static Int_t vtpc1_part;
 	static Int_t vtpc2_part;
@@ -404,7 +413,7 @@ Float_t Particles::choose_dedx(Particle *particle)
 			return (particle->GetdEdxVtpc1());
 	}
 }
-
+*/
 
 void Particles::analyze(Particle *particle, const int ener)
 {

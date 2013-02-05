@@ -262,6 +262,17 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 						++unlike_correlations;
 						histos.histDyDphiUnlike->Fill(angle_diff, y_diff);
 						histos.histDetaDphiUnlike->Fill(angle_diff, eta_diff);
+				//--------------- Pb+Pb 00R - histogram to check unlike-sign correlations near deta-dphi = (0,0)-(0.5,0.5)
+						if((angle_diff < 0.5) && (eta_diff < 0.5))
+						{
+							histos.histDedx_DetaDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
+							histos.histDedx_DetaDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+						}
+						if((angle_diff < 0.5) && (y_diff < 0.5))
+						{
+							histos.histDedx_DyDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
+							histos.histDedx_DyDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+						}
 					}
 				}
 			}
@@ -282,8 +293,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				phi[Neg] += angle3;
 				phiSq[Neg] += angle3*angle3;
 			}
-
-			
 
 			if(with_fifivsbpar)
 			{

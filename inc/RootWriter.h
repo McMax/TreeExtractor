@@ -80,6 +80,8 @@ struct Histos
 	TH2F	*histDetaDphiPos;
 	TH2F	*histDetaDphiNeg;
 	TH2F	*histDetaDphiUnlike;
+	TH2F	*histDedx_DetaDphiUnlike_05;
+	TH2F	*histDedx_DyDphiUnlike_05;
 
 	TH2F	*histDedx;
 	TH2F	*histDedxPos;
@@ -150,7 +152,33 @@ public:
 	void init(Histos *histograms, const float ener);
 	void newEvent(bool first = false);
 	void analyze(Particle*, const int);
-	Float_t choose_dedx(Particle*);
+	static Float_t choose_dedx(Particle* particle)
+	{
+		static Int_t vtpc1_part;
+		static Int_t vtpc2_part;
+		static Int_t mtpc_part;
+
+		vtpc1_part = particle->GetNdEdxVtpc1();
+		vtpc2_part = particle->GetNdEdxVtpc2();
+		mtpc_part = particle->GetNdEdxMtpc();
+
+		//std::cout << "dE/dx: VTPC1 part: " << vtpc1_part << "\tVTPC2 part: " << vtpc2_part << "\tMTPC part: " << mtpc_part << std::endl;
+		if((vtpc1_part == 0) && (vtpc2_part == 0) && (mtpc_part == 0))
+		{
+			std::cout << "WTF? Particle with no dE/dx information!" << std::endl;
+			return 0;
+		}
+		else
+		{
+			if(mtpc_part > 0)
+				return (particle->GetdEdxMtpc());
+			else if(vtpc2_part >= vtpc1_part)
+				return (particle->GetdEdxVtpc2());
+			else
+				return (particle->GetdEdxVtpc1());
+		}
+	}
+	
 	static float inline calc_beta(float ener) { return (ener/(ener+nucleon_mass));}
 	static float inline calc_gamma(float ener) { return (1/(TMath::Sqrt(1-TMath::Power(calc_beta(ener),2))));}
 	float inline calc_gbE(float ener) { return (gamma_beta_e = beta*gamma*ener);}
