@@ -158,6 +158,10 @@ public:
 		static Int_t vtpc2_part;
 		static Int_t mtpc_part;
 
+		vtpc1_part = 0;
+		vtpc2_part = 0;
+		mtpc_part = 0;
+
 		vtpc1_part = particle->GetNdEdxVtpc1();
 		vtpc2_part = particle->GetNdEdxVtpc2();
 		mtpc_part = particle->GetNdEdxMtpc();

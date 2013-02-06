@@ -110,6 +110,7 @@ void Histos::init()
 	LogBinning(histDedxMtpc);
 	LogBinning(histDedxMtpcPos);
 	LogBinning(histDedxMtpcNeg);
+	LogBinning(histDedx_DyDphiUnlike_05);
 	LogBinning(histDedx_DetaDphiUnlike_05);
 }
 
