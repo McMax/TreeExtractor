@@ -114,6 +114,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 	int	n[3];
 	UInt_t	i,j;
+	UInt_t	pid1, pid2;
 
 	unsigned correlations = 0, pos_correlations = 0, neg_correlations = 0, all_correlations = 0, unlike_correlations = 0;
 
@@ -126,6 +127,11 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	Particles particles;
 	Histos histos;
 	TFile *root_output_file;
+
+//	to dE/dx of particles in (deta,dphi) < (0.5,0.5)
+	std::set<UInt_t> unique_particles_y;
+	std::set<UInt_t> unique_particles_eta;
+	std::set<UInt_t>::iterator iter_y, iter_eta;
 
 	if(write_to_root)
 	{
@@ -162,9 +168,14 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		//if((event->GetNneg()) < 7)
 		//	continue;
 
+		unique_particles_y.clear();
+		unique_particles_eta.clear();
+
 		for(i=0; i<event->GetNpa(); ++i)
 		{
 			particleA = event->GetParticle(i);
+			pid1 = particleA->GetPid();
+
 			if((TMath::Abs(particleA->GetBx()) > 4) || (TMath::Abs(particleA->GetBy()) > 2))
 				continue;
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
@@ -190,6 +201,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				for(j=i+1; j<event->GetNpa(); ++j)
 				{
 					particleB = event->GetParticle(j);
+					pid2 = particleB->GetPid();
+
 					if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
 						continue;
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
@@ -265,13 +278,31 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				//--------------- Pb+Pb 00R - histogram to check unlike-sign correlations near deta-dphi = (0,0)-(0.5,0.5)
 						if((angle_diff < 0.5) && (eta_diff < 0.5))
 						{
-							histos.histDedx_DetaDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
-							histos.histDedx_DetaDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+							if(unique_particles_eta.find(pid1) != unique_particles_eta.end())
+							{
+								histos.histDedx_DetaDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
+								unique_particles_eta.insert(pid1);
+							}
+							
+							if(unique_particles_eta.find(pid2) != unique_particles_eta.end())
+							{
+								histos.histDedx_DetaDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+								unique_particles_eta.insert(pid2);
+							}
 						}
 						if((angle_diff < 0.5) && (y_diff < 0.5))
 						{
-							histos.histDedx_DyDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
-							histos.histDedx_DyDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+							if(unique_particles_y.find(pid1) != unique_particles_y.end())
+							{
+								histos.histDedx_DyDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
+								unique_particles_y.insert(pid1);
+							}
+
+							if(unique_particles_y.find(pid2) != unique_particles_y.end())
+							{
+								histos.histDedx_DyDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+								unique_particles_y.insert(pid2);
+							}
 						}
 					}
 				}
