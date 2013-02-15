@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <set>
 #include <string>
 #include <cstdio>
 
@@ -131,7 +132,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 //	to dE/dx of particles in (deta,dphi) < (0.5,0.5)
 	std::set<UInt_t> unique_particles_y;
 	std::set<UInt_t> unique_particles_eta;
-	std::set<UInt_t>::iterator iter_y, iter_eta;
+	std::set<UInt_t> unique_particles_y_025;
+	std::set<UInt_t> unique_particles_eta_025;
 
 	if(write_to_root)
 	{
@@ -170,6 +172,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 		unique_particles_y.clear();
 		unique_particles_eta.clear();
+		unique_particles_y_025.clear();
+		unique_particles_eta_025.clear();
 
 		for(i=0; i<event->GetNpa(); ++i)
 		{
@@ -278,13 +282,13 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				//--------------- Pb+Pb 00R - histogram to check unlike-sign correlations near deta-dphi = (0,0)-(0.5,0.5)
 						if((angle_diff < 0.5) && (eta_diff < 0.5))
 						{
-							if(unique_particles_eta.find(pid1) != unique_particles_eta.end())
+							if(unique_particles_eta.find(pid1) == unique_particles_eta.end())
 							{
 								histos.histDedx_DetaDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
 								unique_particles_eta.insert(pid1);
 							}
 							
-							if(unique_particles_eta.find(pid2) != unique_particles_eta.end())
+							if(unique_particles_eta.find(pid2) == unique_particles_eta.end())
 							{
 								histos.histDedx_DetaDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
 								unique_particles_eta.insert(pid2);
@@ -292,16 +296,44 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 						}
 						if((angle_diff < 0.5) && (y_diff < 0.5))
 						{
-							if(unique_particles_y.find(pid1) != unique_particles_y.end())
+							if(unique_particles_y.find(pid1) == unique_particles_y.end())
 							{
 								histos.histDedx_DyDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
 								unique_particles_y.insert(pid1);
 							}
 
-							if(unique_particles_y.find(pid2) != unique_particles_y.end())
+							if(unique_particles_y.find(pid2) == unique_particles_y.end())
 							{
 								histos.histDedx_DyDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
 								unique_particles_y.insert(pid2);
+							}
+						}
+						if((angle_diff < 0.25) && (eta_diff < 0.25))
+						{
+							if(unique_particles_eta_025.find(pid1) == unique_particles_eta_025.end())
+							{
+								histos.histDedx_DetaDphiUnlike_025->Fill(p1,particles.choose_dedx(particleA));
+								unique_particles_eta_025.insert(pid1);
+							}
+							
+							if(unique_particles_eta_025.find(pid2) == unique_particles_eta_025.end())
+							{
+								histos.histDedx_DetaDphiUnlike_025->Fill(p2,particles.choose_dedx(particleB));
+								unique_particles_eta_025.insert(pid2);
+							}
+						}
+						if((angle_diff < 0.25) && (y_diff < 0.25))
+						{
+							if(unique_particles_y_025.find(pid1) == unique_particles_y_025.end())
+							{
+								histos.histDedx_DyDphiUnlike_025->Fill(p1,particles.choose_dedx(particleA));
+								unique_particles_y_025.insert(pid1);
+							}
+
+							if(unique_particles_y_025.find(pid2) == unique_particles_y_025.end())
+							{
+								histos.histDedx_DyDphiUnlike_025->Fill(p2,particles.choose_dedx(particleB));
+								unique_particles_y_025.insert(pid2);
 							}
 						}
 					}

@@ -62,6 +62,8 @@ void Histos::init()
 
 	histDedx_DyDphiUnlike_05 = new TH2F("histDedx_DyDphiUnlike_05","dE/dx (#Deltay vs. #Delta#phi, unlike-sign < (0.5,0.5));#Delta#phi [rad]; #Deltay", 400,-3,3,400,0,3);
 	histDedx_DetaDphiUnlike_05 = new TH2F("histDedx_DetaDphiUnlike_05","dE/dx (#Delta#eta vs. #Delta#phi, unlike-sign < (0.5,0.5));#Delta#phi [rad]; #Delta#eta", 400,-3,3,400,0,3);
+	histDedx_DyDphiUnlike_025 = new TH2F("histDedx_DyDphiUnlike_025","dE/dx (#Deltay vs. #Delta#phi, unlike-sign < (0.25,0.25));#Delta#phi [rad]; #Deltay", 400,-3,3,400,0,3);
+	histDedx_DetaDphiUnlike_025 = new TH2F("histDedx_DetaDphiUnlike_025","dE/dx (#Delta#eta vs. #Delta#phi, unlike-sign < (0.25,0.25));#Delta#phi [rad]; #Delta#eta", 400,-3,3,400,0,3);
 
 	histDedx = new TH2F("histDedx","dE/dx (all charged)",400,-3,3,400,0,3);
 	histDedxPos = new TH2F("histDedxPos","dE/dx (pos. charged)",400,-3,3,400,0,3);
@@ -112,6 +114,8 @@ void Histos::init()
 	LogBinning(histDedxMtpcNeg);
 	LogBinning(histDedx_DyDphiUnlike_05);
 	LogBinning(histDedx_DetaDphiUnlike_05);
+	LogBinning(histDedx_DyDphiUnlike_025);
+	LogBinning(histDedx_DetaDphiUnlike_025);
 }
 
 void Histos::LogBinning(TH2F *hist)
@@ -188,6 +192,8 @@ void Histos::write()
 	histDetaDphiUnlike->Write();
 	histDedx_DyDphiUnlike_05->Write();
 	histDedx_DetaDphiUnlike_05->Write();
+	histDedx_DyDphiUnlike_025->Write();
+	histDedx_DetaDphiUnlike_025->Write();
 	histDedx->Write();
 	histDedxPos->Write();
 	histDedxNeg->Write();
@@ -275,6 +281,8 @@ void Histos::clear()
 	delete histDetaDphiUnlike;
 	delete histDedx_DyDphiUnlike_05;
 	delete histDedx_DetaDphiUnlike_05;
+	delete histDedx_DyDphiUnlike_025;
+	delete histDedx_DetaDphiUnlike_025;
 	delete histDedx;
 	delete histDedxPos;
 	delete histDedxNeg;

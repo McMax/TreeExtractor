@@ -82,6 +82,8 @@ struct Histos
 	TH2F	*histDetaDphiUnlike;
 	TH2F	*histDedx_DetaDphiUnlike_05;
 	TH2F	*histDedx_DyDphiUnlike_05;
+	TH2F	*histDedx_DetaDphiUnlike_025;
+	TH2F	*histDedx_DyDphiUnlike_025;
 
 	TH2F	*histDedx;
 	TH2F	*histDedxPos;
