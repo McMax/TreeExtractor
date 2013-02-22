@@ -27,6 +27,9 @@ void Histos::init()
 	histYcms = new TH1F("histYcms","CMS rapidity with #pi mass;y_{#pi}",100,-5,5);
 	histYcmsNeg = new TH1F("histYcmsNeg","CMS rapidity with #pi mass, neg.;y_{#pi}",100,-5,5);
 	histYcmsPos = new TH1F("histYcmsPos","CMS rapidity with #pi mass, pos.;y_{#pi}",100,-5,5);
+	histYprotcms = new TH1F("histYprotcms","CMS rapidity with proton mass;y_{p}",100,-5,5);
+	histYprotcmsNeg = new TH1F("histYprotcmsNeg","CMS rapidity with proton mass, neg.;y_{p}",100,-5,5);
+	histYprotcmsPos = new TH1F("histYprotcmsPos","CMS rapidity with proton mass, pos.;y_{p}",100,-5,5);
 	histEta = new TH1F("histEta","Pseudorapidity;#eta",100,-2,8);
 	histEtaNeg = new TH1F("histEtaNeg","Pseudorapidity, negatively charged;#eta",100,-2,8);
 	histEtaPos = new TH1F("histEtaPos","Pseudorapidity, positively charged;#eta",100,-2,8);
@@ -158,6 +161,9 @@ void Histos::write()
 	histYcms->Write();
 	histYcmsPos->Write();
 	histYcmsNeg->Write();
+	histYprotcms->Write();
+	histYprotcmsPos->Write();
+	histYprotcmsNeg->Write();
 	histEta->Write();
 	histEtaNeg->Write();
 	histEtaPos->Write();
@@ -247,6 +253,9 @@ void Histos::clear()
 	delete 	histYcms;
 	delete 	histYcmsPos;
 	delete 	histYcmsNeg;
+	delete 	histYprotcms;
+	delete 	histYprotcmsPos;
+	delete 	histYprotcmsNeg;
 	delete	histEta;
 	delete	histEtaNeg;
 	delete	histEtaPos;
@@ -334,7 +343,7 @@ void Particles::init(Histos *histograms, const float ener)
 	histos = histograms;
 	angle = 0.;
 	theta = theta_cms = 0.;
-	y_pi = y_cms = y_pi_cms = 0.;
+	y_pi = y_cms = y_pi_cms = y_proton_cms = 0.;
 	eta = eta_cms = 0.;
 	pz_cms = pt = 0.;
 	particle_charge = All;
@@ -395,35 +404,6 @@ void Particles::newEvent(bool first)
 	}
 }
 
-/*
-static Float_t Particles::choose_dedx(Particle *particle)
-{
-	static Int_t vtpc1_part;
-	static Int_t vtpc2_part;
-	static Int_t mtpc_part;
-
-	vtpc1_part = particle->GetNdEdxVtpc1();
-	vtpc2_part = particle->GetNdEdxVtpc2();
-	mtpc_part = particle->GetNdEdxMtpc();
-
-	//std::cout << "dE/dx: VTPC1 part: " << vtpc1_part << "\tVTPC2 part: " << vtpc2_part << "\tMTPC part: " << mtpc_part << std::endl;
-	if((vtpc1_part == 0) && (vtpc2_part == 0) && (mtpc_part == 0))
-	{
-		std::cout << "WTF? Particle with no dE/dx information!" << std::endl;
-		return 0;
-	}
-	else
-	{
-		if(mtpc_part > 0)
-			return (particle->GetdEdxMtpc());
-		else if(vtpc2_part >= vtpc1_part)
-			return (particle->GetdEdxVtpc2());
-		else
-			return (particle->GetdEdxVtpc1());
-	}
-}
-*/
-
 void Particles::analyze(Particle *particle, const int ener)
 {
 	if(particle->isPositive())
@@ -437,17 +417,16 @@ void Particles::analyze(Particle *particle, const int ener)
 	//std::cout << "gamma = " << gamma << " | gamma_beta_e = " << gamma_beta_e << std::endl;
 	pt = TMath::Sqrt(py*py+px*px);
 	p = TMath::Sqrt(px*px+py*py+pz*pz);
-	//E = TMath::Sqrt(0.1396*0.1396 + p*p);
-	E = TMath::Sqrt(pion_mass*pion_mass + p*p);
-	pz_cms = gamma*pz - calc_gbE(E); 
+	E_pi = TMath::Sqrt(pion_mass*pion_mass + p*p);
+	E_proton = TMath::Sqrt(proton_mass*proton_mass + p*p);
+	pz_cms = gamma*pz - calc_gbE(E_pi); 
 
 	angle = TMath::ATan2(py,px);
 	theta = TMath::ATan2(pt,pz);
-	y_pi = 0.5*TMath::Log((E+pz)/(E-pz));
+	y_pi = 0.5*TMath::Log((E_pi+pz)/(E_pi-pz));
 	y_pi_cms = y_pi - y_cms;
+	y_proton_cms = 0.5*TMath::Log((E_proton+pz)/(E_proton-pz)) - y_cms;
 	theta_cms = TMath::ATan2(pt,pz_cms);
-
-	//std::cout << "Theta = " << theta << " | Theta_cms = " << theta_cms << std::endl;
 
 	eta  = -TMath::Log(TMath::Tan(theta/2.));
 
@@ -459,6 +438,7 @@ void Particles::analyze(Particle *particle, const int ener)
 
 	histos->histYpi->Fill(y_pi);
 	histos->histYcms->Fill(y_pi_cms);
+	histos->histYprotcms->Fill(y_proton_cms);
 	histos->histEta->Fill(eta);
 	histos->histEtacms->Fill(eta_cms);
 	histos->histAngle->Fill(angle);
@@ -489,6 +469,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histPzcmsPos->Fill(pz_cms);
 		histos->histYpiPos->Fill(y_pi);
 		histos->histYcmsPos->Fill(y_pi_cms);
+		histos->histYprotcmsPos->Fill(y_proton_cms);
 		histos->histEtaPos->Fill(eta);
 		histos->histEtacmsPos->Fill(eta_cms);
 		histos->histPtVsYPos->Fill(y_pi_cms, pt);
@@ -523,6 +504,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		mean_pt[Neg] += pt;
 		histos->histYpiNeg->Fill(y_pi);
 		histos->histYcmsNeg->Fill(y_pi_cms);
+		histos->histYprotcmsNeg->Fill(y_proton_cms);
 		histos->histEtaNeg->Fill(eta);
 		histos->histEtacmsNeg->Fill(eta_cms);
 		histos->histPtVsYNeg->Fill(y_pi_cms,pt);

@@ -101,9 +101,11 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		pt1, pt2,
 		pz_cms1, pz_cms2,
 		E1, E2,
+		E_prot,
 		gbE1, gbE2,
 		theta1, theta2,
 		y1, y2,
+		y_prot_cms,
 		eta1, eta2,
 		angle_j,
 		angle_diff,
@@ -185,6 +187,12 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
 			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 			E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
+			E_prot = TMath::Sqrt(proton_mass*proton_mass+p1*p1);
+			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
+/*
+			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
+				continue;
+*/
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 

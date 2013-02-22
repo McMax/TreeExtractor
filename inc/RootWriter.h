@@ -44,6 +44,9 @@ struct Histos
 	TH1F	*histYcms;
 	TH1F	*histYcmsNeg;
 	TH1F	*histYcmsPos;
+	TH1F	*histYprotcms;
+	TH1F	*histYprotcmsNeg;
+	TH1F	*histYprotcmsPos;
 	TH1F	*histEta;
 	TH1F	*histEtaNeg;
 	TH1F	*histEtaPos;
@@ -136,8 +139,10 @@ class Particles //klasa liczaca zmienne wszystkich trackow w JEDNYM evencie
 	Float_t	angle,
 			theta, theta_cms,
 			y_pi, y_pi_cms,
+			y_proton_cms,
 			eta, eta_cms,
-			px, py, pz, p, pt, E, pz_cms,
+			E_pi, E_proton,
+			px, py, pz, p, pt, pz_cms,
 			mean_pt[3];
 
 	charge		particle_charge;
