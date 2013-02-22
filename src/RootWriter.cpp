@@ -51,6 +51,9 @@ void Histos::init()
 	histPtVsYAll = new TH2F("histPtVsYAll","Trans. momentum vs. rapidity; y^{*}_{#pi}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
 	histPtVsYNeg = new TH2F("histPtVsYNeg","Trans. momentum vs. rapidity, neg.; y^{*}_{#pi}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
 	histPtVsYPos = new TH2F("histPtVsYPos","Trans. momentum vs. rapidity, pos.; y^{*}_{#pi}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
+	histPtVsYprotAll = new TH2F("histPtVsYprotAll","Trans. momentum vs. rapidity; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
+	histPtVsYprotNeg = new TH2F("histPtVsYprotNeg","Trans. momentum vs. rapidity, neg.; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
+	histPtVsYprotPos = new TH2F("histPtVsYprotPos","Trans. momentum vs. rapidity, pos.; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
 	histPhiVsPtAll = new TH2F("histPhiVsPtAll","Az. angle vs. transverse momentum; #phi [rad]; p_{T} [GeV/c]",50,-3.2,3.2,150,0,1.5);
 	histPhiVsPtPos = new TH2F("histPhiVsPtPos","Az. angle vs. transverse momentum, pos.; #phi [rad]; p_{T} [GeV/c]",50,-3.2,3.2,150,0,1.5);
 	histPhiVsPtNeg = new TH2F("histPhiVsPtNeg","Az. angle vs. transverse momentum, neg.; #phi [rad]; p_{T} [GeV/c]",50,-3.2,3.2,150,0,1.5);
@@ -185,6 +188,9 @@ void Histos::write()
 	histPtVsYAll->Write();
 	histPtVsYPos->Write();
 	histPtVsYNeg->Write();
+	histPtVsYprotAll->Write();
+	histPtVsYprotPos->Write();
+	histPtVsYprotNeg->Write();
 	histPhiVsPtAll->Write();
 	histPhiVsPtPos->Write();
 	histPhiVsPtNeg->Write();
@@ -277,6 +283,9 @@ void Histos::clear()
 	delete	histPtVsYAll;
 	delete	histPtVsYPos;
 	delete	histPtVsYNeg;
+	delete	histPtVsYprotAll;
+	delete	histPtVsYprotPos;
+	delete	histPtVsYprotNeg;
 	delete histPhiVsPtAll;
 	delete histPhiVsPtPos;
 	delete histPhiVsPtNeg;
@@ -448,6 +457,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histPzAll->Fill(pz);
 	histos->histPzcmsAll->Fill(pz_cms);
 	histos->histPtVsYAll->Fill(y_pi_cms, pt);
+	histos->histPtVsYprotAll->Fill(y_proton_cms, pt);
 	histos->histPhiVsPtAll->Fill(angle, pt);
 	histos->histDedx->Fill(p,particle->GetdEdx());
 	histos->histDedxVtpc1->Fill(p,particle->GetdEdxVtpc1());
@@ -473,6 +483,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histEtaPos->Fill(eta);
 		histos->histEtacmsPos->Fill(eta_cms);
 		histos->histPtVsYPos->Fill(y_pi_cms, pt);
+		histos->histPtVsYprotPos->Fill(y_proton_cms, pt);
 		histos->histAnglePos->Fill(angle);
 		histos->histThetaPos->Fill(theta);
 		histos->histThetacmsPos->Fill(theta_cms);
@@ -508,6 +519,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histEtaNeg->Fill(eta);
 		histos->histEtacmsNeg->Fill(eta_cms);
 		histos->histPtVsYNeg->Fill(y_pi_cms,pt);
+		histos->histPtVsYprotNeg->Fill(y_proton_cms,pt);
 		histos->histPhiVsPtNeg->Fill(angle, pt);
 		histos->histDedxNeg->Fill(p,particle->GetdEdx());
 		histos->histDedxVtpc1Neg->Fill(p,particle->GetdEdxVtpc1());

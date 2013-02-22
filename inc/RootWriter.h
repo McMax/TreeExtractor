@@ -70,6 +70,9 @@ struct Histos
 	TH2F	*histPtVsYAll;
 	TH2F	*histPtVsYNeg;
 	TH2F	*histPtVsYPos;
+	TH2F	*histPtVsYprotAll;
+	TH2F	*histPtVsYprotNeg;
+	TH2F	*histPtVsYprotPos;
 
 	TH2F	*histPhiVsPtAll;
 	TH2F	*histPhiVsPtPos;
