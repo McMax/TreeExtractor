@@ -9,6 +9,7 @@
 #include "TMath.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "TLorentzVector.h"
 
 #include "Prefifi.h"
 #include "RootWriter.h"
@@ -119,6 +120,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	UInt_t	i,j;
 	UInt_t	pid1, pid2;
 
+	TLorentzVector v1, v2, v;
+
 	unsigned correlations = 0, pos_correlations = 0, neg_correlations = 0, all_correlations = 0, unlike_correlations = 0;
 
 	Event *event = new Event();
@@ -189,6 +192,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
 			E_prot = TMath::Sqrt(proton_mass*proton_mass+p1*p1);
 			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
+			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
 
 			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
 				continue;
@@ -226,6 +230,10 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					E2 = TMath::Sqrt(pion_mass*pion_mass+p2*p2);
 					E_prot = TMath::Sqrt(proton_mass*proton_mass+p2*p2);
 					y_prot_cms = 0.5*TMath::Log((E_prot+particleB->GetPz())/(E_prot-particleB->GetPz())) - particles.y_cms;
+					v2.SetPxPyPzE(particleB->GetPx(),particleB->GetPy(),particleB->GetPz(),E2);
+
+					v = v1 + v2;
+					histos.histInvMass->Fill(v.M());
 
 					if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
 						continue;
