@@ -103,6 +103,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		pz_cms1, pz_cms2,
 		E1, E2,
 		E_prot,
+		inv_mass,
 		gbE1, gbE2,
 		theta1, theta2,
 		y1, y2,
@@ -233,7 +234,12 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					v2.SetPxPyPzE(particleB->GetPx(),particleB->GetPy(),particleB->GetPz(),E2);
 
 					v = v1 + v2;
-					histos.histInvMass->Fill(v.M());
+					inv_mass = v.M();
+					
+					if(inv_mass < 0.285) //GeV dipion (280 MeV) + Coulomb interactions (5 MeV)
+						continue;
+
+					histos.histInvMass->Fill(inv_mass);
 
 					if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
 						continue;
