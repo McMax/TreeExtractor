@@ -236,13 +236,17 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					v = v1 + v2;
 					inv_mass = v.M();
 					
+					/*
 					if(inv_mass < 0.285) //GeV dipion (280 MeV) + Coulomb interactions (5 MeV)
 						continue;
+						*/
 
 					histos.histInvMass->Fill(inv_mass);
 
+					/*
 					if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
 						continue;
+						*/
 
 					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
 
@@ -431,7 +435,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		}
 
 		//cout << "\rEvent " << ev;
-		if(!(ev%50))
+		if(!(ev%5000))
 			cout << "Event " << ev << endl;
 
 		if(write_to_root)
