@@ -1,42 +1,36 @@
 CC	= g++
 LD	= g++
 
-CCFLAGS = -g -O0 `root-config --cflags` -Wall -I./inc
-LDFLAGS = -g -O0 `root-config --libs` -Wall -L./lib
+CCFLAGS = -g -O0 `root-config --cflags` -Wall -I./inc -I$(PEV_INC)
+LDFLAGS = -g -O0 `root-config --libs` -Wall -L./lib -I$(PEV_LIB)
 
 TOPDIR = .
 SRC_DIR = $(TOPDIR)/src
 OBJ_DIR = $(TOPDIR)/lib
 INC_DIR = $(TOPDIR)/inc
 
+PEV_DIR = $(TOPDIR)/../Particle_Event
+PEV_LIB = $(PEV_DIR)/lib
+PEV_SRC = $(PEV_DIR)/src
+PEV_INC = $(PEV_DIR)/inc
+
 PROGRAM = extractor
 
 SOURCES := $(shell find $(SRC_DIR) -type f -name "*.cpp")
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
-#INCLUDES := $(shell find $(INC_DIR) -type f -name "*.h" | grep -v "linkdef.h" | grep -v "Prefifi.h")
-#INCLUDES += $(INC_DIR)/linkdef.h
-INCLUDES = inc/Particle.h inc/Event.h inc/linkdef.h
+PEV_OBJECTS = $(PEV_LIB)/Particle.o $(PEV_LIB)/Event.o $(PEV_LIB)/ParticleTree.o $(PEV_LIB)/Dict.o
 
 all: $(PROGRAM)
 
-$(PROGRAM): $(OBJECTS) Dict.o
+$(PROGRAM): $(OBJECTS) $(PEV_OBJECTS)
 	$(LD) -o $@ $^ $(LDFLAGS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp Dict.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	mkdir -p $(OBJ_DIR)
 	$(CC) -c $(CCFLAGS) $< -o $@ 
 
-Dict.o: Dict.cpp
-	g++ -c $(CCFLAGS) Dict.cpp -o Dict.o	
-
-Dict.cpp: $(INCLUDES)
-	@echo "Generating dictionary..."
-	rootcint -f Dict.cpp -c -P -I$(ROOTSYS) -I/usr/local/include $(INCLUDES)
+$(PEV_OBJECTS):
+	@echo "No base libs. Create them"
 
 clean:
 	@rm -rf $(PROGRAM) ./lib
-
-realclean:
-	@rm -f $(PROGRAM)
-	@rm -rf ./lib
-	@rm -f Dict.*

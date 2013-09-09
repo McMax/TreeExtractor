@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <set>
 #include <string>
 #include <cstdio>
 
@@ -8,6 +9,7 @@
 #include "TMath.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "TLorentzVector.h"
 
 #include "Prefifi.h"
 #include "RootWriter.h"
@@ -100,9 +102,12 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		pt1, pt2,
 		pz_cms1, pz_cms2,
 		E1, E2,
+		E_prot,
+		inv_mass,
 		gbE1, gbE2,
 		theta1, theta2,
 		y1, y2,
+		y_prot_cms,
 		eta1, eta2,
 		angle_j,
 		angle_diff,
@@ -114,6 +119,9 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 	int	n[3];
 	UInt_t	i,j;
+	UInt_t	pid1, pid2;
+
+	TLorentzVector v1, v2, v;
 
 	unsigned correlations = 0, pos_correlations = 0, neg_correlations = 0, all_correlations = 0, unlike_correlations = 0;
 
@@ -126,6 +134,12 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	Particles particles;
 	Histos histos;
 	TFile *root_output_file;
+
+//	to dE/dx of particles in (deta,dphi) < (0.5,0.5)
+	std::set<UInt_t> unique_particles_y;
+	std::set<UInt_t> unique_particles_eta;
+	std::set<UInt_t> unique_particles_y_025;
+	std::set<UInt_t> unique_particles_eta_025;
 
 	if(write_to_root)
 	{
@@ -162,14 +176,28 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		//if((event->GetNneg()) < 7)
 		//	continue;
 
+		unique_particles_y.clear();
+		unique_particles_eta.clear();
+		unique_particles_y_025.clear();
+		unique_particles_eta_025.clear();
+
 		for(i=0; i<event->GetNpa(); ++i)
 		{
 			particleA = event->GetParticle(i);
+			pid1 = particleA->GetPid();
+
 			if((TMath::Abs(particleA->GetBx()) > 4) || (TMath::Abs(particleA->GetBy()) > 2))
 				continue;
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
 			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 			E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
+			E_prot = TMath::Sqrt(proton_mass*proton_mass+p1*p1);
+			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
+			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
+
+			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
+				continue;
+
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 
@@ -190,6 +218,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				for(j=i+1; j<event->GetNpa(); ++j)
 				{
 					particleB = event->GetParticle(j);
+					pid2 = particleB->GetPid();
+
 					if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
 						continue;
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
@@ -199,6 +229,24 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					//cout << "p1 = " << p1 << " | p2 = " << p2 << endl;
 
 					E2 = TMath::Sqrt(pion_mass*pion_mass+p2*p2);
+					E_prot = TMath::Sqrt(proton_mass*proton_mass+p2*p2);
+					y_prot_cms = 0.5*TMath::Log((E_prot+particleB->GetPz())/(E_prot-particleB->GetPz())) - particles.y_cms;
+					v2.SetPxPyPzE(particleB->GetPx(),particleB->GetPy(),particleB->GetPz(),E2);
+
+					v = v1 + v2;
+					inv_mass = v.M();
+					
+					/*
+					if(inv_mass < 0.285) //GeV dipion (280 MeV) + Coulomb interactions (5 MeV)
+						continue;
+						*/
+
+					histos.histInvMass->Fill(inv_mass);
+
+					/*
+					if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
+						continue;
+						*/
 
 					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
 
@@ -262,6 +310,63 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 						++unlike_correlations;
 						histos.histDyDphiUnlike->Fill(angle_diff, y_diff);
 						histos.histDetaDphiUnlike->Fill(angle_diff, eta_diff);
+				//--------------- Pb+Pb 00R - histogram to check unlike-sign correlations near deta-dphi = (0,0)-(0.5,0.5)
+						if((angle_diff < 0.5) && (eta_diff < 0.5))
+						{
+							if(unique_particles_eta.find(pid1) == unique_particles_eta.end())
+							{
+								histos.histDedx_DetaDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
+								unique_particles_eta.insert(pid1);
+							}
+							
+							if(unique_particles_eta.find(pid2) == unique_particles_eta.end())
+							{
+								histos.histDedx_DetaDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+								unique_particles_eta.insert(pid2);
+							}
+						}
+						if((angle_diff < 0.5) && (y_diff < 0.5))
+						{
+							if(unique_particles_y.find(pid1) == unique_particles_y.end())
+							{
+								histos.histDedx_DyDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
+								unique_particles_y.insert(pid1);
+							}
+
+							if(unique_particles_y.find(pid2) == unique_particles_y.end())
+							{
+								histos.histDedx_DyDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+								unique_particles_y.insert(pid2);
+							}
+						}
+						if((angle_diff < 0.25) && (eta_diff < 0.25))
+						{
+							if(unique_particles_eta_025.find(pid1) == unique_particles_eta_025.end())
+							{
+								histos.histDedx_DetaDphiUnlike_025->Fill(p1,particles.choose_dedx(particleA));
+								unique_particles_eta_025.insert(pid1);
+							}
+							
+							if(unique_particles_eta_025.find(pid2) == unique_particles_eta_025.end())
+							{
+								histos.histDedx_DetaDphiUnlike_025->Fill(p2,particles.choose_dedx(particleB));
+								unique_particles_eta_025.insert(pid2);
+							}
+						}
+						if((angle_diff < 0.25) && (y_diff < 0.25))
+						{
+							if(unique_particles_y_025.find(pid1) == unique_particles_y_025.end())
+							{
+								histos.histDedx_DyDphiUnlike_025->Fill(p1,particles.choose_dedx(particleA));
+								unique_particles_y_025.insert(pid1);
+							}
+
+							if(unique_particles_y_025.find(pid2) == unique_particles_y_025.end())
+							{
+								histos.histDedx_DyDphiUnlike_025->Fill(p2,particles.choose_dedx(particleB));
+								unique_particles_y_025.insert(pid2);
+							}
+						}
 					}
 				}
 			}
@@ -282,8 +387,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				phi[Neg] += angle3;
 				phiSq[Neg] += angle3*angle3;
 			}
-
-			
 
 			if(with_fifivsbpar)
 			{
@@ -332,7 +435,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		}
 
 		//cout << "\rEvent " << ev;
-		if(!(ev%50))
+		if(!(ev%5000))
 			cout << "Event " << ev << endl;
 
 		if(write_to_root)
