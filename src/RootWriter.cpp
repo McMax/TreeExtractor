@@ -75,9 +75,9 @@ void Histos::init()
 	histDedx = new TH2F("histDedx","dE/dx (all charged)",400,-3,3,400,0,3);
 	histDedxPos = new TH2F("histDedxPos","dE/dx (pos. charged)",400,-3,3,400,0,3);
 	histDedxNeg = new TH2F("histDedxNeg","dE/dx (neg. charged)",400,-3,3,400,0,3);
-	histDedxSelected = new TH2F("histDedxSelected","dE/dx (selected, all charged)",400,-3,3,400,0,3);
-	histDedxPosSelected = new TH2F("histDedxPosSelected","dE/dx (selected, pos. charged)",400,-3,3,400,0,3);
-	histDedxNegSelected = new TH2F("histDedxNegSelected","dE/dx (selected, neg. charged)",400,-3,3,400,0,3);
+	//histDedxSelected = new TH2F("histDedxSelected","dE/dx (selected, all charged)",400,-3,3,400,0,3);
+	//histDedxPosSelected = new TH2F("histDedxPosSelected","dE/dx (selected, pos. charged)",400,-3,3,400,0,3);
+	//histDedxNegSelected = new TH2F("histDedxNegSelected","dE/dx (selected, neg. charged)",400,-3,3,400,0,3);
 	histDedxVtpc1 = new TH2F("histDedxVtpc1","dE/dx (VTPC1, all charged)",400,-3,3,400,0,3);
 	histDedxVtpc1Pos = new TH2F("histDedxVtpc1Pos","dE/dx (VTPC1, pos. charged)",400,-3,3,400,0,3);
 	histDedxVtpc1Neg = new TH2F("histDedxVtpc1Neg","dE/dx (VTPC1, neg. charged)",400,-3,3,400,0,3);
@@ -107,9 +107,9 @@ void Histos::init()
 	LogBinning(histDedx);
 	LogBinning(histDedxPos);
 	LogBinning(histDedxNeg);
-	LogBinning(histDedxSelected);
-	LogBinning(histDedxPosSelected);
-	LogBinning(histDedxNegSelected);
+//	LogBinning(histDedxSelected);
+//	LogBinning(histDedxPosSelected);
+//	LogBinning(histDedxNegSelected);
 	LogBinning(histDedxVtpc1);
 	LogBinning(histDedxVtpc1Pos);
 	LogBinning(histDedxVtpc1Neg);
@@ -211,9 +211,9 @@ void Histos::write()
 	histDedx->Write();
 	histDedxPos->Write();
 	histDedxNeg->Write();
-	histDedxSelected->Write();
-	histDedxPosSelected->Write();
-	histDedxNegSelected->Write();
+//	histDedxSelected->Write();
+	//histDedxPosSelected->Write();
+	//histDedxNegSelected->Write();
 	histDedxVtpc1->Write();
 	histDedxVtpc1Pos->Write();
 	histDedxVtpc1Neg->Write();
@@ -307,9 +307,9 @@ void Histos::clear()
 	delete histDedx;
 	delete histDedxPos;
 	delete histDedxNeg;
-	delete histDedxSelected;
-	delete histDedxPosSelected;
-	delete histDedxNegSelected;
+	//delete histDedxSelected;
+	//delete histDedxPosSelected;
+	//delete histDedxNegSelected;
 	delete histDedxVtpc1;
 	delete histDedxVtpc1Pos;
 	delete histDedxVtpc1Neg;
@@ -471,7 +471,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histnDedxVtpc2->Fill(p,particle->GetNdEdxVtpc2());
 	histos->histnDedxMtpc->Fill(p,particle->GetNdEdxMtpc());
 
-	histos->histDedxSelected->Fill(p,choose_dedx(particle));
+	//histos->histDedxSelected->Fill(p,choose_dedx(particle));
 
 	if(particle->isPositive())
 	{
@@ -501,7 +501,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histnDedxVtpc2Pos->Fill(p,particle->GetNdEdxVtpc2());
 		histos->histnDedxMtpcPos->Fill(p,particle->GetNdEdxMtpc());
 
-		histos->histDedxPosSelected->Fill(p,choose_dedx(particle));
+		//histos->histDedxPosSelected->Fill(p,choose_dedx(particle));
 	}
 	else
 	{
@@ -533,7 +533,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histnDedxVtpc2Neg->Fill(p,particle->GetNdEdxVtpc2());
 		histos->histnDedxMtpcNeg->Fill(p,particle->GetNdEdxMtpc());
 
-		histos->histDedxNegSelected->Fill(p,choose_dedx(particle));
+		//histos->histDedxNegSelected->Fill(p,choose_dedx(particle));
 	}
 }
 

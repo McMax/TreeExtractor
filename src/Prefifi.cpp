@@ -315,13 +315,13 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 						{
 							if(unique_particles_eta.find(pid1) == unique_particles_eta.end())
 							{
-								histos.histDedx_DetaDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
+								histos.histDedx_DetaDphiUnlike_05->Fill(p1,particleA->GetdEdx());
 								unique_particles_eta.insert(pid1);
 							}
 							
 							if(unique_particles_eta.find(pid2) == unique_particles_eta.end())
 							{
-								histos.histDedx_DetaDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+								histos.histDedx_DetaDphiUnlike_05->Fill(p2,particleB->GetdEdx());
 								unique_particles_eta.insert(pid2);
 							}
 						}
@@ -329,13 +329,13 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 						{
 							if(unique_particles_y.find(pid1) == unique_particles_y.end())
 							{
-								histos.histDedx_DyDphiUnlike_05->Fill(p1,particles.choose_dedx(particleA));
+								histos.histDedx_DyDphiUnlike_05->Fill(p1,particleA->GetdEdx());
 								unique_particles_y.insert(pid1);
 							}
 
 							if(unique_particles_y.find(pid2) == unique_particles_y.end())
 							{
-								histos.histDedx_DyDphiUnlike_05->Fill(p2,particles.choose_dedx(particleB));
+								histos.histDedx_DyDphiUnlike_05->Fill(p2,particleB->GetdEdx());
 								unique_particles_y.insert(pid2);
 							}
 						}
@@ -343,13 +343,13 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 						{
 							if(unique_particles_eta_025.find(pid1) == unique_particles_eta_025.end())
 							{
-								histos.histDedx_DetaDphiUnlike_025->Fill(p1,particles.choose_dedx(particleA));
+								histos.histDedx_DetaDphiUnlike_025->Fill(p1,particleA->GetdEdx());
 								unique_particles_eta_025.insert(pid1);
 							}
 							
 							if(unique_particles_eta_025.find(pid2) == unique_particles_eta_025.end())
 							{
-								histos.histDedx_DetaDphiUnlike_025->Fill(p2,particles.choose_dedx(particleB));
+								histos.histDedx_DetaDphiUnlike_025->Fill(p2,particleB->GetdEdx());
 								unique_particles_eta_025.insert(pid2);
 							}
 						}
@@ -357,13 +357,13 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 						{
 							if(unique_particles_y_025.find(pid1) == unique_particles_y_025.end())
 							{
-								histos.histDedx_DyDphiUnlike_025->Fill(p1,particles.choose_dedx(particleA));
+								histos.histDedx_DyDphiUnlike_025->Fill(p1,particleA->GetdEdx());
 								unique_particles_y_025.insert(pid1);
 							}
 
 							if(unique_particles_y_025.find(pid2) == unique_particles_y_025.end())
 							{
-								histos.histDedx_DyDphiUnlike_025->Fill(p2,particles.choose_dedx(particleB));
+								histos.histDedx_DyDphiUnlike_025->Fill(p2,particleB->GetdEdx());
 								unique_particles_y_025.insert(pid2);
 							}
 						}

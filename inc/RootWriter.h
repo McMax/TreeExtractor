@@ -98,9 +98,9 @@ struct Histos
 	TH2F	*histDedxPos;
 	TH2F	*histDedxNeg;
 
-	TH2F	*histDedxSelected;
-	TH2F	*histDedxPosSelected;
-	TH2F	*histDedxNegSelected;
+	//TH2F	*histDedxSelected;
+	//TH2F	*histDedxPosSelected;
+	//TH2F	*histDedxNegSelected;
 
 	TH2F	*histDedxVtpc1;
 	TH2F	*histDedxVtpc1Pos;
