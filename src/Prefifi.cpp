@@ -129,6 +129,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	Particle *particleA, *particleB;
 	particletree->SetBranchAddress("event",&event);
 	Long64_t treeNentries = particletree->GetEntries();
+	cout << "Number of events: " << treeNentries << endl;
 	Long64_t ev;
 
 	Particles particles;
