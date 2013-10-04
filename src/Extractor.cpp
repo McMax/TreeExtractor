@@ -34,24 +34,9 @@ int main(int argc, char** argv)
 
 		root_tree_file->Close();
 	}
-	else if(argc == 4) //Pb-Pb mode
-	{
-		TFile *root_tree_file = new TFile(argv[1]);
-		TTree *particletree = (TTree*)root_tree_file->Get("events");
-		float energy = atof(argv[2]);
-		TString root_output_filename = argv[3];
-
-		cout << "Reading file" << endl;
-
-		//Biore rozklad ile eventow mialo dany rozmiar
-		mainanalyzePb(particletree, energy, root_output_filename);
-
-		root_tree_file->Close();
-	}
 	else
 	{
 		cout << "USAGE: extractor <path_to_particle_tree> <energy> <root_file> <fifivsbpar> <outputfile>" << endl;
-		cout << "OR: extractor <path_to_particle_tree> <energy> <outputfile>" << endl;
 		return -1;
 	}
 }

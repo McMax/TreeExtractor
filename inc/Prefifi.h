@@ -3,8 +3,6 @@
 #include <string>
 #include "TTree.h"
 
-void mainanalyzePb(TTree*, const float, const TString);
-
 void mainanalyze(TTree*, const int, bool, const float, std::string, const TString);
 
 const float  bx[] = {0.1, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 4.0},
