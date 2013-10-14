@@ -208,9 +208,9 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				{
 					particleB = event->GetParticle(j);
 
-					cout << "Particle A [" << i << "]:" << particleA << " particleB[" << j << "]:" << particleB << endl;
-					cout << "Particle A: px=" << particleA->GetPx() << " py=" << particleA->GetPy() << " pz=" << particleA->GetPz() << endl;
-					cout << "Particle B: px=" << particleB->GetPx() << " py=" << particleB->GetPy() << " pz=" << particleB->GetPz() << endl;
+					//cout << "Particle A [" << i << "]:" << particleA << " particleB[" << j << "]:" << particleB << endl;
+					//cout << "Particle A: px=" << particleA->GetPx() << " py=" << particleA->GetPy() << " pz=" << particleA->GetPz() << endl;
+					//cout << "Particle B: px=" << particleB->GetPx() << " py=" << particleB->GetPy() << " pz=" << particleB->GetPz() << endl;
 
 					if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
 						continue;
@@ -369,7 +369,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		}
 
 		//cout << "\rEvent " << ev;
-		if(!(ev%50))
+		if(!(ev%5000))
 			cout << "Event " << ev << endl;
 
 		if(write_to_root)
