@@ -7,9 +7,9 @@
 
 void Histos::init()
 {
-	histCharged = new TH1I("histCharged","Multiplicity of charged;N",1501,0,1500);
-	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",1501,0,1500);
-	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",1501,0,1500);
+	histCharged = new TH1I("histCharged","Multiplicity of charged;N",20,0,20);
+	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",20,0,20);
+	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",20,0,20);
 	histMeanCharge = new TH1F("histMeanCharge","Mean charge;charge",23,-1.15,1.15);
 	histAngle = new TH1F("histAngle","Azimuthal angle;#phi [rad]",50,-3.25,3.25);
 	histAngleNegNotrot = new TH1F("histAngleNegNotrot","Azimuthal angle (notrot), neg.;#phi [rad]",50,-3.25,3.25);
