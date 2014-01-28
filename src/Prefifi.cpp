@@ -184,8 +184,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
 			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
 
-			if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
-				continue;
+			//if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
+			//	continue;
 
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
@@ -348,6 +348,9 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				}
 			}
 		}	
+
+		if((event->GetNpa()!=n[All]))
+				cerr << "Event: " << ev << " ParticleTree: " << (event->GetNpa()) << " Extraction: " << (n[All]) << endl;
 
 		//debugfile << "----------" << endl;
 

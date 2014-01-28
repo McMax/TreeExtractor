@@ -411,6 +411,7 @@ void Particles::newEvent(bool first)
 		histos->histChargedNeg->Fill(n[Neg]);
 		histos->histChargedPos->Fill(n[Pos]);
 
+		//std::cout << "Mult. in Particles class: " << (n[All]) << std::endl;
 		n[All] = n[Neg] = n[Pos] = 0;
 		mean_pt[All] = mean_pt[Neg] = mean_pt[Pos] = 0.;
 	}
