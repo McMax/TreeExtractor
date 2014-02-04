@@ -431,9 +431,9 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		//histos.histCharged->AddBinContent(1,zeros);
 		//histos.histChargedNeg->AddBinContent(1,zeros);
 		//histos.histChargedPos->AddBinContent(1,zeros);
-		histos.histCharged->ResetStats();
-		histos.histChargedNeg->ResetStats();
-		histos.histChargedPos->ResetStats();
+	//	histos.histCharged->ResetStats();
+	//	histos.histChargedNeg->ResetStats();
+	//	histos.histChargedPos->ResetStats();
 		root_output_file->cd();
 		histos.write();
 		histos.clear();
