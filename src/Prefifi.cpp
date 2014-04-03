@@ -21,7 +21,7 @@ using namespace std;
 void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const float energy, string fifivsbpar, const TString output_filename="Extracted_distributions.root")
 {
 	ofstream prefifi_file("Pre_fifi.txt");
-	//ofstream debugfile("Debug.txt");
+	ofstream debugfile("Debug.txt");
 	ofstream prefifi_b_file[12];
 	float 	phi_b[3][12],
 		phiSq_b[3][12];
@@ -148,7 +148,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	for(ev=0; ev<treeNentries; ++ev)
 	{
 		particletree->GetEntry(ev);
-		//debugfile << event->GetNpa() << endl;
 		
 		phi[Neg] = phi[All] = phi[Pos]= 0.;
 		phiSq[Neg] = phiSq[All] = phiSq[Pos] = 0.;
@@ -164,7 +163,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			}
 		}
 
-		//debugfile << ev << "\t" << event->GetNpa() << endl;
+		debugfile << ev << "\t" << event->GetNpa() << endl;
 
 		unique_particles_y.clear();
 		unique_particles_eta.clear();
@@ -175,8 +174,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		{
 			particleA = event->GetParticle(i);
 
-			if((TMath::Abs(particleA->GetBx()) > 4) || (TMath::Abs(particleA->GetBy()) > 2))
-				continue;
+			//if((TMath::Abs(particleA->GetBx()) > 4) || (TMath::Abs(particleA->GetBy()) > 2))
+			//	continue;
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
 			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 			E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
@@ -193,7 +192,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			if(write_to_root)
 				particles.analyze(particleA,energy);
 
-			//debugfile << particleA->GetPx() << "\t" << particleA->GetPy() << "\t" << particleA->GetPz() << endl;
+			//debugfile << i << ": " <<  particleA->GetPx() << "\t" << particleA->GetPy() << "\t" << particleA->GetPz() << endl;
 
 			//angle = TMath::Sqrt(TMath::Power(particleA->GetPx(),2) + TMath::Power(particleA->GetPy(),2));
 			positive = particleA->isPositive();
@@ -212,8 +211,8 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 					//cout << "Particle A: px=" << particleA->GetPx() << " py=" << particleA->GetPy() << " pz=" << particleA->GetPz() << endl;
 					//cout << "Particle B: px=" << particleB->GetPx() << " py=" << particleB->GetPy() << " pz=" << particleB->GetPz() << endl;
 
-					if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
-						continue;
+			//		if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
+			//			continue;
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
 
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
