@@ -18,73 +18,9 @@
 
 using namespace std;
 
-void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const float energy, string fifivsbpar, const TString output_filename="Extracted_distributions.root")
+void mainanalyze(TTree *particletree, const float energy, const TString output_filename="Extracted_distributions.root")
 {
-	ofstream prefifi_file("Pre_fifi.txt");
 	ofstream debugfile("Debug.txt");
-	ofstream prefifi_b_file[12];
-	float 	phi_b[3][12],
-		phiSq_b[3][12];
-	int	n_b[3][12];
-	TString targettype;
-
-	bool with_fifivsbpar = false;
-	bool with_prefifi = true;
-
-	if(!(fifivsbpar.compare("NONE")))
-	{
-		with_fifivsbpar = false;
-		with_prefifi = false;
-	}
-	else if(!(fifivsbpar.compare("PREFIFI")))
-	{
-		with_fifivsbpar = false;
-		with_prefifi = true;
-	}
-	else if(!(fifivsbpar.compare("EMPTY")))
-	{
-		with_fifivsbpar = true;
-		targettype = "EMPTY";
-	}
-	else if(!(fifivsbpar.compare("FULL")))
-	{
-		with_fifivsbpar = true;
-		targettype = "FULL";
-	}
-	else if(!(fifivsbpar.compare("VENUS")))
-	{
-		with_fifivsbpar = true;
-		targettype = "VENUS";
-	}
-	else if(!(fifivsbpar.compare("VGCALOR")))
-	{
-		with_fifivsbpar = true;
-		targettype = "VGCALOR";
-	}
-	else
-	{
-		with_fifivsbpar = false;
-		cout << "Target type unknown. Skipping fifivsbpar extraction." << endl;
-	}
-
-	if(with_fifivsbpar)
-	{
-		TString prefifi_b_filename;
-		
-		cout << "Saving to:" << endl;
-		for(int j=0; j<12; j++)
-		{
-			prefifi_b_filename = "PhiphiVsBpar_";
-			prefifi_b_filename += targettype;
-			prefifi_b_filename += "/B";
-			prefifi_b_filename += j;
-			prefifi_b_filename += ".txt";
-			cout << prefifi_b_filename << endl;
-			prefifi_b_file[j].open(prefifi_b_filename);             
-		}
-		
-	}
-
 	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
 
 	float 	phi[3],
@@ -135,13 +71,10 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 	std::set<UInt_t> unique_particles_y_025;
 	std::set<UInt_t> unique_particles_eta_025;
 
-	if(write_to_root)
-	{
-		histos.init();
-		particles.init(&histos, energy);
-		particles.newEvent(true);
-		root_output_file = new TFile(output_filename,"recreate");
-	}
+	histos.init();
+	particles.init(&histos, energy);
+	particles.newEvent(true);
+	root_output_file = new TFile(output_filename,"recreate");
 
 	cout << "Writing events" << endl;
 
@@ -153,15 +86,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 		phiSq[Neg] = phiSq[All] = phiSq[Pos] = 0.;
 		n[Neg] = n[All] = n[Pos] = 0;
 
-		if(with_fifivsbpar)
-		{
-			for(j=0; j<12; ++j)
-			{
-				phi_b[Neg][j] = phi_b[All][j] = phi_b[Pos][j]= 0.;
-				phiSq_b[Neg][j] = phiSq_b[All][j] = phiSq_b[Pos][j] = 0.;
-				n_b[Neg][j] = n_b[All][j] = n_b[Pos][j] = 0;
-			}
-		}
 
 		debugfile << ev << "\t" << event->GetNpa() << endl;
 
@@ -189,8 +113,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 
-			if(write_to_root)
-				particles.analyze(particleA,energy);
+			particles.analyze(particleA,energy);
 
 			//debugfile << i << ": " <<  particleA->GetPx() << "\t" << particleA->GetPy() << "\t" << particleA->GetPz() << endl;
 
@@ -201,7 +124,7 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 			if(!positive)
 				angle3 = mk_angle3(angle);
 
-			if(write_to_root && (event->GetNpa() > 1))
+			if(event->GetNpa() > 1)
 			{
 				for(j=i+1; j<event->GetNpa(); ++j)
 				{
@@ -320,32 +243,6 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 				phi[Neg] += angle3;
 				phiSq[Neg] += angle3*angle3;
 			}
-
-			if(with_fifivsbpar)
-			{
-				for(j=0; j<12; ++j)
-				{
-					if((TMath::Abs(particleA->GetBx()) < bx[j]) && (TMath::Abs(particleA->GetBy()) < by[j]))
-					{
-						n_b[All][j]++;
-						phi_b[All][j] += angle;
-						phiSq_b[All][j] += angle*angle;
-
-						if(positive)
-						{
-							n_b[Pos][j]++;
-							phi_b[Pos][j] += angle;
-							phiSq_b[Pos][j] += angle*angle;
-						}
-						else
-						{
-							n_b[Neg][j]++;
-							phi_b[Neg][j] += angle3;
-							phiSq_b[Neg][j] += angle3*angle3;
-						}	
-					}
-				}
-			}
 		}	
 
 		if((event->GetNpa()!=n[All]))
@@ -353,66 +250,14 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 		//debugfile << "----------" << endl;
 
-		if(with_prefifi)
-		{
-			prefifi_file << 10000 << "\t\t" << n[All] << "\t" << phi[All] << "\t" << phiSq[All] << "\t\t" << 
-				n[Neg] << "\t" << phi[Neg] << "\t" << phiSq[Neg] << "\t\t" << 
-				n[Pos] << "\t" << phi[Pos] << "\t" << phiSq[Pos] << endl;
-		}
-
-		if(with_fifivsbpar)
-		{
-			for(j=0; j<12; ++j)
-			{
-				prefifi_b_file[j] << 10000 << "\t\t" << n_b[All][j] << "\t" << phi_b[All][j] << "\t" << phiSq_b[All][j] << "\t\t" << 
-					n_b[Neg][j] << "\t" << phi_b[Neg][j] << "\t" << phiSq_b[Neg][j] << "\t\t" << 
-					n_b[Pos][j] << "\t" << phi_b[Pos][j] << "\t" << phiSq_b[Pos][j] << endl;
-			}
-		}
-
 		//cout << "\rEvent " << ev;
 		if(!(ev%5000))
 			cout << "Event " << ev << endl;
 
-		if(write_to_root)
-			particles.newEvent();
+		particles.newEvent();
 	}
 
 	//event--;
-
-	cout << endl << "Filling with zeros" << endl;
-	int zero_event = 0;
-	
-	if(with_fifivsbpar)
-	{
-		while(zero_event+1 <= zeros)
-		{
-			zero_event++;
-			prefifi_file << "10000\t\t0\t0\t0\t\t0\t0\t0\t\t0\t0\t0" << endl;
-
-			for(j=0; j<12; ++j)
-				prefifi_b_file[j] << "10000\t\t0\t0\t0\t\t0\t0\t0\t\t0\t0\t0" << endl;
-			
-			cout << "\rEvent " << zero_event;
-		}
-		cout << endl << (ev+zero_event) << " lines written to Pre_fifi" << endl;
-		prefifi_file.close();
-		for(j=0; j<12; ++j)
-			prefifi_b_file[j].close();
-	}
-	else if(with_prefifi)
-	{
-		while(zero_event+1 <= zeros)
-		{
-			zero_event++;
-			prefifi_file << "10000\t\t0\t0\t0\t\t0\t0\t0\t\t0\t0\t0" << endl;
-			cout << "\rEvent " << zero_event;
-		}
-		cout << endl << (ev+zero_event) << " lines written to Pre_fifi" << endl;
-		prefifi_file.close();
-	}
-	else
-		prefifi_file.close();
 
 	cout << "All correlations: " << all_correlations << endl;
 	cout << "Like-sign correlations: " << correlations << endl;
@@ -425,17 +270,11 @@ void mainanalyze(TTree *particletree, const int zeros, bool write_to_root, const
 
 	//debugfile.close();
 
-	if(write_to_root)
-	{
-		//histos.histCharged->AddBinContent(1,zeros);
-		//histos.histChargedNeg->AddBinContent(1,zeros);
-		//histos.histChargedPos->AddBinContent(1,zeros);
 	//	histos.histCharged->ResetStats();
 	//	histos.histChargedNeg->ResetStats();
 	//	histos.histChargedPos->ResetStats();
-		root_output_file->cd();
-		histos.write();
-		histos.clear();
-		root_output_file->Close();
-	}
+	root_output_file->cd();
+	histos.write();
+	histos.clear();
+	root_output_file->Close();
 }
