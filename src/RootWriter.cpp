@@ -36,6 +36,7 @@ void Histos::init()
 	histEtacms = new TH1F("histEtacms","Pseudorapidity;#eta",100,-4,6);
 	histEtacmsNeg = new TH1F("histEtacmsNeg","Pseudorapidity, negatively charged;#eta",100,-4,6);
 	histEtacmsPos = new TH1F("histEtacmsPos","Pseudorapidity, positively charged;#eta",100,-4,6);
+	histPtWide = new TH1F("histPtWide","Transverse momentum (wide);p_{T} [GeV/c]",750,0,150);
 	histPtAll = new TH1F("histPtAll","Transverse momentum;p_{T} [GeV/c]",150,0,3);
 	histPtNeg = new TH1F("histPtNeg","Transverse momentum, neg.;p_{T} [GeV/c]",150,0,3);
 	histPtPos = new TH1F("histPtPos","Transverse momentum, pos.;p_{T} [GeV/c]",150,0,3);
@@ -174,6 +175,7 @@ void Histos::write()
 	histEtacms->Write();
 	histEtacmsNeg->Write();
 	histEtacmsPos->Write();
+	histPtWide->Write();
 	histPtAll->Write();
 	histPtPos->Write();
 	histPtNeg->Write();
@@ -270,6 +272,7 @@ void Histos::clear()
 	delete	histEtacms;
 	delete	histEtacmsNeg;
 	delete	histEtacmsPos;
+	delete 	histPtWide;
 	delete 	histPtAll;
 	delete 	histPtPos;
 	delete 	histPtNeg;
@@ -457,6 +460,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histAngle->Fill(angle);
 	histos->histTheta->Fill(theta);
 	histos->histThetacms->Fill(theta_cms);
+	histos->histPtWide->Fill(pt);
 	histos->histPtAll->Fill(pt);
 	histos->histPzAll->Fill(pz);
 	histos->histPzcmsAll->Fill(pz_cms);

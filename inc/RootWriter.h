@@ -54,6 +54,7 @@ struct Histos
 	TH1F	*histEtacmsNeg;
 	TH1F	*histEtacmsPos;
 
+	TH1F	*histPtWide;
 	TH1F	*histPtAll;
 	TH1F	*histPtNeg;
 	TH1F	*histPtPos;
