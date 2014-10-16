@@ -102,7 +102,7 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 			//	continue;
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
 			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
-			E1 = TMath::Sqrt(TMath::Power(particleA->GetMass(),2)+p1*p1);
+			E1 = TMath::Sqrt(TMath::Power(pion_mass,2)+p1*p1);
 			E_prot = TMath::Sqrt(proton_mass*proton_mass+p1*p1);
 			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
 			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
@@ -142,7 +142,7 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 
 					//cout << "p1 = " << p1 << " | p2 = " << p2 << endl;
 
-					E2 = TMath::Sqrt(TMath::Power(particleB->GetMass(),2)+p2*p2);
+					E2 = TMath::Sqrt(TMath::Power(pion_mass,2)+p2*p2);
 					E_prot = TMath::Sqrt(proton_mass*proton_mass+p2*p2);
 					y_prot_cms = 0.5*TMath::Log((E_prot+particleB->GetPz())/(E_prot-particleB->GetPz())) - particles.y_cms;
 					v2.SetPxPyPzE(particleB->GetPx(),particleB->GetPy(),particleB->GetPz(),E2);
