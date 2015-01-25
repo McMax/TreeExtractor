@@ -30,11 +30,9 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 
 		p1, p2,
 		pt1, pt2,
-		pz_cms1, pz_cms2,
+		pz1, pz2,
 		E1, E2,
-		E_prot,
 		inv_mass,
-		gbE1, gbE2,
 		theta1, theta2,
 		y1, y2,
 		y_prot_cms,
@@ -101,16 +99,12 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 			//if((TMath::Abs(particleA->GetBx()) > 4) || (TMath::Abs(particleA->GetBy()) > 2))
 			//	continue;
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
+			pz1 = particleA->GetPz();
 			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 			E1 = TMath::Sqrt(pion_mass*pion_mass+p1*p1);
-			E_prot = TMath::Sqrt(proton_mass*proton_mass+p1*p1);
-			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
-			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
+			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),pz1,E1);
 
-			//if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
-			//	continue;
-
-			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
+			y1 = 0.5*TMath::Log((E1+pz1)/(E1-pz1));
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 
 			particles.analyze(particleA,energy);
@@ -137,15 +131,13 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 			//		if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
 			//			continue;
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
-
-					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
+					pz2 = particleB->GetPz();
+					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(pz2,2));
 
 					//cout << "p1 = " << p1 << " | p2 = " << p2 << endl;
 
 					E2 = TMath::Sqrt(pion_mass*pion_mass+p2*p2);
-					E_prot = TMath::Sqrt(proton_mass*proton_mass+p2*p2);
-					y_prot_cms = 0.5*TMath::Log((E_prot+particleB->GetPz())/(E_prot-particleB->GetPz())) - particles.y_cms;
-					v2.SetPxPyPzE(particleB->GetPx(),particleB->GetPy(),particleB->GetPz(),E2);
+					v2.SetPxPyPzE(particleB->GetPx(),particleB->GetPy(),pz2,E2);
 
 					v = v1 + v2;
 					inv_mass = v.M();
@@ -162,28 +154,16 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 						continue;
 						*/
 
-					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
+					//cout << "pz1 = " << pz1 << " | pz2 = " << pz2 << endl;
 
-					gbE1 = particles.calc_gbE(E1);
-					gbE2 = particles.calc_gbE(E2);
-
-					//cout << "Beta factor: " << particles.beta << endl;
-					//cout << "Gamma factor: " << particles.gamma << endl;
-					//cout << "gamma*beta*E1: " << gbE1 << " | gamma*beta*E2: " << gbE2 << endl;
-
-					pz_cms1 = particles.gamma*particleA->GetPz() - gbE1;
-					pz_cms2 = particles.gamma*particleB->GetPz() - gbE2;
-
-					//cout << "pz_cms1 = " << pz_cms1 << " | pz_cms2 = " << pz_cms2 << endl;
-
-					y2 = 0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())) - particles.y_cms;
+					y2 = 0.5*TMath::Log((E2+pz2)/(E2-pz2));
 
 					angle_j = TMath::ATan2(particleB->GetPy(), particleB->GetPx());
 
 					//cout << "y1 = " << y1 << " | y2 = " << y2 << endl;
 
-					theta1 = TMath::Abs(TMath::ATan2(pt1,pz_cms1));
-					theta2 = TMath::Abs(TMath::ATan2(pt2,pz_cms2));
+					theta1 = TMath::Abs(TMath::ATan2(pt1,pz1));
+					theta2 = TMath::Abs(TMath::ATan2(pt2,pz2));
 
 					//cout << "theta1 = " << theta1 << " | theta2 = " << theta2 << endl;
 
