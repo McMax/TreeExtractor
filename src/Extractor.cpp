@@ -25,6 +25,7 @@ int main(int argc, char** argv)
 		TString root_output_filename = argv[3];
 
 		cout << "Reading file" << endl;
+		cout << "EXTRACTOR WILL NOT TRANSFORM FRAME!!\nIt assumes the data is in CMS frame already" << endl;
 
 		mainanalyze(particletree, energy, root_output_filename);
 

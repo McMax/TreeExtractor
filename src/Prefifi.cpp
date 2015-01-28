@@ -20,7 +20,7 @@ using namespace std;
 
 void mainanalyze(TTree *particletree, const float energy, const TString output_filename="Extracted_distributions.root")
 {
-	ofstream debugfile("Debug.txt");
+	//ofstream debugfile("Debug.txt");
 	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
 
 	float 	phi[3],
@@ -85,7 +85,7 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 		n[Neg] = n[All] = n[Pos] = 0;
 
 
-		debugfile << ev << "\t" << event->GetNpa() << endl;
+		//debugfile << ev << "\t" << event->GetNpa() << endl;
 
 		unique_particles_y.clear();
 		unique_particles_eta.clear();
@@ -171,11 +171,15 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 					eta2 = -TMath::Log(TMath::Tan(0.5*theta2));
 
 					//cout << "eta1 = " << eta1 << " | eta2 = " << eta2 << endl;
-					//cout << "angle1 = " << angle << " | angle2 = " << angle_j << endl;
+				//	cout << "angle1 = " << angle << " | angle2 = " << angle_j << endl;
 
 					positive_j = particleB->isPositive();
 					if((angle_diff = TMath::Abs(angle-angle_j)) > TMath::Pi())
 						angle_diff = 2*TMath::Pi()-angle_diff;
+
+				//	cout << "angle_diff = " << angle_diff << endl;
+					//debugfile << "angle_diff = " << angle_diff << endl;
+
 					y_diff = TMath::Abs(y1-y2);
 
 					histos.histDyDphiAll->Fill(angle_diff, (y_diff = TMath::Abs(y1-y2)));

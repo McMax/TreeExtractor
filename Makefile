@@ -1,8 +1,8 @@
 CC	= g++
 LD	= g++
 
-CCFLAGS = -g -O0 `root-config --cflags` -Wall -I./inc -I$(PEV_INC)
-LDFLAGS = -g -O0 `root-config --libs` -Wall -L./lib -I$(PEV_LIB)
+CCFLAGS = -O3 `root-config --cflags` -Wall -I./inc -I$(PEV_INC)
+LDFLAGS = -O3 `root-config --libs` -Wall -L./lib -I$(PEV_LIB)
 
 TOPDIR = .
 SRC_DIR = $(TOPDIR)/src
