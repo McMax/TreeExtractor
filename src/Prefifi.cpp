@@ -200,6 +200,10 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 
 					histos.histDyDphiAll->Fill(angle_diff, (y_diff = TMath::Abs(y1-y2)));
 					histos.histDetaDphiAll->Fill(angle_diff, (eta_diff = TMath::Abs(eta1-eta2)));
+					histos.histDetaDphiAll1->Fill(angle_diff, eta_diff);
+					histos.histDetaDphiAll2->Fill(angle_diff, eta_diff);
+					histos.histDetaDphiAll3->Fill(angle_diff, eta_diff);
+					histos.histDetaDphiAll4->Fill(angle_diff, eta_diff);
 					
 					++all_correlations;
 
