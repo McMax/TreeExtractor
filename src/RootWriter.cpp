@@ -12,10 +12,6 @@ void Histos::init()
 	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",20,0,20);
 	histMeanCharge = new TH1F("histMeanCharge","Mean charge;charge",23,-1.15,1.15);
 	histAngle = new TH1F("histAngle","Azimuthal angle;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
-	histAngle1 = new TH1F("histAngle1","Azimuthal angle;#phi [rad]",50,-3.25, 3.25);
-	histAngle2 = new TH1F("histAngle2","Azimuthal angle;#phi [rad]",10,-3.25, 3.25);
-	histAngle3 = new TH1F("histAngle3","Azimuthal angle;#phi [rad]",100,-3.25, 3.25);
-	histAngle4 = new TH1F("histAngle3","Azimuthal angle;#phi [rad]",50,-TMath::Pi(), TMath::Pi()+1e-4);
 	histAngleNegNotrot = new TH1F("histAngleNegNotrot","Azimuthal angle (notrot), neg.;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
 	histAngleNeg = new TH1F("histAngleNeg","Azimuthal angle, neg.;#phi [rad]",50,-TMath::Pi(),TMath::Pi());
 	histAnglePos = new TH1F("histAnglePos","Azimuthal angle, pos.;#phi [rad]",50,-TMath::Pi(),TMath::Pi());
@@ -67,10 +63,6 @@ void Histos::init()
 	histDyDphiNeg = new TH2F("histDyDphiNeg","#Deltay versus #Delta#phi, neg.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
 	histDyDphiUnlike = new TH2F("histDyDphiUnlike","#Deltay versus #Delta#phi, unlike-sign;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
 	histDetaDphiAll = new TH2F("histDetaDphiAll","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi(),200,0,6);
-	histDetaDphiAll1 = new TH2F("histDetaDphiAll1","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
-	histDetaDphiAll2 = new TH2F("histDetaDphiAll2","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",400,0,3.2,200,0,6);
-	histDetaDphiAll3 = new TH2F("histDetaDphiAll3","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",20,0,3.2,200,0,6);
-	histDetaDphiAll4 = new TH2F("histDetaDphiAll4","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi()+1e-4,200,0,6);
 	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta versus #Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi(),200,0,6);
 	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi(),200,0,6);
 	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta versus #Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",200,0,TMath::Pi(),200,0,6);
@@ -159,10 +151,6 @@ void Histos::write()
 	histChargedPos->Write();
 	histMeanCharge->Write();
 	histAngle->Write();
-	histAngle1->Write();
-	histAngle2->Write();
-	histAngle3->Write();
-	histAngle4->Write();
 	histAnglePos->Write();
 	histAngleNeg->Write();
 	histAngleNegNotrot->Write();
@@ -214,10 +202,6 @@ void Histos::write()
 	histDyDphiNeg->Write();
 	histDyDphiUnlike->Write();
 	histDetaDphiAll->Write();
-	histDetaDphiAll1->Write();
-	histDetaDphiAll2->Write();
-	histDetaDphiAll3->Write();
-	histDetaDphiAll4->Write();
 	histDetaDphiPos->Write();
 	histDetaDphiNeg->Write();
 	histDetaDphiUnlike->Write();
@@ -264,10 +248,6 @@ void Histos::clear()
 	delete	histChargedPos;
 	delete	histMeanCharge;
 	delete 	histAngle;
-	delete 	histAngle1;
-	delete 	histAngle2;
-	delete 	histAngle3;
-	delete 	histAngle4;
 	delete 	histAnglePos;
 	delete 	histAngleNeg;
 	delete 	histAngleNegNotrot;
@@ -319,10 +299,6 @@ void Histos::clear()
 	delete histDyDphiNeg;
 	delete histDyDphiUnlike;
 	delete histDetaDphiAll;
-	delete histDetaDphiAll1;
-	delete histDetaDphiAll2;
-	delete histDetaDphiAll3;
-	delete histDetaDphiAll4;
 	delete histDetaDphiPos;
 	delete histDetaDphiNeg;
 	delete histDetaDphiUnlike;
@@ -482,10 +458,6 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histEta->Fill(eta);
 	histos->histEtacms->Fill(eta_cms);
 	histos->histAngle->Fill(angle);
-	histos->histAngle1->Fill(angle);
-	histos->histAngle2->Fill(angle);
-	histos->histAngle3->Fill(angle);
-	histos->histAngle4->Fill(angle);
 	histos->histTheta->Fill(theta);
 	histos->histThetacms->Fill(theta_cms);
 	histos->histPtWide->Fill(pt);

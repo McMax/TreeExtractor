@@ -28,10 +28,6 @@ struct Histos
 	TH1F	*histMeanCharge;
 
 	TH1F	*histAngle;
-	TH1F	*histAngle1;
-	TH1F	*histAngle2;
-	TH1F	*histAngle3;
-	TH1F	*histAngle4;
 	TH1F	*histAngleNegNotrot;
 	TH1F	*histAngleNeg;
 	TH1F	*histAnglePos;
@@ -88,10 +84,6 @@ struct Histos
 	TH2F	*histDyDphiNeg;
 	TH2F	*histDyDphiUnlike;
 	TH2F	*histDetaDphiAll;
-	TH2F	*histDetaDphiAll1;
-	TH2F	*histDetaDphiAll2;
-	TH2F	*histDetaDphiAll3;
-	TH2F	*histDetaDphiAll4;
 	TH2F	*histDetaDphiPos;
 	TH2F	*histDetaDphiNeg;
 	TH2F	*histDetaDphiUnlike;
