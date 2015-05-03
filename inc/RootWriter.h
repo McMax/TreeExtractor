@@ -67,6 +67,7 @@ struct Histos
 	TH1F	*histMeanPt;
 	TH1F	*histMeanPtNeg;
 	TH1F	*histMeanPtPos;
+	TH1F	*histPtot;
 
 	TH2F	*histPtVsYAll;
 	TH2F	*histPtVsYNeg;

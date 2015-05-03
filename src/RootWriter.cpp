@@ -46,6 +46,7 @@ void Histos::init()
 	histPzcmsAll = new TH1F("histPzcmsAll","Longitudinal momentum, CMS;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsNeg = new TH1F("histPzcmsNeg","Longitudinal momentum, CMS, neg.;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsPos = new TH1F("histPzcmsPos","Longitudinal momentum, CMS, pos.;p_{z} [GeV/c]",200,-5,10);
+	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",300, 0, 150);
 	histMeanPt = new TH1F("histMeanPt","Mean transverse momentum (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtNeg = new TH1F("histMeanPtNeg","Mean transverse momentum, neg. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtPos = new TH1F("histMeanPtPos","Mean transverse momentum, pos. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
@@ -188,6 +189,7 @@ void Histos::write()
 	histMeanPt->Write();
 	histMeanPtNeg->Write();
 	histMeanPtPos->Write();
+	histPtot->Write();
 	histPtVsYAll->Write();
 	histPtVsYPos->Write();
 	histPtVsYNeg->Write();
@@ -285,6 +287,7 @@ void Histos::clear()
 	delete	histMeanPt;
 	delete	histMeanPtNeg;
 	delete	histMeanPtPos;
+	delete	histPtot;
 	delete	histPtVsYAll;
 	delete	histPtVsYPos;
 	delete	histPtVsYNeg;
@@ -463,6 +466,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histPtWide->Fill(pt);
 	histos->histPtAll->Fill(pt);
 	histos->histPzAll->Fill(pz);
+	histos->histPtot->Fill(p);
 	histos->histPzcmsAll->Fill(pz_cms);
 	histos->histPtVsYAll->Fill(y_pi_cms, pt);
 	histos->histPtVsYprotAll->Fill(y_proton_cms, pt);
