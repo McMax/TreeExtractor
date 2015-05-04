@@ -21,19 +21,19 @@ int main(int argc, char** argv)
 	{
 		TFile *root_tree_file = new TFile(argv[1]);
 		TTree *particletree = (TTree*)root_tree_file->Get("events");
-		float energy = atof(argv[2]);
+		float momentum = atof(argv[2]);
 		TString root_output_filename = argv[3];
 
 		cout << "Reading file" << endl;
 
 		//Biore rozklad ile eventow mialo dany rozmiar
-		mainanalyze(particletree, energy, root_output_filename);
+		mainanalyze(particletree, momentum, root_output_filename);
 
 		root_tree_file->Close();
 	}
 	else
 	{
-		cout << "USAGE: extractor <path_to_particle_tree> <energy> <outputfile>" << endl;
+		cout << "USAGE: extractor <path_to_particle_tree> <beam_momentum> <outputfile>" << endl;
 		return -1;
 	}
 }

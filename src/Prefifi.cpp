@@ -18,9 +18,9 @@
 
 using namespace std;
 
-void mainanalyze(TTree *particletree, const float energy, const TString output_filename="Extracted_distributions.root")
+void mainanalyze(TTree *particletree, const float beam_momentum, const TString output_filename="Extracted_distributions.root")
 {
-	ofstream debugfile("Debug.txt");
+	//ofstream debugfile("Debug.txt");
 	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
 
 	float 	phi[3],
@@ -72,7 +72,7 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 	std::set<UInt_t> unique_particles_eta_025;
 
 	histos.init();
-	particles.init(&histos, energy);
+	particles.init(&histos, beam_momentum);
 	particles.newEvent(true);
 	root_output_file = new TFile(output_filename,"recreate");
 
@@ -87,7 +87,7 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 		n[Neg] = n[All] = n[Pos] = 0;
 
 
-		debugfile << ev << "\t" << event->GetNpa() << endl;
+		//debugfile << ev << "\t" << event->GetNpa() << endl;
 
 		unique_particles_y.clear();
 		unique_particles_eta.clear();
@@ -113,7 +113,7 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 
-			particles.analyze(particleA,energy);
+			particles.analyze(particleA,beam_momentum);
 
 			//debugfile << i << ": " <<  particleA->GetPx() << "\t" << particleA->GetPy() << "\t" << particleA->GetPz() << endl;
 
@@ -174,7 +174,7 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 					pz_cms1 = particles.gamma*particleA->GetPz() - gbE1;
 					pz_cms2 = particles.gamma*particleB->GetPz() - gbE2;
 
-					//cout << "pz_cms1 = " << pz_cms1 << " | pz_cms2 = " << pz_cms2 << endl;
+					//debugfile << "pz_cms1 = " << pz_cms1 << " | pz_cms2 = " << pz_cms2 << endl;
 
 					y2 = 0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())) - particles.y_cms;
 
@@ -185,12 +185,12 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 					theta1 = TMath::Abs(TMath::ATan2(pt1,pz_cms1));
 					theta2 = TMath::Abs(TMath::ATan2(pt2,pz_cms2));
 
-					//cout << "theta1 = " << theta1 << " | theta2 = " << theta2 << endl;
+					//debugfile << "theta1 = " << theta1 << " | theta2 = " << theta2 << endl;
 
 					eta1 = -TMath::Log(TMath::Tan(0.5*theta1));
 					eta2 = -TMath::Log(TMath::Tan(0.5*theta2));
 
-					//cout << "eta1 = " << eta1 << " | eta2 = " << eta2 << endl;
+					//debugfile << "eta1 = " << eta1 << " | eta2 = " << eta2 << endl;
 					//cout << "angle1 = " << angle << " | angle2 = " << angle_j << endl;
 
 					positive_j = particleB->isPositive();
@@ -200,6 +200,8 @@ void mainanalyze(TTree *particletree, const float energy, const TString output_f
 
 					histos.histDyDphiAll->Fill(angle_diff, (y_diff = TMath::Abs(y1-y2)));
 					histos.histDetaDphiAll->Fill(angle_diff, (eta_diff = TMath::Abs(eta1-eta2)));
+
+					//debugfile << "deta=" << eta_diff << endl;
 					
 					++all_correlations;
 

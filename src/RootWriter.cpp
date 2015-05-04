@@ -356,7 +356,7 @@ Float_t Particles::beta = 0;
 Float_t Particles::gamma = 0;
 Float_t Particles::gamma_beta_e = 0;
 
-void Particles::init(Histos *histograms, const float ener)
+void Particles::init(Histos *histograms, const float momentum)
 {
 	histos = histograms;
 	angle = 0.;
@@ -371,8 +371,8 @@ void Particles::init(Histos *histograms, const float ener)
 		mean_pt[ch] = 0.;
 	}
 
-	beta = calc_beta(ener);
-	gamma = calc_gamma(ener);
+	beta = calc_beta(momentum);
+	gamma = calc_gamma(momentum);
 	y_cms = 0.5*TMath::Log((1+beta)/(1-beta));
 	std::cout << "Beta factor: " << beta << std::endl;
 	std::cout << "Gamma factor: " << gamma << std::endl;
