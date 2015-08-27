@@ -84,10 +84,16 @@ struct Histos
 	TH2F	*histDyDphiPos;
 	TH2F	*histDyDphiNeg;
 	TH2F	*histDyDphiUnlike;
+
 	TH2F	*histDetaDphiAll;
 	TH2F	*histDetaDphiPos;
 	TH2F	*histDetaDphiNeg;
 	TH2F	*histDetaDphiUnlike;
+
+	TH2F	*histDetaDphiAllReflected;
+	TH2F	*histDetaDphiPosReflected;
+	TH2F	*histDetaDphiNegReflected;
+	TH2F	*histDetaDphiUnlikeReflected;
 
 	TH1D	*histInvMass;
 
@@ -135,7 +141,7 @@ struct Histos
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;
 
-	void init();
+	void init(const float momentum);
 	void write();
 	void clear();
 	void LogBinning(TH2F*);

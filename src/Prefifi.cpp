@@ -71,7 +71,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 	std::set<UInt_t> unique_particles_y_025;
 	std::set<UInt_t> unique_particles_eta_025;
 
-	histos.init();
+	histos.init(beam_momentum);
 	particles.init(&histos, beam_momentum);
 	particles.newEvent(true);
 	root_output_file = new TFile(output_filename,"recreate");
@@ -200,6 +200,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 
 					histos.histDyDphiAll->Fill(angle_diff, (y_diff = TMath::Abs(y1-y2)));
 					histos.histDetaDphiAll->Fill(angle_diff, (eta_diff = TMath::Abs(eta1-eta2)));
+					Fill4Times(histos.histDetaDphiAllReflected, eta_diff, angle_diff);
 
 					//debugfile << "deta=" << eta_diff << endl;
 					
@@ -212,19 +213,22 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 
 						histos.histDyDphiPos->Fill(angle_diff, y_diff);
 						histos.histDetaDphiPos->Fill(angle_diff, eta_diff);
+						Fill4Times(histos.histDetaDphiPosReflected, eta_diff, angle_diff);
 					}
 					else if((positive_j == false) && (positive == false))
 					{
-							++correlations;
-							++neg_correlations;
-							histos.histDyDphiNeg->Fill(angle_diff, y_diff);
-							histos.histDetaDphiNeg->Fill(angle_diff, eta_diff);
+						++correlations;
+						++neg_correlations;
+						histos.histDyDphiNeg->Fill(angle_diff, y_diff);
+						histos.histDetaDphiNeg->Fill(angle_diff, eta_diff);
+						Fill4Times(histos.histDetaDphiNegReflected, eta_diff, angle_diff);
 					}
 					else
 					{
 						++unlike_correlations;
 						histos.histDyDphiUnlike->Fill(angle_diff, y_diff);
 						histos.histDetaDphiUnlike->Fill(angle_diff, eta_diff);
+						Fill4Times(histos.histDetaDphiUnlikeReflected, eta_diff, angle_diff);
 					}
 				}
 			}
@@ -280,3 +284,22 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 	histos.clear();
 	root_output_file->Close();
 }
+
+void Fill4Times(TH2F* hist, const float deta, const float dphi)
+{
+	hist->Fill(dphi,deta);
+	hist->Fill(dphi,-deta);
+
+	if((-1*dphi) < (-0.5*TMath::Pi()))	//If phi's reflection is smaller than -Pi/2, reflect it
+	{
+		hist->Fill((2*TMath::Pi()-dphi),deta);
+		hist->Fill((2*TMath::Pi()-dphi),-deta);
+	}
+	else
+	{
+
+		hist->Fill(-dphi,deta);
+		hist->Fill(-dphi,-deta);
+	}
+}
+
