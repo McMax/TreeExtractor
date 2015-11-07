@@ -54,6 +54,7 @@ struct Histos
 	TH1F	*histEtacmsNeg;
 	TH1F	*histEtacmsPos;
 
+	TH1F	*histPtWide;
 	TH1F	*histPtAll;
 	TH1F	*histPtNeg;
 	TH1F	*histPtPos;
@@ -66,6 +67,7 @@ struct Histos
 	TH1F	*histMeanPt;
 	TH1F	*histMeanPtNeg;
 	TH1F	*histMeanPtPos;
+	TH1F	*histPtot;
 
 	TH2F	*histPtVsYAll;
 	TH2F	*histPtVsYNeg;
@@ -82,10 +84,16 @@ struct Histos
 	TH2F	*histDyDphiPos;
 	TH2F	*histDyDphiNeg;
 	TH2F	*histDyDphiUnlike;
+
 	TH2F	*histDetaDphiAll;
 	TH2F	*histDetaDphiPos;
 	TH2F	*histDetaDphiNeg;
 	TH2F	*histDetaDphiUnlike;
+
+	TH2F	*histDetaDphiAllReflected;
+	TH2F	*histDetaDphiPosReflected;
+	TH2F	*histDetaDphiNegReflected;
+	TH2F	*histDetaDphiUnlikeReflected;
 
 	TH1D	*histInvMass;
 
@@ -133,7 +141,7 @@ struct Histos
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;
 
-	void init();
+	void init(const float momentum);
 	void write();
 	void clear();
 	void LogBinning(TH2F*);
@@ -162,7 +170,7 @@ public:
 
 	Particles() {}
 
-	void init(Histos *histograms, const float ener);
+	void init(Histos *histograms, const float momentum);
 	void newEvent(bool first = false);
 	void analyze(Particle*, const int);
 	static Float_t choose_dedx(Particle* particle)
@@ -196,8 +204,8 @@ public:
 		}
 	}
 	
-	static float inline calc_beta(float ener) { return (ener/(ener+nucleon_mass));}
-	static float inline calc_gamma(float ener) { return (1/(TMath::Sqrt(1-TMath::Power(calc_beta(ener),2))));}
+	static float inline calc_beta(float momentum) { return (momentum/(TMath::Sqrt(momentum*momentum+nucleon_mass*nucleon_mass)+nucleon_mass));}
+	static float inline calc_gamma(float momentum) { return (1/(TMath::Sqrt(1-TMath::Power(calc_beta(momentum),2))));}
 	float inline calc_gbE(float ener) { return (gamma_beta_e = beta*gamma*ener);}
 };
 

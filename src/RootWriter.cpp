@@ -5,16 +5,28 @@
 #include "Particle.h"
 #include "TFile.h"
 
-void Histos::init()
+void Histos::init(const float momentum)
 {
+	int detadphibins[2];
+	if(momentum <= 31)
+	{
+		detadphibins[0] = 26;
+		detadphibins[1] = 13;
+	}
+	else
+	{
+		detadphibins[0] = 50;
+		detadphibins[1] = 25;
+	}
+
 	histCharged = new TH1I("histCharged","Multiplicity of charged;N",20,0,20);
 	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",20,0,20);
 	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",20,0,20);
 	histMeanCharge = new TH1F("histMeanCharge","Mean charge;charge",23,-1.15,1.15);
-	histAngle = new TH1F("histAngle","Azimuthal angle;#phi [rad]",50,-3.25,3.25);
-	histAngleNegNotrot = new TH1F("histAngleNegNotrot","Azimuthal angle (notrot), neg.;#phi [rad]",50,-3.25,3.25);
-	histAngleNeg = new TH1F("histAngleNeg","Azimuthal angle, neg.;#phi [rad]",50,-3.25,3.25);
-	histAnglePos = new TH1F("histAnglePos","Azimuthal angle, pos.;#phi [rad]",50,-3.25,3.25);
+	histAngle = new TH1F("histAngle","Azimuthal angle;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
+	histAngleNegNotrot = new TH1F("histAngleNegNotrot","Azimuthal angle (notrot), neg.;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
+	histAngleNeg = new TH1F("histAngleNeg","Azimuthal angle, neg.;#phi [rad]",50,-TMath::Pi(),TMath::Pi());
+	histAnglePos = new TH1F("histAnglePos","Azimuthal angle, pos.;#phi [rad]",50,-TMath::Pi(),TMath::Pi());
 	histTheta = new TH1F("histTheta","Polar angle;#theta [rad]", 50, -1, 1);
 	histThetaNeg = new TH1F("histThetaNeg","Polar angle, neg.;#theta [rad]", 50, -1, 1);
 	histThetaPos = new TH1F("histThetaPos","Polar angle, pos.;#theta [rad]", 50, -1, 1);
@@ -36,6 +48,7 @@ void Histos::init()
 	histEtacms = new TH1F("histEtacms","Pseudorapidity;#eta",100,-4,6);
 	histEtacmsNeg = new TH1F("histEtacmsNeg","Pseudorapidity, negatively charged;#eta",100,-4,6);
 	histEtacmsPos = new TH1F("histEtacmsPos","Pseudorapidity, positively charged;#eta",100,-4,6);
+	histPtWide = new TH1F("histPtWide","Transverse momentum (wide);p_{T} [GeV/c]",750,0,150);
 	histPtAll = new TH1F("histPtAll","Transverse momentum;p_{T} [GeV/c]",150,0,3);
 	histPtNeg = new TH1F("histPtNeg","Transverse momentum, neg.;p_{T} [GeV/c]",150,0,3);
 	histPtPos = new TH1F("histPtPos","Transverse momentum, pos.;p_{T} [GeV/c]",150,0,3);
@@ -45,6 +58,7 @@ void Histos::init()
 	histPzcmsAll = new TH1F("histPzcmsAll","Longitudinal momentum, CMS;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsNeg = new TH1F("histPzcmsNeg","Longitudinal momentum, CMS, neg.;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsPos = new TH1F("histPzcmsPos","Longitudinal momentum, CMS, pos.;p_{z} [GeV/c]",200,-5,10);
+	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",300, 0, 150);
 	histMeanPt = new TH1F("histMeanPt","Mean transverse momentum (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtNeg = new TH1F("histMeanPtNeg","Mean transverse momentum, neg. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtPos = new TH1F("histMeanPtPos","Mean transverse momentum, pos. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
@@ -54,17 +68,25 @@ void Histos::init()
 	histPtVsYprotAll = new TH2F("histPtVsYprotAll","Trans. momentum vs. rapidity; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
 	histPtVsYprotNeg = new TH2F("histPtVsYprotNeg","Trans. momentum vs. rapidity, neg.; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
 	histPtVsYprotPos = new TH2F("histPtVsYprotPos","Trans. momentum vs. rapidity, pos.; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
-	histPhiVsPtAll = new TH2F("histPhiVsPtAll","Az. angle vs. transverse momentum; #phi [rad]; p_{T} [GeV/c]",50,-3.2,3.2,150,0,1.5);
-	histPhiVsPtPos = new TH2F("histPhiVsPtPos","Az. angle vs. transverse momentum, pos.; #phi [rad]; p_{T} [GeV/c]",50,-3.2,3.2,150,0,1.5);
-	histPhiVsPtNeg = new TH2F("histPhiVsPtNeg","Az. angle vs. transverse momentum, neg.; #phi [rad]; p_{T} [GeV/c]",50,-3.2,3.2,150,0,1.5);
-	histDyDphiAll = new TH2F("histDyDphiAll","#Deltay versus #Delta#phi;#Delta#phi [rad]; #Deltay_{#pi}",200,0,3.2,200,0,6.5);
-	histDyDphiPos = new TH2F("histDyDphiPos","#Deltay versus #Delta#phi, pos.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,3.2,200,0,6.5);
-	histDyDphiNeg = new TH2F("histDyDphiNeg","#Deltay versus #Delta#phi, neg.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,3.2,200,0,6.5);
-	histDyDphiUnlike = new TH2F("histDyDphiUnlike","#Deltay versus #Delta#phi, unlike-sign;#Delta#phi [rad]; #Deltay_{#pi}",200,0,3.2,200,0,6.5);
-	histDetaDphiAll = new TH2F("histDetaDphiAll","#Delta#eta versus #Delta#phi;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
-	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta versus #Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
-	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta versus #Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
-	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta versus #Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",200,0,3.2,200,0,6);
+	histPhiVsPtAll = new TH2F("histPhiVsPtAll","Az. angle vs. transverse momentum; #phi [rad]; p_{T} [GeV/c]",50,-TMath::Pi(),TMath::Pi(),150,0,1.5);
+	histPhiVsPtPos = new TH2F("histPhiVsPtPos","Az. angle vs. transverse momentum, pos.; #phi [rad]; p_{T} [GeV/c]",50,-TMath::Pi(),TMath::Pi(),150,0,1.5);
+	histPhiVsPtNeg = new TH2F("histPhiVsPtNeg","Az. angle vs. transverse momentum, neg.; #phi [rad]; p_{T} [GeV/c]",50,-TMath::Pi(),TMath::Pi(),150,0,1.5);
+	histDyDphiAll = new TH2F("histDyDphiAll","#Deltay versus #Delta#phi;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
+	histDyDphiPos = new TH2F("histDyDphiPos","#Deltay versus #Delta#phi, pos.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
+	histDyDphiNeg = new TH2F("histDyDphiNeg","#Deltay versus #Delta#phi, neg.;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
+	histDyDphiUnlike = new TH2F("histDyDphiUnlike","#Deltay versus #Delta#phi, unlike-sign;#Delta#phi [rad]; #Deltay_{#pi}",200,0,TMath::Pi(),200,0,6.5);
+
+	histDetaDphiAll = new TH2F("histDetaDphiAll","#Delta#eta#Delta#phi;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta#Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta#Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta#Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
+
+
+	histDetaDphiAllReflected = new TH2F("histDetaDphiAllReflected","#Delta#eta#Delta#phi (Reflected);#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
+	histDetaDphiPosReflected = new TH2F("histDetaDphiPosReflected","#Delta#eta#Delta#phi (Reflected), pos.;#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
+	histDetaDphiNegReflected = new TH2F("histDetaDphiNegReflected","#Delta#eta#Delta#phi (Reflected), neg.;#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
+	histDetaDphiUnlikeReflected = new TH2F("histDetaDphiUnlikeReflected","#Delta#eta#Delta#phi (Reflected), unlike-sign;#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
+
 	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
 
 	histDedx_DyDphiUnlike_05 = new TH2F("histDedx_DyDphiUnlike_05","dE/dx (#Deltay vs. #Delta#phi, unlike-sign < (0.5,0.5));#Delta#phi [rad]; #Deltay", 400,-3,3,400,0,3);
@@ -174,6 +196,7 @@ void Histos::write()
 	histEtacms->Write();
 	histEtacmsNeg->Write();
 	histEtacmsPos->Write();
+	histPtWide->Write();
 	histPtAll->Write();
 	histPtPos->Write();
 	histPtNeg->Write();
@@ -186,6 +209,7 @@ void Histos::write()
 	histMeanPt->Write();
 	histMeanPtNeg->Write();
 	histMeanPtPos->Write();
+	histPtot->Write();
 	histPtVsYAll->Write();
 	histPtVsYPos->Write();
 	histPtVsYNeg->Write();
@@ -203,6 +227,10 @@ void Histos::write()
 	histDetaDphiPos->Write();
 	histDetaDphiNeg->Write();
 	histDetaDphiUnlike->Write();
+	histDetaDphiAllReflected->Write();
+	histDetaDphiPosReflected->Write();
+	histDetaDphiNegReflected->Write();
+	histDetaDphiUnlikeReflected->Write();
 	histInvMass->Write();
 	histDedx_DyDphiUnlike_05->Write();
 	histDedx_DetaDphiUnlike_05->Write();
@@ -270,6 +298,7 @@ void Histos::clear()
 	delete	histEtacms;
 	delete	histEtacmsNeg;
 	delete	histEtacmsPos;
+	delete 	histPtWide;
 	delete 	histPtAll;
 	delete 	histPtPos;
 	delete 	histPtNeg;
@@ -282,6 +311,7 @@ void Histos::clear()
 	delete	histMeanPt;
 	delete	histMeanPtNeg;
 	delete	histMeanPtPos;
+	delete	histPtot;
 	delete	histPtVsYAll;
 	delete	histPtVsYPos;
 	delete	histPtVsYNeg;
@@ -299,6 +329,10 @@ void Histos::clear()
 	delete histDetaDphiPos;
 	delete histDetaDphiNeg;
 	delete histDetaDphiUnlike;
+	delete histDetaDphiAllReflected;
+	delete histDetaDphiPosReflected;
+	delete histDetaDphiNegReflected;
+	delete histDetaDphiUnlikeReflected;
 	delete histInvMass;
 	delete histDedx_DyDphiUnlike_05;
 	delete histDedx_DetaDphiUnlike_05;
@@ -350,7 +384,7 @@ Float_t Particles::beta = 0;
 Float_t Particles::gamma = 0;
 Float_t Particles::gamma_beta_e = 0;
 
-void Particles::init(Histos *histograms, const float ener)
+void Particles::init(Histos *histograms, const float momentum)
 {
 	histos = histograms;
 	angle = 0.;
@@ -365,8 +399,8 @@ void Particles::init(Histos *histograms, const float ener)
 		mean_pt[ch] = 0.;
 	}
 
-	beta = calc_beta(ener);
-	gamma = calc_gamma(ener);
+	beta = calc_beta(momentum);
+	gamma = calc_gamma(momentum);
 	y_cms = 0.5*TMath::Log((1+beta)/(1-beta));
 	std::cout << "Beta factor: " << beta << std::endl;
 	std::cout << "Gamma factor: " << gamma << std::endl;
@@ -457,8 +491,10 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histAngle->Fill(angle);
 	histos->histTheta->Fill(theta);
 	histos->histThetacms->Fill(theta_cms);
+	histos->histPtWide->Fill(pt);
 	histos->histPtAll->Fill(pt);
 	histos->histPzAll->Fill(pz);
+	histos->histPtot->Fill(p);
 	histos->histPzcmsAll->Fill(pz_cms);
 	histos->histPtVsYAll->Fill(y_pi_cms, pt);
 	histos->histPtVsYprotAll->Fill(y_proton_cms, pt);
