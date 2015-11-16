@@ -20,7 +20,7 @@ using namespace std;
 
 void mainanalyze(TTree *particletree, const float beam_momentum, const TString output_filename="Extracted_distributions.root")
 {
-	ofstream debugfile("Debug.txt");
+	//ofstream debugfile("Debug.txt");
 	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
 
 	float 	phi[3],
@@ -87,7 +87,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 		n[Neg] = n[All] = n[Pos] = 0;
 
 
-		debugfile << ev << "\t" << event->GetNpa() << endl;
+		//debugfile << ev << "\t" << event->GetNpa() << endl;
 
 		unique_particles_y.clear();
 		unique_particles_eta.clear();
