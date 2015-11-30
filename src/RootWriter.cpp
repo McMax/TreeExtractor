@@ -19,9 +19,9 @@ void Histos::init(const float momentum)
 		detadphibins[1] = 25;
 	}
 
-	histCharged = new TH1I("histCharged","Multiplicity of charged;N",20,0,20);
-	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",20,0,20);
-	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",20,0,20);
+	histCharged = new TH1I("histCharged","Multiplicity of charged;N",80,0,80);
+	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",80,0,80);
+	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",80,0,80);
 	histMeanCharge = new TH1F("histMeanCharge","Mean charge;charge",23,-1.15,1.15);
 	histAngle = new TH1F("histAngle","Azimuthal angle;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
 	histAngleNegNotrot = new TH1F("histAngleNegNotrot","Azimuthal angle (notrot), neg.;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
@@ -33,21 +33,24 @@ void Histos::init(const float momentum)
 	histThetacms = new TH1F("histThetacms","Polar angle, CMS;#theta [rad]", 100, -TMath::Pi(), 2*TMath::Pi());
 	histThetacmsNeg = new TH1F("histThetacmsNeg","Polar angle, CMS, neg.;#theta [rad]", 50, -TMath::Pi(), 2*TMath::Pi());
 	histThetacmsPos = new TH1F("histThetacmsPos","Polar angle, CMS, pos.;#theta [rad]", 50, -TMath::Pi(), 2*TMath::Pi());
-	histYpi = new TH1F("histYpi","Rapidity with #pi mass;y_{#pi}",100,-2,8);
-	histYpiNeg = new TH1F("histYpiNeg","Rapidity with #pi mass, neg.;y_{#pi}",100,-2,8);
-	histYpiPos = new TH1F("histYpiPos","Rapidity with #pi mass, pos.;y_{#pi}",100,-2,8);
-	histYcms = new TH1F("histYcms","CMS rapidity with #pi mass;y_{#pi}",100,-5,5);
-	histYcmsNeg = new TH1F("histYcmsNeg","CMS rapidity with #pi mass, neg.;y_{#pi}",100,-5,5);
-	histYcmsPos = new TH1F("histYcmsPos","CMS rapidity with #pi mass, pos.;y_{#pi}",100,-5,5);
-	histYprotcms = new TH1F("histYprotcms","CMS rapidity with proton mass;y_{p}",100,-5,5);
-	histYprotcmsNeg = new TH1F("histYprotcmsNeg","CMS rapidity with proton mass, neg.;y_{p}",100,-5,5);
-	histYprotcmsPos = new TH1F("histYprotcmsPos","CMS rapidity with proton mass, pos.;y_{p}",100,-5,5);
-	histEta = new TH1F("histEta","Pseudorapidity;#eta",100,-2,8);
-	histEtaNeg = new TH1F("histEtaNeg","Pseudorapidity, negatively charged;#eta",100,-2,8);
-	histEtaPos = new TH1F("histEtaPos","Pseudorapidity, positively charged;#eta",100,-2,8);
-	histEtacms = new TH1F("histEtacms","Pseudorapidity;#eta",100,-4,6);
-	histEtacmsNeg = new TH1F("histEtacmsNeg","Pseudorapidity, negatively charged;#eta",100,-4,6);
-	histEtacmsPos = new TH1F("histEtacmsPos","Pseudorapidity, positively charged;#eta",100,-4,6);
+	histYreal = new TH1F("histYreal","Rapidity with real mass;y",200,-8,8);
+	histYrealNeg = new TH1F("histYrealNeg","Rapidity with real mass, neg.;y",200,-8,8);
+	histYrealPos = new TH1F("histYrealPos","Rapidity with real mass, pos.;y",200,-8,8);
+	histYpi = new TH1F("histYpi","Rapidity with #pi mass;y_{#pi}",200,-10,10);
+	histYpiNeg = new TH1F("histYpiNeg","Rapidity with #pi mass, neg.;y_{#pi}",200,-10,10);
+	histYpiPos = new TH1F("histYpiPos","Rapidity with #pi mass, pos.;y_{#pi}",200,-10,10);
+	histYcms = new TH1F("histYcms","CMS rapidity with #pi mass;y_{#pi}",200,-10,10);
+	histYcmsNeg = new TH1F("histYcmsNeg","CMS rapidity with #pi mass, neg.;y_{#pi}",200,-10,10);
+	histYcmsPos = new TH1F("histYcmsPos","CMS rapidity with #pi mass, pos.;y_{#pi}",200,-10,10);
+	histYprotcms = new TH1F("histYprotcms","CMS rapidity with proton mass;y_{p}",200,-10,10);
+	histYprotcmsNeg = new TH1F("histYprotcmsNeg","CMS rapidity with proton mass, neg.;y_{p}",200,-10,10);
+	histYprotcmsPos = new TH1F("histYprotcmsPos","CMS rapidity with proton mass, pos.;y_{p}",200,-10,10);
+	histEta = new TH1F("histEta","Pseudorapidity;#eta",200,-8,8);
+	histEtaNeg = new TH1F("histEtaNeg","Pseudorapidity, negatively charged;#eta",200,-8,8);
+	histEtaPos = new TH1F("histEtaPos","Pseudorapidity, positively charged;#eta",200,-8,8);
+	histEtacms = new TH1F("histEtacms","Pseudorapidity;#eta",200,-10,10);
+	histEtacmsNeg = new TH1F("histEtacmsNeg","Pseudorapidity, negatively charged;#eta",200,-10,10);
+	histEtacmsPos = new TH1F("histEtacmsPos","Pseudorapidity, positively charged;#eta",200,-10,10);
 	histPtWide = new TH1F("histPtWide","Transverse momentum (wide);p_{T} [GeV/c]",750,0,150);
 	histPtAll = new TH1F("histPtAll","Transverse momentum;p_{T} [GeV/c]",150,0,3);
 	histPtNeg = new TH1F("histPtNeg","Transverse momentum, neg.;p_{T} [GeV/c]",150,0,3);
@@ -62,12 +65,12 @@ void Histos::init(const float momentum)
 	histMeanPt = new TH1F("histMeanPt","Mean transverse momentum (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtNeg = new TH1F("histMeanPtNeg","Mean transverse momentum, neg. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtPos = new TH1F("histMeanPtPos","Mean transverse momentum, pos. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
-	histPtVsYAll = new TH2F("histPtVsYAll","Trans. momentum vs. rapidity; y^{*}_{#pi}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
-	histPtVsYNeg = new TH2F("histPtVsYNeg","Trans. momentum vs. rapidity, neg.; y^{*}_{#pi}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
-	histPtVsYPos = new TH2F("histPtVsYPos","Trans. momentum vs. rapidity, pos.; y^{*}_{#pi}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
-	histPtVsYprotAll = new TH2F("histPtVsYprotAll","Trans. momentum vs. rapidity; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
-	histPtVsYprotNeg = new TH2F("histPtVsYprotNeg","Trans. momentum vs. rapidity, neg.; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
-	histPtVsYprotPos = new TH2F("histPtVsYprotPos","Trans. momentum vs. rapidity, pos.; y^{*}_{prot}; p_{T} [GeV/c]",100,-2,8,150,0,1.5);
+	histPtVsYAll = new TH2F("histPtVsYAll","Trans. momentum vs. rapidity; y^{*}_{#pi}; p_{T} [GeV/c]",100,-8,8,200,0,1.5);
+	histPtVsYNeg = new TH2F("histPtVsYNeg","Trans. momentum vs. rapidity, neg.; y^{*}_{#pi}; p_{T} [GeV/c]",200,-8,8,150,0,1.5);
+	histPtVsYPos = new TH2F("histPtVsYPos","Trans. momentum vs. rapidity, pos.; y^{*}_{#pi}; p_{T} [GeV/c]",200,-8,8,150,0,1.5);
+	histPtVsYprotAll = new TH2F("histPtVsYprotAll","Trans. momentum vs. rapidity; y^{*}_{prot}; p_{T} [GeV/c]",200,-8,8,150,0,1.5);
+	histPtVsYprotNeg = new TH2F("histPtVsYprotNeg","Trans. momentum vs. rapidity, neg.; y^{*}_{prot}; p_{T} [GeV/c]",200,-8,8,150,0,1.5);
+	histPtVsYprotPos = new TH2F("histPtVsYprotPos","Trans. momentum vs. rapidity, pos.; y^{*}_{prot}; p_{T} [GeV/c]",200,-8,8,150,0,1.5);
 	histPhiVsPtAll = new TH2F("histPhiVsPtAll","Az. angle vs. transverse momentum; #phi [rad]; p_{T} [GeV/c]",50,-TMath::Pi(),TMath::Pi(),150,0,1.5);
 	histPhiVsPtPos = new TH2F("histPhiVsPtPos","Az. angle vs. transverse momentum, pos.; #phi [rad]; p_{T} [GeV/c]",50,-TMath::Pi(),TMath::Pi(),150,0,1.5);
 	histPhiVsPtNeg = new TH2F("histPhiVsPtNeg","Az. angle vs. transverse momentum, neg.; #phi [rad]; p_{T} [GeV/c]",50,-TMath::Pi(),TMath::Pi(),150,0,1.5);
@@ -181,6 +184,9 @@ void Histos::write()
 	histThetacms->Write();
 	histThetacmsPos->Write();
 	histThetacmsNeg->Write();
+	histYreal->Write();
+	histYrealPos->Write();
+	histYrealNeg->Write();
 	histYpi->Write();
 	histYpiPos->Write();
 	histYpiNeg->Write();
@@ -283,6 +289,9 @@ void Histos::clear()
 	delete 	histThetacms;
 	delete 	histThetacmsPos;
 	delete 	histThetacmsNeg;
+	delete 	histYreal;
+	delete 	histYrealPos;
+	delete 	histYrealNeg;
 	delete 	histYpi;
 	delete 	histYpiPos;
 	delete 	histYpiNeg;
@@ -389,6 +398,8 @@ void Particles::init(Histos *histograms, const float momentum)
 	histos = histograms;
 	angle = 0.;
 	theta = theta_cms = 0.;
+	y = 0.;
+	E_real = 0.;
 	y_pi = y_cms = y_pi_cms = y_proton_cms = 0.;
 	eta = eta_cms = 0.;
 	pz_cms = pt = 0.;
@@ -461,15 +472,18 @@ void Particles::analyze(Particle *particle, const int ener)
 	px = particle->GetPx();
 	py = particle->GetPy();
 	pz = particle->GetPz();
+	mass = particle->GetMass();
 	//std::cout << "gamma = " << gamma << " | gamma_beta_e = " << gamma_beta_e << std::endl;
 	pt = TMath::Sqrt(py*py+px*px);
 	p = TMath::Sqrt(px*px+py*py+pz*pz);
+	E_real = TMath::Sqrt(mass*mass + p*p);
 	E_pi = TMath::Sqrt(pion_mass*pion_mass + p*p);
 	E_proton = TMath::Sqrt(proton_mass*proton_mass + p*p);
 	pz_cms = gamma*pz - calc_gbE(E_pi); 
 
 	angle = TMath::ATan2(py,px);
 	theta = TMath::ATan2(pt,pz);
+	y = 0.5*TMath::Log((E_real+pz)/(E_real-pz));
 	y_pi = 0.5*TMath::Log((E_pi+pz)/(E_pi-pz));
 	y_pi_cms = y_pi - y_cms;
 	y_proton_cms = 0.5*TMath::Log((E_proton+pz)/(E_proton-pz)) - y_cms;
@@ -483,6 +497,7 @@ void Particles::analyze(Particle *particle, const int ener)
 
 	mean_pt[All] += pt;
 
+	histos->histYreal->Fill(y);
 	histos->histYpi->Fill(y_pi);
 	histos->histYcms->Fill(y_pi_cms);
 	histos->histYprotcms->Fill(y_proton_cms);
@@ -517,6 +532,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histPtPos->Fill(pt);
 		histos->histPzPos->Fill(pz);
 		histos->histPzcmsPos->Fill(pz_cms);
+		histos->histYrealPos->Fill(y);
 		histos->histYpiPos->Fill(y_pi);
 		histos->histYcmsPos->Fill(y_pi_cms);
 		histos->histYprotcmsPos->Fill(y_proton_cms);
@@ -553,6 +569,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histPzNeg->Fill(pz);
 		histos->histPzcmsNeg->Fill(pz_cms);
 		mean_pt[Neg] += pt;
+		histos->histYrealNeg->Fill(y);
 		histos->histYpiNeg->Fill(y_pi);
 		histos->histYcmsNeg->Fill(y_pi_cms);
 		histos->histYprotcmsNeg->Fill(y_proton_cms);
