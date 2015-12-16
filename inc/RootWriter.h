@@ -19,6 +19,7 @@ enum charge
 	Pos = 2
 };
 
+//All histograms
 struct Histos
 {
 	TH1I	*histCharged;
@@ -97,18 +98,9 @@ struct Histos
 
 	TH1D	*histInvMass;
 
-	TH2F	*histDedx_DetaDphiUnlike_05;
-	TH2F	*histDedx_DyDphiUnlike_05;
-	TH2F	*histDedx_DetaDphiUnlike_025;
-	TH2F	*histDedx_DyDphiUnlike_025;
-
 	TH2F	*histDedx;
 	TH2F	*histDedxPos;
 	TH2F	*histDedxNeg;
-
-	//TH2F	*histDedxSelected;
-	//TH2F	*histDedxPosSelected;
-	//TH2F	*histDedxNegSelected;
 
 	TH2F	*histDedxVtpc1;
 	TH2F	*histDedxVtpc1Pos;
@@ -147,7 +139,8 @@ struct Histos
 	void LogBinning(TH2F*);
 };
 
-class Particles //klasa liczaca zmienne wszystkich trackow w JEDNYM evencie
+//All kinematic variables needed to describe the particle
+class Particles
 {
 	Histos *histos;
 	Float_t	angle,
@@ -209,6 +202,5 @@ public:
 	float inline calc_gbE(float ener) { return (gamma_beta_e = beta*gamma*ener);}
 };
 
-std::map<int,int> getDistro(TString);
 float mk_angle3(float);
 #endif

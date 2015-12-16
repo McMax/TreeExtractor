@@ -8,6 +8,7 @@
 void Histos::init(const float momentum)
 {
 	int detadphibins[2];
+//Due to low statistics, pp20 and pp31 have wider bins. This is applied only in ALICE style distributions.
 	if(momentum <= 31)
 	{
 		detadphibins[0] = 26;
@@ -89,17 +90,9 @@ void Histos::init(const float momentum)
 
 	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
 
-	histDedx_DyDphiUnlike_05 = new TH2F("histDedx_DyDphiUnlike_05","dE/dx (#Deltay vs. #Delta#phi, unlike-sign < (0.5,0.5));#Delta#phi [rad]; #Deltay", 400,-3,3,400,0,3);
-	histDedx_DetaDphiUnlike_05 = new TH2F("histDedx_DetaDphiUnlike_05","dE/dx (#Delta#eta vs. #Delta#phi, unlike-sign < (0.5,0.5));#Delta#phi [rad]; #Delta#eta", 400,-3,3,400,0,3);
-	histDedx_DyDphiUnlike_025 = new TH2F("histDedx_DyDphiUnlike_025","dE/dx (#Deltay vs. #Delta#phi, unlike-sign < (0.25,0.25));#Delta#phi [rad]; #Deltay", 400,-3,3,400,0,3);
-	histDedx_DetaDphiUnlike_025 = new TH2F("histDedx_DetaDphiUnlike_025","dE/dx (#Delta#eta vs. #Delta#phi, unlike-sign < (0.25,0.25));#Delta#phi [rad]; #Delta#eta", 400,-3,3,400,0,3);
-
 	histDedx = new TH2F("histDedx","dE/dx (all charged)",400,-3,3,400,0,3);
 	histDedxPos = new TH2F("histDedxPos","dE/dx (pos. charged)",400,-3,3,400,0,3);
 	histDedxNeg = new TH2F("histDedxNeg","dE/dx (neg. charged)",400,-3,3,400,0,3);
-	//histDedxSelected = new TH2F("histDedxSelected","dE/dx (selected, all charged)",400,-3,3,400,0,3);
-	//histDedxPosSelected = new TH2F("histDedxPosSelected","dE/dx (selected, pos. charged)",400,-3,3,400,0,3);
-	//histDedxNegSelected = new TH2F("histDedxNegSelected","dE/dx (selected, neg. charged)",400,-3,3,400,0,3);
 	histDedxVtpc1 = new TH2F("histDedxVtpc1","dE/dx (VTPC1, all charged)",400,-3,3,400,0,3);
 	histDedxVtpc1Pos = new TH2F("histDedxVtpc1Pos","dE/dx (VTPC1, pos. charged)",400,-3,3,400,0,3);
 	histDedxVtpc1Neg = new TH2F("histDedxVtpc1Neg","dE/dx (VTPC1, neg. charged)",400,-3,3,400,0,3);
@@ -129,9 +122,6 @@ void Histos::init(const float momentum)
 	LogBinning(histDedx);
 	LogBinning(histDedxPos);
 	LogBinning(histDedxNeg);
-//	LogBinning(histDedxSelected);
-//	LogBinning(histDedxPosSelected);
-//	LogBinning(histDedxNegSelected);
 	LogBinning(histDedxVtpc1);
 	LogBinning(histDedxVtpc1Pos);
 	LogBinning(histDedxVtpc1Neg);
@@ -141,12 +131,9 @@ void Histos::init(const float momentum)
 	LogBinning(histDedxMtpc);
 	LogBinning(histDedxMtpcPos);
 	LogBinning(histDedxMtpcNeg);
-	LogBinning(histDedx_DyDphiUnlike_05);
-	LogBinning(histDedx_DetaDphiUnlike_05);
-	LogBinning(histDedx_DyDphiUnlike_025);
-	LogBinning(histDedx_DetaDphiUnlike_025);
 }
 
+//Taken from Maja
 void Histos::LogBinning(TH2F *hist)
 {
 	TAxis *axis = hist->GetXaxis();
@@ -232,16 +219,9 @@ void Histos::write()
 	histDetaDphiNegReflected->Write();
 	histDetaDphiUnlikeReflected->Write();
 	histInvMass->Write();
-	histDedx_DyDphiUnlike_05->Write();
-	histDedx_DetaDphiUnlike_05->Write();
-	histDedx_DyDphiUnlike_025->Write();
-	histDedx_DetaDphiUnlike_025->Write();
 	histDedx->Write();
 	histDedxPos->Write();
 	histDedxNeg->Write();
-//	histDedxSelected->Write();
-	//histDedxPosSelected->Write();
-	//histDedxNegSelected->Write();
 	histDedxVtpc1->Write();
 	histDedxVtpc1Pos->Write();
 	histDedxVtpc1Neg->Write();
@@ -334,16 +314,9 @@ void Histos::clear()
 	delete histDetaDphiNegReflected;
 	delete histDetaDphiUnlikeReflected;
 	delete histInvMass;
-	delete histDedx_DyDphiUnlike_05;
-	delete histDedx_DetaDphiUnlike_05;
-	delete histDedx_DyDphiUnlike_025;
-	delete histDedx_DetaDphiUnlike_025;
 	delete histDedx;
 	delete histDedxPos;
 	delete histDedxNeg;
-	//delete histDedxSelected;
-	//delete histDedxPosSelected;
-	//delete histDedxNegSelected;
 	delete histDedxVtpc1;
 	delete histDedxVtpc1Pos;
 	delete histDedxVtpc1Neg;
@@ -451,6 +424,8 @@ void Particles::newEvent(bool first)
 	}
 }
 
+//Calculation of kinematic variables and filling kinematic distributions.
+//Some of them are calculed second time. Quite inefficient but had no time and self-denial to optimize it.
 void Particles::analyze(Particle *particle, const int ener)
 {
 	if(particle->isPositive())
@@ -508,8 +483,6 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histnDedxVtpc2->Fill(p,particle->GetNdEdxVtpc2());
 	histos->histnDedxMtpc->Fill(p,particle->GetNdEdxMtpc());
 
-	//histos->histDedxSelected->Fill(p,choose_dedx(particle));
-
 	if(particle->isPositive())
 	{
 		n[Pos]++;
@@ -537,8 +510,6 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histnDedxVtpc1Pos->Fill(p,particle->GetNdEdxVtpc1());
 		histos->histnDedxVtpc2Pos->Fill(p,particle->GetNdEdxVtpc2());
 		histos->histnDedxMtpcPos->Fill(p,particle->GetNdEdxMtpc());
-
-		//histos->histDedxPosSelected->Fill(p,choose_dedx(particle));
 	}
 	else
 	{
@@ -569,25 +540,5 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histnDedxVtpc1Neg->Fill(p,particle->GetNdEdxVtpc1());
 		histos->histnDedxVtpc2Neg->Fill(p,particle->GetNdEdxVtpc2());
 		histos->histnDedxMtpcNeg->Fill(p,particle->GetNdEdxMtpc());
-
-		//histos->histDedxNegSelected->Fill(p,choose_dedx(particle));
 	}
-}
-
-using namespace std;
-
-map<int,int> getDistro(TString root_filename)
-{
-	TFile *rootfile = new TFile(root_filename);
-	map<int,int> distribution;
-
-	TH1I* histMult = (TH1I*)rootfile->Get("histCharged");
-	cout << "\t\tdone" << endl;
-
-	for(int i=0; i<histMult->GetNbinsX(); i++)
-		distribution.insert(pair<int,int> (i,histMult->GetBinContent(i+1)));
-
-	cout << distribution[0] << " events with 0 particles" << endl;
-
-	return distribution;
 }

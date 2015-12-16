@@ -23,11 +23,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 	//ofstream debugfile("Debug.txt");
 	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
 
-	float 	phi[3],
-		phiSq[3],
-		angle,
-		angle3,
-
+	float	angle, angle3,
 		p1, p2,
 		pt1, pt2,
 		pz_cms1, pz_cms2,
@@ -48,12 +44,14 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 		positive_j;
 
 	int	n[3];
+	unsigned int all_particles=0;
 	UInt_t	i,j;
 
 	TLorentzVector v1, v2, v;
 
 	unsigned correlations = 0, pos_correlations = 0, neg_correlations = 0, all_correlations = 0, unlike_correlations = 0;
 
+//Preparation of ParticleTree output file
 	Event *event = new Event();
 	Particle *particleA, *particleB;
 	particletree->SetBranchAddress("event",&event);
@@ -65,41 +63,29 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 	Histos histos;
 	TFile *root_output_file;
 
-//	to dE/dx of particles in (deta,dphi) < (0.5,0.5)
-	std::set<UInt_t> unique_particles_y;
-	std::set<UInt_t> unique_particles_eta;
-	std::set<UInt_t> unique_particles_y_025;
-	std::set<UInt_t> unique_particles_eta_025;
-
 	histos.init(beam_momentum);
 	particles.init(&histos, beam_momentum);
 	particles.newEvent(true);
 	root_output_file = new TFile(output_filename,"recreate");
+//End of preparation
 
 	cout << "Writing events" << endl;
 
+//Loop over events
 	for(ev=0; ev<treeNentries; ++ev)
 	{
 		particletree->GetEntry(ev);
 		
-		phi[Neg] = phi[All] = phi[Pos]= 0.;
-		phiSq[Neg] = phiSq[All] = phiSq[Pos] = 0.;
 		n[Neg] = n[All] = n[Pos] = 0;
-
 
 		//debugfile << ev << "\t" << event->GetNpa() << endl;
 
-		unique_particles_y.clear();
-		unique_particles_eta.clear();
-		unique_particles_y_025.clear();
-		unique_particles_eta_025.clear();
-
+//Loop over the first particle in two-particle pair
 		for(i=0; i<event->GetNpa(); ++i)
 		{
 			particleA = event->GetParticle(i);
 
-			//if((TMath::Abs(particleA->GetBx()) > 4) || (TMath::Abs(particleA->GetBy()) > 2))
-			//	continue;
+//Calculating kinematics for Delta-eta Delta-phi
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
 			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 			E1 = TMath::Sqrt(TMath::Power(pion_mass,2)+p1*p1);
@@ -107,17 +93,14 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
 			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
 
-			//if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
-			//	continue;
-
 			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 
+//Calculating the rest of variables (RootWriter.cpp)
 			particles.analyze(particleA,beam_momentum);
 
 			//debugfile << i << ": " <<  particleA->GetPx() << "\t" << particleA->GetPy() << "\t" << particleA->GetPz() << endl;
 
-			//angle = TMath::Sqrt(TMath::Power(particleA->GetPx(),2) + TMath::Power(particleA->GetPy(),2));
 			positive = particleA->isPositive();
 
 			//debugfile << (positive ? "1 " : "-1 ") << angle << endl;
@@ -126,6 +109,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 
 			if(event->GetNpa() > 1)
 			{
+//Loop over the second particle in two-particle pair
 				for(j=i+1; j<event->GetNpa(); ++j)
 				{
 					particleB = event->GetParticle(j);
@@ -134,14 +118,9 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 					//cout << "Particle A: px=" << particleA->GetPx() << " py=" << particleA->GetPy() << " pz=" << particleA->GetPz() << endl;
 					//cout << "Particle B: px=" << particleB->GetPx() << " py=" << particleB->GetPy() << " pz=" << particleB->GetPz() << endl;
 
-			//		if((TMath::Abs(particleB->GetBx()) > 4) || (TMath::Abs(particleB->GetBy()) > 2))
-			//			continue;
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
 
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
-
-					//cout << "p1 = " << p1 << " | p2 = " << p2 << endl;
-
 					E2 = TMath::Sqrt(TMath::Power(pion_mass,2)+p2*p2);
 					E_prot = TMath::Sqrt(proton_mass*proton_mass+p2*p2);
 					y_prot_cms = 0.5*TMath::Log((E_prot+particleB->GetPz())/(E_prot-particleB->GetPz())) - particles.y_cms;
@@ -157,13 +136,9 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 
 					histos.histInvMass->Fill(inv_mass);
 
-					/*
-					if(y_prot_cms > (particles.y_cms - 0.5))		//Quick cross-check
-						continue;
-						*/
-
 					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
 
+//Gamma, beta, energy. All needed to shift particles rapidity to CMS. Calculation done in RootWriter.h. I agree, this is strange place of putting such code in header.
 					gbE1 = particles.calc_gbE(E1);
 					gbE2 = particles.calc_gbE(E2);
 
@@ -194,17 +169,24 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 					//cout << "angle1 = " << angle << " | angle2 = " << angle_j << endl;
 
 					positive_j = particleB->isPositive();
+
+//Calculating differences in azimuthal angle and rapidity
 					if((angle_diff = TMath::Abs(angle-angle_j)) > TMath::Pi())
 						angle_diff = 2*TMath::Pi()-angle_diff;
 					y_diff = TMath::Abs(y1-y2);
 
+//Filling dydphi and detadphi histograms
 					histos.histDyDphiAll->Fill(angle_diff, (y_diff = TMath::Abs(y1-y2)));
 					histos.histDetaDphiAll->Fill(angle_diff, (eta_diff = TMath::Abs(eta1-eta2)));
+
+//Filling with automatic reflection (ALICE style)
 					Fill4Times(histos.histDetaDphiAllReflected, eta_diff, angle_diff);
 
 					//debugfile << "deta=" << eta_diff << endl;
 					
 					++all_correlations;
+
+//The same for different charge combinations
 
 					if((positive_j == true) && (positive == true))
 					{
@@ -233,22 +215,13 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 				}
 			}
 
+			all_particles++;
 			n[All]++;
-			phi[All] += angle;
-			phiSq[All] += angle*angle;
 
 			if(positive)
-			{
 				n[Pos]++;
-				phi[Pos] += angle;
-				phiSq[Pos] += angle*angle;
-			}
 			else
-			{
 				n[Neg]++;
-				phi[Neg] += angle3;
-				phiSq[Neg] += angle3*angle3;
-			}
 		}	
 
 		if((event->GetNpa()!=n[All]))
@@ -269,6 +242,8 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 	cout << "Like-sign correlations: " << correlations << endl;
 	cout << "Positive correlations: " << pos_correlations << endl;
 	cout << "Negative correlations: " << neg_correlations << endl;
+	cout << "=======================" << endl << "All particles: " << all_particles << ", all events: " << ev << endl;
+	cout << "Mean multiplicity: " << (((double)all_particles)/ev) << endl;
 	//debugfile << "All correlations: " << all_correlations << endl;
 	//debugfile << "\nLike-sign correlations: " << correlations << endl;
 	//debugfile << "Positive correlations: " << pos_correlations << endl;

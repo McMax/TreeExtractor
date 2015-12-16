@@ -26,8 +26,7 @@ int main(int argc, char** argv)
 
 		cout << "Reading file" << endl;
 
-		//Biore rozklad ile eventow mialo dany rozmiar
-		mainanalyze(particletree, momentum, root_output_filename);
+		mainanalyze(particletree, momentum, root_output_filename);	//In Prefifi.cpp
 
 		root_tree_file->Close();
 	}
