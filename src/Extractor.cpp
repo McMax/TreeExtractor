@@ -21,12 +21,12 @@ int main(int argc, char** argv)
 	{
 		TFile *root_tree_file = new TFile(argv[1]);
 		TTree *particletree = (TTree*)root_tree_file->Get("events");
-		float momentum = atof(argv[2]);
+		float beam_momentum = atof(argv[2]);
 		TString root_output_filename = argv[3];
 
 		cout << "Reading file" << endl;
 
-		mainanalyze(particletree, momentum, root_output_filename);	//In Prefifi.cpp
+		mainanalyze(particletree, beam_momentum, root_output_filename);
 
 		root_tree_file->Close();
 	}
