@@ -64,6 +64,7 @@ void Histos::init(const float momentum)
 	histPzcmsPos = new TH1F("histPzcmsPos","Longitudinal momentum, CMS, pos.;p_{z} [GeV/c]",200,-5,10);
 	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",300, 0, 150);
 	histEtot = new TH1F("histEtot","Total energy;E_{tot} [GeV]", 300, 0, 150);
+	histEtotCALM = new TH1F("histEtotCALM","Total energy;E_{tot} [GeV]", 300, 0, 150);
 
 	histMeanPt = new TH1F("histMeanPt","Mean transverse momentum (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtNeg = new TH1F("histMeanPtNeg","Mean transverse momentum, neg. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
@@ -94,68 +95,8 @@ void Histos::init(const float momentum)
 
 	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
 
-	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
-
-	histDedx = new TH2F("histDedx","dE/dx (all charged)",400,-3,3,400,0,3);
-	histDedxPos = new TH2F("histDedxPos","dE/dx (pos. charged)",400,-3,3,400,0,3);
-	histDedxNeg = new TH2F("histDedxNeg","dE/dx (neg. charged)",400,-3,3,400,0,3);
-	histDedxVtpc1 = new TH2F("histDedxVtpc1","dE/dx (VTPC1, all charged)",400,-3,3,400,0,3);
-	histDedxVtpc1Pos = new TH2F("histDedxVtpc1Pos","dE/dx (VTPC1, pos. charged)",400,-3,3,400,0,3);
-	histDedxVtpc1Neg = new TH2F("histDedxVtpc1Neg","dE/dx (VTPC1, neg. charged)",400,-3,3,400,0,3);
-	histDedxVtpc2 = new TH2F("histDedxVtpc2","dE/dx (VTPC2, all charged)",400,-3,3,400,0,3);
-	histDedxVtpc2Pos = new TH2F("histDedxVtpc2Pos","dE/dx (VTPC2, pos. charged)",400,-3,3,400,0,3);
-	histDedxVtpc2Neg = new TH2F("histDedxVtpc2Neg","dE/dx (VTPC2, neg. charged)",400,-3,3,400,0,3);
-	histDedxMtpc = new TH2F("histDedxMtpc","dE/dx (MTPC, all charged)",400,-3,3,400,0,3);
-	histDedxMtpcPos = new TH2F("histDedxMtpcPos","dE/dx (MTPC, pos. charged)",400,-3,3,400,0,3);
-	histDedxMtpcNeg = new TH2F("histDedxMtpcNeg","dE/dx (MTPC, neg. charged)",400,-3,3,400,0,3);
-
-	histnDedx = new TH1I("histnDedx","No. of dE/dx points (all charged)",201,0,200);
-	histnDedxPos = new TH1I("histnDedxPos","No. of dE/dx points (pos. charged)",201,0,200);
-	histnDedxNeg = new TH1I("histnDedxNeg","No. of dE/dx points (neg. charged)",201,0,200);
-	histnDedxVtpc1 = new TH1I("histnDedxVtpc1","No. of dE/dx points (VTPC1, all charged)",101,0,100);
-	histnDedxVtpc1Pos = new TH1I("histnDedxVtpc1Pos","No. of dE/dx points (VTPC1, pos. charged)",101,0,100);
-	histnDedxVtpc1Neg = new TH1I("histnDedxVtpc1Neg","No. of dE/dx points (VTPC1, neg. charged)",101,0,100);
-	histnDedxVtpc2 = new TH1I("histnDedxVtpc2","No. of dE/dx points (VTPC2, all charged)",101,0,100);
-	histnDedxVtpc2Pos = new TH1I("histnDedxVtpc2Pos","No. of dE/dx points (VTPC2, pos. charged)",101,0,100);
-	histnDedxVtpc2Neg = new TH1I("histnDedxVtpc2Neg","No. of dE/dx points (VTPC2, neg. charged)",101,0,100);
-	histnDedxMtpc = new TH1I("histnDedxMtpc","No. of dE/dx points (MTPC, all charged)",151,0,150);
-	histnDedxMtpcPos = new TH1I("histnDedxMtpcPos","No. of dE/dx points (MTPC, pos. charged)",151,0,150);
-	histnDedxMtpcNeg = new TH1I("histnDedxMtpcNeg","No. of dE/dx points (MTPC, neg. charged)",151,0,150);
-
 	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
 	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
-
-	LogBinning(histDedx);
-	LogBinning(histDedxPos);
-	LogBinning(histDedxNeg);
-	LogBinning(histDedxVtpc1);
-	LogBinning(histDedxVtpc1Pos);
-	LogBinning(histDedxVtpc1Neg);
-	LogBinning(histDedxVtpc2);
-	LogBinning(histDedxVtpc2Pos);
-	LogBinning(histDedxVtpc2Neg);
-	LogBinning(histDedxMtpc);
-	LogBinning(histDedxMtpcPos);
-	LogBinning(histDedxMtpcNeg);
-}
-
-//Taken from Maja
-void Histos::LogBinning(TH2F *hist)
-{
-	TAxis *axis = hist->GetXaxis();
-	int bins = axis->GetNbins();
-
-	Axis_t from = axis->GetXmin();
-	Axis_t to = axis->GetXmax();
-	Axis_t width = (to - from) / bins;
-	Axis_t *new_bins = new Axis_t[bins + 1];
-
-	for (int i = 0; i <= bins; i++) {
-		new_bins[i] = TMath::Power(10, from + i * width);
-
-	}
-	axis->Set(bins, new_bins);
-	delete new_bins;
 }
 
 void Histos::write()
@@ -207,6 +148,7 @@ void Histos::write()
 	histMeanPtPos->Write();
 	histPtot->Write();
 	histEtot->Write();
+	histEtotCALM->Write();
 	histPtVsYAll->Write();
 	histPtVsYPos->Write();
 	histPtVsYNeg->Write();
@@ -229,30 +171,6 @@ void Histos::write()
 	histDetaDphiNegReflected->Write();
 	histDetaDphiUnlikeReflected->Write();
 	histInvMass->Write();
-	histDedx->Write();
-	histDedxPos->Write();
-	histDedxNeg->Write();
-	histDedxVtpc1->Write();
-	histDedxVtpc1Pos->Write();
-	histDedxVtpc1Neg->Write();
-	histDedxVtpc2->Write();
-	histDedxVtpc2Pos->Write();
-	histDedxVtpc2Neg->Write();
-	histDedxMtpc->Write();
-	histDedxMtpcPos->Write();
-	histDedxMtpcNeg->Write();
-	histnDedx->Write();
-	histnDedxPos->Write();
-	histnDedxNeg->Write();
-	histnDedxVtpc1->Write();
-	histnDedxVtpc1Pos->Write();
-	histnDedxVtpc1Neg->Write();
-	histnDedxVtpc2->Write();
-	histnDedxVtpc2Pos->Write();
-	histnDedxVtpc2Neg->Write();
-	histnDedxMtpc->Write();
-	histnDedxMtpcPos->Write();
-	histnDedxMtpcNeg->Write();
 	histPartPopMatrixPos->Write();
 	histPartPopMatrixNeg->Write();
 }
@@ -306,6 +224,7 @@ void Histos::clear()
 	delete	histMeanPtPos;
 	delete	histPtot;
 	delete	histEtot;
+	delete	histEtotCALM;
 	delete	histPtVsYAll;
 	delete	histPtVsYPos;
 	delete	histPtVsYNeg;
@@ -328,30 +247,6 @@ void Histos::clear()
 	delete histDetaDphiNegReflected;
 	delete histDetaDphiUnlikeReflected;
 	delete histInvMass;
-	delete histDedx;
-	delete histDedxPos;
-	delete histDedxNeg;
-	delete histDedxVtpc1;
-	delete histDedxVtpc1Pos;
-	delete histDedxVtpc1Neg;
-	delete histDedxVtpc2;
-	delete histDedxVtpc2Pos;
-	delete histDedxVtpc2Neg;
-	delete histDedxMtpc;
-	delete histDedxMtpcPos;
-	delete histDedxMtpcNeg;
-	delete histnDedx;
-	delete histnDedxPos;
-	delete histnDedxNeg;
-	delete histnDedxVtpc1;
-	delete histnDedxVtpc1Pos;
-	delete histnDedxVtpc1Neg;
-	delete histnDedxVtpc2;
-	delete histnDedxVtpc2Pos;
-	delete histnDedxVtpc2Neg;
-	delete histnDedxMtpc;
-	delete histnDedxMtpcPos;
-	delete histnDedxMtpcNeg;
 	delete histPartPopMatrixPos;	
 	delete histPartPopMatrixNeg;	
 }
@@ -495,14 +390,6 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histPtVsYAll->Fill(y_pi_cms, pt);
 	histos->histPtVsYprotAll->Fill(y_proton_cms, pt);
 	histos->histPhiVsPtAll->Fill(angle, pt);
-	histos->histDedx->Fill(p,particle->GetdEdx());
-	histos->histDedxVtpc1->Fill(p,particle->GetdEdxVtpc1());
-	histos->histDedxVtpc2->Fill(p,particle->GetdEdxVtpc2());
-	histos->histDedxMtpc->Fill(p,particle->GetdEdxMtpc());
-	histos->histnDedx->Fill(p,particle->GetNdEdx());
-	histos->histnDedxVtpc1->Fill(p,particle->GetNdEdxVtpc1());
-	histos->histnDedxVtpc2->Fill(p,particle->GetNdEdxVtpc2());
-	histos->histnDedxMtpc->Fill(p,particle->GetNdEdxMtpc());
 
 	if(particle->isPositive())
 	{
@@ -524,14 +411,6 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histThetacmsPos->Fill(theta_cms);
 		histos->histPhiVsPtPos->Fill(angle, pt);
 		histos->histPartPopMatrixPos->Fill(p,pt,angle);
-		histos->histDedxPos->Fill(p,particle->GetdEdx());
-		histos->histDedxVtpc1Pos->Fill(p,particle->GetdEdxVtpc1());
-		histos->histDedxVtpc2Pos->Fill(p,particle->GetdEdxVtpc2());
-		histos->histDedxMtpcPos->Fill(p,particle->GetdEdxMtpc());
-		histos->histnDedxPos->Fill(p,particle->GetNdEdx());
-		histos->histnDedxVtpc1Pos->Fill(p,particle->GetNdEdxVtpc1());
-		histos->histnDedxVtpc2Pos->Fill(p,particle->GetNdEdxVtpc2());
-		histos->histnDedxMtpcPos->Fill(p,particle->GetNdEdxMtpc());
 	}
 	else
 	{
@@ -555,13 +434,5 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histPtVsYNeg->Fill(y_pi_cms,pt);
 		histos->histPtVsYprotNeg->Fill(y_proton_cms,pt);
 		histos->histPhiVsPtNeg->Fill(angle, pt);
-		histos->histDedxNeg->Fill(p,particle->GetdEdx());
-		histos->histDedxVtpc1Neg->Fill(p,particle->GetdEdxVtpc1());
-		histos->histDedxVtpc2Neg->Fill(p,particle->GetdEdxVtpc2());
-		histos->histDedxMtpcNeg->Fill(p,particle->GetdEdxMtpc());
-		histos->histnDedxNeg->Fill(p,particle->GetNdEdx());
-		histos->histnDedxVtpc1Neg->Fill(p,particle->GetNdEdxVtpc1());
-		histos->histnDedxVtpc2Neg->Fill(p,particle->GetNdEdxVtpc2());
-		histos->histnDedxMtpcNeg->Fill(p,particle->GetNdEdxMtpc());
 	}
 }
