@@ -24,6 +24,7 @@ int main(int argc, char** argv)
 		float beam_momentum = atof(argv[2]);
 		TString root_output_filename = argv[3];
 
+		cout << "TreeExtractor" << endl << "CALM version" << endl;
 		cout << "Reading file" << endl;
 
 		mainanalyze(particletree, beam_momentum, root_output_filename);
