@@ -38,12 +38,15 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 		angle_j,
 		angle_diff,
 		y_diff,
-		eta_diff;
+		eta_diff,
+		mass,
+		Etot, Etot_cms;
 	
 	bool	positive,
 		positive_j;
 
 	int	n[3];
+	Int_t gpid;
 	unsigned int all_particles=0;
 	UInt_t	i,j;
 
@@ -77,6 +80,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 		particletree->GetEntry(ev);
 		
 		n[Neg] = n[All] = n[Pos] = 0;
+		Etot = Etot_cms = 0.;
 
 		//debugfile << ev << "\t" << event->GetNpa() << endl;
 
@@ -89,6 +93,19 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
 			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 			E1 = TMath::Sqrt(TMath::Power(pion_mass,2)+p1*p1);
+
+			gpid = particleA->GetGeantPID();
+			mass = particleA->GetMass();
+			gbE1 = particles.calc_gbE(E1);
+			pz_cms1 = particles.gamma*particleA->GetPz() - gbE1;
+
+//Adding the energy to total energy of pi. K, n, p, lambdas
+			if(((gpid >= 7) && (gpid <= 16)) || (gpid == 18) || (gpid == 26))
+			{
+				Etot += TMath::Sqrt(mass*mass + p1*p1);
+				Etot_cms += TMath::Sqrt(mass*mass + pt1*pt1 + pz_cms1*pz_cms1);
+			}
+
 			E_prot = TMath::Sqrt(proton_mass*proton_mass+p1*p1);
 			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
 			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
@@ -139,14 +156,12 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
 
 //Gamma, beta, energy. All needed to shift particles rapidity to CMS. Calculation done in RootWriter.h. I agree, this is strange place of putting such code in header.
-					gbE1 = particles.calc_gbE(E1);
 					gbE2 = particles.calc_gbE(E2);
 
 					//cout << "Beta factor: " << particles.beta << endl;
 					//cout << "Gamma factor: " << particles.gamma << endl;
 					//cout << "gamma*beta*E1: " << gbE1 << " | gamma*beta*E2: " << gbE2 << endl;
 
-					pz_cms1 = particles.gamma*particleA->GetPz() - gbE1;
 					pz_cms2 = particles.gamma*particleB->GetPz() - gbE2;
 
 					//debugfile << "pz_cms1 = " << pz_cms1 << " | pz_cms2 = " << pz_cms2 << endl;
@@ -232,6 +247,9 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 		//cout << "\rEvent " << ev;
 		if(!(ev%5000))
 			cout << "Event " << ev << endl;
+
+		histos.histEtotCALM->Fill(Etot);
+		histos.histEtotCALMCMS->Fill(Etot_cms);
 
 		particles.newEvent();
 	}

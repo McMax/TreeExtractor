@@ -72,8 +72,10 @@ struct Histos
 	TH1F	*histMeanPtNeg;
 	TH1F	*histMeanPtPos;
 	TH1F	*histPtot;
+
 	TH1F	*histEtot;
 	TH1F	*histEtotCALM;
+	TH1F	*histEtotCALMCMS;
 
 	TH2F	*histPtVsYAll;
 	TH2F	*histPtVsYNeg;
@@ -122,12 +124,13 @@ class Particles
 			y_pi, y_pi_cms,
 			y_proton_cms,
 			eta, eta_cms,
-			E_real, E_pi, E_proton,
+			E_real, E_real_cms, E_pi, E_proton,
 			px, py, pz, p, pt, pz_cms,
 			mean_pt[3];
 
 	charge		particle_charge;
 	UInt_t n[3];
+	Int_t gpid;
 
 public:
 	static Float_t y_cms;

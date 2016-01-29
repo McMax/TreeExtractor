@@ -64,7 +64,8 @@ void Histos::init(const float momentum)
 	histPzcmsPos = new TH1F("histPzcmsPos","Longitudinal momentum, CMS, pos.;p_{z} [GeV/c]",200,-5,10);
 	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",300, 0, 150);
 	histEtot = new TH1F("histEtot","Total energy;E_{tot} [GeV]", 300, 0, 150);
-	histEtotCALM = new TH1F("histEtotCALM","Total energy;E_{tot} [GeV]", 300, 0, 150);
+	histEtotCALM = new TH1F("histEtotCALM","Total energy of #pi, K, p, n, #Lambda;E_{tot} [GeV]", 400, 0, 200);
+	histEtotCALMCMS = new TH1F("histEtotCALMCMS","Total energy of #pi, K, p, n, #Lambda in CMS;E_{tot} [GeV]", 400, 0, 50);
 
 	histMeanPt = new TH1F("histMeanPt","Mean transverse momentum (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtNeg = new TH1F("histMeanPtNeg","Mean transverse momentum, neg. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
@@ -149,6 +150,7 @@ void Histos::write()
 	histPtot->Write();
 	histEtot->Write();
 	histEtotCALM->Write();
+	histEtotCALMCMS->Write();
 	histPtVsYAll->Write();
 	histPtVsYPos->Write();
 	histPtVsYNeg->Write();
@@ -225,6 +227,7 @@ void Histos::clear()
 	delete	histPtot;
 	delete	histEtot;
 	delete	histEtotCALM;
+	delete	histEtotCALMCMS;
 	delete	histPtVsYAll;
 	delete	histPtVsYPos;
 	delete	histPtVsYNeg;
@@ -348,6 +351,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	py = particle->GetPy();
 	pz = particle->GetPz();
 	mass = particle->GetMass();
+	gpid = particle->GetGeantPID();
 	//std::cout << "gamma = " << gamma << " | gamma_beta_e = " << gamma_beta_e << std::endl;
 	pt = TMath::Sqrt(py*py+px*px);
 	p = TMath::Sqrt(px*px+py*py+pz*pz);
@@ -355,6 +359,9 @@ void Particles::analyze(Particle *particle, const int ener)
 	E_pi = TMath::Sqrt(pion_mass*pion_mass + p*p);
 	E_proton = TMath::Sqrt(proton_mass*proton_mass + p*p);
 	pz_cms = gamma*pz - calc_gbE(E_pi); 
+	//pz_cms = gamma*pz - calc_gbE(E_real); 
+
+	E_real_cms = TMath::Sqrt(mass*mass + pt*pt + pz_cms*pz_cms);
 
 	angle = TMath::ATan2(py,px);
 	theta = TMath::ATan2(pt,pz);
@@ -390,6 +397,12 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histPtVsYAll->Fill(y_pi_cms, pt);
 	histos->histPtVsYprotAll->Fill(y_proton_cms, pt);
 	histos->histPhiVsPtAll->Fill(angle, pt);
+
+//	if(((gpid >= 7) && (gpid <= 16)) || (gpid == 18) || (gpid == 26))
+//	{
+//		histos->histEtotCALM->Fill(E_real);
+//		histos->histEtotCALMCMS->Fill(E_real_cms);
+//	}
 
 	if(particle->isPositive())
 	{
