@@ -93,10 +93,6 @@ void Histos::init(const float momentum)
 	histDetaDphiUnlikeReflected = new TH2F("histDetaDphiUnlikeReflected","#Delta#eta#Delta#phi (Reflected), unlike-sign;#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
 
 	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
-	histDetaDphiAllReflected = new TH2F("histDetaDphiAllReflected","#Delta#eta#Delta#phi (Reflected);#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
-	histDetaDphiPosReflected = new TH2F("histDetaDphiPosReflected","#Delta#eta#Delta#phi (Reflected), pos.;#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
-	histDetaDphiNegReflected = new TH2F("histDetaDphiNegReflected","#Delta#eta#Delta#phi (Reflected), neg.;#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
-	histDetaDphiUnlikeReflected = new TH2F("histDetaDphiUnlikeReflected","#Delta#eta#Delta#phi (Reflected), unlike-sign;#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
 
 	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
 
