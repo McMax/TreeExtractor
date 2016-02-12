@@ -63,7 +63,7 @@ void Histos::init(const float momentum)
 	histPzcmsNeg = new TH1F("histPzcmsNeg","Longitudinal momentum, CMS, neg.;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsPos = new TH1F("histPzcmsPos","Longitudinal momentum, CMS, pos.;p_{z} [GeV/c]",200,-5,10);
 	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",300, 0, 150);
-	histEtot = new TH1F("histEtot","Total energy;E_{tot} [GeV]", 300, 0, 150);
+	histEtot = new TH1F("histEtot","Total energy;E_{tot} [GeV]", 320, 0, 160);
 
 	histMeanPt = new TH1F("histMeanPt","Mean transverse momentum (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtNeg = new TH1F("histMeanPtNeg","Mean transverse momentum, neg. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
