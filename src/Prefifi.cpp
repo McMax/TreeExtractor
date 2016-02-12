@@ -21,24 +21,22 @@ using namespace std;
 void mainanalyze(TTree *particletree, const float beam_momentum, const TString output_filename="Extracted_distributions.root")
 {
 	//ofstream debugfile("Debug.txt");
-	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
-
 	float	angle, angle3,
 		p1, p2,
 		pt1, pt2,
-		pz_cms1, pz_cms2,
+		pz1, pz2,
 		E1, E2,
 		E_prot,
 		inv_mass,
-		gbE1, gbE2,
-		theta1, theta2,
 		y1, y2,
-		y_prot_cms,
 		eta1, eta2,
+		theta1, theta2,
 		angle_j,
 		angle_diff,
 		y_diff,
-		eta_diff;
+		eta_diff,
+		mass,
+		Etot;
 	
 	bool	positive,
 		positive_j;
@@ -77,6 +75,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 		particletree->GetEntry(ev);
 		
 		n[Neg] = n[All] = n[Pos] = 0;
+		Etot = 0.;
 
 		//debugfile << ev << "\t" << event->GetNpa() << endl;
 
@@ -89,11 +88,17 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 			pt1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2));
 			p1 = TMath::Sqrt(TMath::Power(particleA->GetPx(),2)+TMath::Power(particleA->GetPy(),2)+TMath::Power(particleA->GetPz(),2));
 			E1 = TMath::Sqrt(TMath::Power(pion_mass,2)+p1*p1);
-			E_prot = TMath::Sqrt(proton_mass*proton_mass+p1*p1);
-			y_prot_cms = 0.5*TMath::Log((E_prot+particleA->GetPz())/(E_prot-particleA->GetPz())) - particles.y_cms;
-			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),particleA->GetPz(),E1);
 
-			y1 = 0.5*TMath::Log((E1+particleA->GetPz())/(E1-particleA->GetPz())) - particles.y_cms;
+			mass = particleA->GetMass();
+			pz1 = particleA->GetPz();
+
+//Adding the energy to total energy of pi. K, n, p, lambdas
+			Etot += TMath::Sqrt(mass*mass + p1*p1);
+
+			E_prot = TMath::Sqrt(proton_mass*proton_mass+p1*p1);
+			v1.SetPxPyPzE(particleA->GetPx(),particleA->GetPy(),pz1,E1);
+
+			y1 = 0.5*TMath::Log((E1+pz1)/(E1-pz1));
 			angle = TMath::ATan2(particleA->GetPy(), particleA->GetPx());
 
 //Calculating the rest of variables (RootWriter.cpp)
@@ -119,12 +124,11 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 					//cout << "Particle B: px=" << particleB->GetPx() << " py=" << particleB->GetPy() << " pz=" << particleB->GetPz() << endl;
 
 					pt2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2));
-
+					pz2 = particleB->GetPz();
 					p2 = TMath::Sqrt(TMath::Power(particleB->GetPx(),2)+TMath::Power(particleB->GetPy(),2)+TMath::Power(particleB->GetPz(),2));
 					E2 = TMath::Sqrt(TMath::Power(pion_mass,2)+p2*p2);
 					E_prot = TMath::Sqrt(proton_mass*proton_mass+p2*p2);
-					y_prot_cms = 0.5*TMath::Log((E_prot+particleB->GetPz())/(E_prot-particleB->GetPz())) - particles.y_cms;
-					v2.SetPxPyPzE(particleB->GetPx(),particleB->GetPy(),particleB->GetPz(),E2);
+					v2.SetPxPyPzE(particleB->GetPx(),particleB->GetPy(),pz2,E2);
 
 					v = v1 + v2;
 					inv_mass = v.M();
@@ -138,27 +142,15 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 
 					//cout << "E1 = " << E1 << " | E2 = " << E2 << endl;
 
-//Gamma, beta, energy. All needed to shift particles rapidity to CMS. Calculation done in RootWriter.h. I agree, this is strange place of putting such code in header.
-					gbE1 = particles.calc_gbE(E1);
-					gbE2 = particles.calc_gbE(E2);
 
-					//cout << "Beta factor: " << particles.beta << endl;
-					//cout << "Gamma factor: " << particles.gamma << endl;
-					//cout << "gamma*beta*E1: " << gbE1 << " | gamma*beta*E2: " << gbE2 << endl;
-
-					pz_cms1 = particles.gamma*particleA->GetPz() - gbE1;
-					pz_cms2 = particles.gamma*particleB->GetPz() - gbE2;
-
-					//debugfile << "pz_cms1 = " << pz_cms1 << " | pz_cms2 = " << pz_cms2 << endl;
-
-					y2 = 0.5*TMath::Log((E2+particleB->GetPz())/(E2-particleB->GetPz())) - particles.y_cms;
+					y2 = 0.5*TMath::Log((E2+pz2)/(E2-pz2));
 
 					angle_j = TMath::ATan2(particleB->GetPy(), particleB->GetPx());
 
 					//cout << "y1 = " << y1 << " | y2 = " << y2 << endl;
 
-					theta1 = TMath::Abs(TMath::ATan2(pt1,pz_cms1));
-					theta2 = TMath::Abs(TMath::ATan2(pt2,pz_cms2));
+					theta1 = TMath::Abs(TMath::ATan2(pt1,pz1));
+					theta2 = TMath::Abs(TMath::ATan2(pt2,pz2));
 
 					//debugfile << "theta1 = " << theta1 << " | theta2 = " << theta2 << endl;
 
@@ -232,6 +224,8 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 		//cout << "\rEvent " << ev;
 		if(!(ev%5000))
 			cout << "Event " << ev << endl;
+
+		histos.histEtotCALM->Fill(Etot);
 
 		particles.newEvent();
 	}
