@@ -216,9 +216,6 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 				n[Neg]++;
 		}	
 
-		if((event->GetNpa()!=n[All]))
-				cerr << "Event: " << ev << " ParticleTree: " << (event->GetNpa()) << " Extraction: " << (n[All]) << endl;
-
 		//debugfile << "----------" << endl;
 
 		//cout << "\rEvent " << ev;
