@@ -19,14 +19,17 @@ int merge(TString output_filename, const vector<string> datafiles)
 	Event *event = new Event();
 	Particle *particle;
 	Int_t nentries;
+	UInt_t global_event = 0;
 
-	for(int i=0; i<datafiles.size(); i++)
+	for(unsigned int i=0; i<datafiles.size(); i++)
 	{
 		inputfile_path = datafiles[i];
+		cout << "Opening file: " << inputfile_path << endl;
 		input_file = new TFile(inputfile_path);
 		if(input_file->IsZombie())
 		{
-			//TODO
+			cout << "Input file is zombie, skipping" << endl;
+			continue;
 		}
 
 		input_tree = (TTree*)input_file->Get("events");
@@ -34,17 +37,18 @@ int merge(TString output_filename, const vector<string> datafiles)
 		nentries = input_tree->GetEntries();
 		if(nentries == 0)
 		{
-			//TODO
+			cout << "Input file has no events, skipping" << endl;
+			continue;
 		}
 
-		Int_t entry_bytes;
 		for(Int_t ev = 0; ev < nentries; ++ev)
 		{
 			input_tree->GetEntry(ev);
+			++global_event;
 
 			output_tree.BeginEvent();	//EID will be incremented internally by ParticleTree
 			
-			for(Int_t part = 0; part < event->GetNpa(); part++)
+			for(UInt_t part = 0; part < event->GetNpa(); part++)
 			{
 				particle = event->GetParticle(part);
 
@@ -57,6 +61,9 @@ int merge(TString output_filename, const vector<string> datafiles)
 				//cout << "Pid: " << particle->GetPid() << ", Eid: " << particle->GetEid() << ", px= " << particle->GetPx() << ", py= " << particle->GetPy() << endl;
 				//PID will be incremented internally by ParticleTree
 			}
+
+			if(!(global_event%10000))
+				cout << "Global event: " << global_event << ", local event: " << ev << endl;
 
 			output_tree.EndEvent();
 		}
