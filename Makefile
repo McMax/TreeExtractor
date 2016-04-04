@@ -14,15 +14,16 @@ PEV_LIB = $(PEV_DIR)/lib
 PEV_SRC = $(PEV_DIR)/src
 PEV_INC = $(PEV_DIR)/inc
 
-PROGRAM = extractor
-
 SOURCES := $(shell find $(SRC_DIR) -type f -name "*.cpp")
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
 PEV_OBJECTS = $(PEV_LIB)/Particle.o $(PEV_LIB)/Event.o $(PEV_LIB)/ParticleTree.o $(PEV_LIB)/Dict.o
 
-all: $(PROGRAM)
+all: extractor merger
 
-$(PROGRAM): $(OBJECTS) $(PEV_OBJECTS)
+extractor: $(OBJ_DIR)/Extractor.o $(OBJ_DIR)/Prefifi.o $(OBJ_DIR)/RootWriter.o $(PEV_OBJECTS)
+	$(LD) -o $@ $^ $(LDFLAGS)
+
+merger: $(OBJ_DIR)/Merger.o $(PEV_OBJECTS)
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
