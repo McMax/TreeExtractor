@@ -11,6 +11,7 @@
 const float pion_mass = 0.13957018; //GeV/c^2
 const float proton_mass = 0.938272013; //GeV/c^2
 const float nucleon_mass = 0.9389186795; //GeV/c^2
+const float neutron_mass = 0.939565346; //GeV/c^2
 
 enum charge
 {
@@ -163,7 +164,7 @@ public:
 
 	Particles() {}
 
-	void init(Histos *histograms, const float momentum);
+	void init(Histos *histograms, const TString system, const float momentum);
 	void newEvent(bool first = false);
 	void analyze(Particle*, const int);
 	static Float_t choose_dedx(Particle* particle)
@@ -197,8 +198,18 @@ public:
 		}
 	}
 	
-	static float inline calc_beta(float momentum) { return (momentum/(TMath::Sqrt(momentum*momentum+nucleon_mass*nucleon_mass)+nucleon_mass));}
-	static float inline calc_gamma(float momentum) { return (1/(TMath::Sqrt(1-TMath::Power(calc_beta(momentum),2))));}
+	static float calc_beta(float b_momentum, int beam_protons, int beam_neutrons, int target_protons, int target_neutrons)
+	{ 
+		double total_beam_momentum = b_momentum*(beam_protons+beam_neutrons);
+		std::cout << "Total beam momentum: " << total_beam_momentum << std::endl;
+		double beam_mass = beam_protons*proton_mass + beam_neutrons*neutron_mass;
+		double target_mass = target_protons*proton_mass + target_neutrons*neutron_mass;
+		double beam_energy = TMath::Sqrt(total_beam_momentum*total_beam_momentum + beam_mass*beam_mass);
+		std::cout << "Beam energy: " << beam_energy << std::endl;
+
+		return (total_beam_momentum/(beam_energy+target_mass));
+	}
+	static float inline calc_gamma(float momentum) { return (1/(TMath::Sqrt(1-TMath::Power(beta,2))));}
 	float inline calc_gbE(float ener) { return (gamma_beta_e = beta*gamma*ener);}
 };
 

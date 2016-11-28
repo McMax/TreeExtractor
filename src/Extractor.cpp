@@ -17,22 +17,23 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	if(argc == 4)
+	if(argc == 5)
 	{
 		TFile *root_tree_file = new TFile(argv[1]);
 		TTree *particletree = (TTree*)root_tree_file->Get("events");
-		float momentum = atof(argv[2]);
-		TString root_output_filename = argv[3];
+		TString system = argv[2];
+		float momentum = atof(argv[3]);
+		TString root_output_filename = argv[4];
 
 		cout << "Reading file" << endl;
 
-		mainanalyze(particletree, momentum, root_output_filename);	//In Prefifi.cpp
+		mainanalyze(particletree, system, momentum, root_output_filename);	//In Prefifi.cpp
 
 		root_tree_file->Close();
 	}
 	else
 	{
-		cout << "USAGE: extractor <path_to_particle_tree> <beam_momentum> <outputfile>" << endl;
+		cout << "USAGE: extractor <path_to_particle_tree> <system> <beam_momentum> <outputfile>" << endl;
 		return -1;
 	}
 }

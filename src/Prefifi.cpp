@@ -18,11 +18,9 @@
 
 using namespace std;
 
-void mainanalyze(TTree *particletree, const float beam_momentum, const TString output_filename="Extracted_distributions.root")
+void mainanalyze(TTree *particletree, const TString system, const float beam_momentum, const TString output_filename="Extracted_distributions.root")
 {
 	//ofstream debugfile("Debug.txt");
-	cout << "Beta calculated for nucleon mass: " << nucleon_mass << " GeV/c^2" << endl;
-
 	float	angle, angle3,
 		p1, p2,
 		pt1, pt2,
@@ -64,7 +62,7 @@ void mainanalyze(TTree *particletree, const float beam_momentum, const TString o
 	TFile *root_output_file;
 
 	histos.init(beam_momentum);
-	particles.init(&histos, beam_momentum);
+	particles.init(&histos, system, beam_momentum);
 	particles.newEvent(true);
 	root_output_file = new TFile(output_filename,"recreate");
 //End of preparation

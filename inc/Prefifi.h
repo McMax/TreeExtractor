@@ -6,6 +6,6 @@
 
 void Fill4Times(TH2F*, const float, const float);
 
-void mainanalyze(TTree*, const float, const TString);
+void mainanalyze(TTree*, const TString, const float, const TString);
 
 #endif

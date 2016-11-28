@@ -357,7 +357,7 @@ Float_t Particles::beta = 0;
 Float_t Particles::gamma = 0;
 Float_t Particles::gamma_beta_e = 0;
 
-void Particles::init(Histos *histograms, const float momentum)
+void Particles::init(Histos *histograms, const TString system, const float momentum)
 {
 	histos = histograms;
 	angle = 0.;
@@ -372,7 +372,15 @@ void Particles::init(Histos *histograms, const float momentum)
 		mean_pt[ch] = 0.;
 	}
 
-	beta = calc_beta(momentum);
+	if(system.EqualTo("pp"))
+		beta = calc_beta(momentum, 1, 0, 1, 0);
+	else if(system.EqualTo("BeBe"))
+		beta = calc_beta(momentum, 4, 3, 4, 5);
+	else
+	{
+		std::cout << "System not recognized. Exiting." << std::endl;
+		return;
+	}
 	gamma = calc_gamma(momentum);
 	y_cms = 0.5*TMath::Log((1+beta)/(1-beta));
 	std::cout << "Beta factor: " << beta << std::endl;
