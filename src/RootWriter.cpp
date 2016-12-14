@@ -373,9 +373,11 @@ void Particles::init(Histos *histograms, const TString system, const float momen
 	}
 
 	if(system.EqualTo("pp"))
-		beta = calc_beta(momentum, 1, 0, 1, 0);
+		//beta = calc_beta_asym(momentum, 1, 0, 1, 0);
+		beta = calc_beta_sym(momentum);
 	else if(system.EqualTo("BeBe"))
-		beta = calc_beta(momentum, 4, 3, 4, 5);
+		//beta = calc_beta_asym(momentum, 4, 3, 4, 5);
+		beta = calc_beta_sym(momentum);
 	else
 	{
 		std::cout << "System not recognized. Exiting." << std::endl;

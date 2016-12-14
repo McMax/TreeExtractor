@@ -197,8 +197,13 @@ public:
 				return (particle->GetdEdxVtpc1());
 		}
 	}
+	static float calc_beta_sym(float b_momentum)	//Calculation of c.m.s. beta with assumption of symmetric system
+	{
+		return (b_momentum/(TMath::Sqrt(b_momentum*b_momentum+nucleon_mass*nucleon_mass)+nucleon_mass));
+	}
 	
-	static float calc_beta(float b_momentum, int beam_protons, int beam_neutrons, int target_protons, int target_neutrons)
+	//calculation of c.m.s. beta for assymetric system
+	static float calc_beta_asym(float b_momentum, int beam_protons, int beam_neutrons, int target_protons, int target_neutrons)
 	{ 
 		double total_beam_momentum = b_momentum*(beam_protons+beam_neutrons);
 		std::cout << "Total beam momentum: " << total_beam_momentum << std::endl;
