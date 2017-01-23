@@ -46,9 +46,6 @@ struct Histos
 	TH1F	*histYcms;
 	TH1F	*histYcmsNeg;
 	TH1F	*histYcmsPos;
-	TH1F	*histYprotcms;
-	TH1F	*histYprotcmsNeg;
-	TH1F	*histYprotcmsPos;
 	TH1F	*histEta;
 	TH1F	*histEtaNeg;
 	TH1F	*histEtaPos;
@@ -74,9 +71,6 @@ struct Histos
 	TH2F	*histPtVsYAll;
 	TH2F	*histPtVsYNeg;
 	TH2F	*histPtVsYPos;
-	TH2F	*histPtVsYprotAll;
-	TH2F	*histPtVsYprotNeg;
-	TH2F	*histPtVsYprotPos;
 
 	TH2F	*histPhiVsPtAll;
 	TH2F	*histPhiVsPtPos;
@@ -98,38 +92,6 @@ struct Histos
 	TH2F	*histDetaDphiUnlikeReflected;
 
 	TH1D	*histInvMass;
-
-	TH2F	*histDedx;
-	TH2F	*histDedxPos;
-	TH2F	*histDedxNeg;
-
-	TH2F	*histDedxVtpc1;
-	TH2F	*histDedxVtpc1Pos;
-	TH2F	*histDedxVtpc1Neg;
-
-	TH2F	*histDedxVtpc2;
-	TH2F	*histDedxVtpc2Pos;
-	TH2F	*histDedxVtpc2Neg;
-
-	TH2F	*histDedxMtpc;
-	TH2F	*histDedxMtpcPos;
-	TH2F	*histDedxMtpcNeg;
-
-	TH1I	*histnDedx;
-	TH1I	*histnDedxPos;
-	TH1I	*histnDedxNeg;
-
-	TH1I	*histnDedxVtpc1;
-	TH1I	*histnDedxVtpc1Pos;
-	TH1I	*histnDedxVtpc1Neg;
-
-	TH1I	*histnDedxVtpc2;
-	TH1I	*histnDedxVtpc2Pos;
-	TH1I	*histnDedxVtpc2Neg;
-
-	TH1I	*histnDedxMtpc;
-	TH1I	*histnDedxMtpcPos;
-	TH1I	*histnDedxMtpcNeg;
 
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;
@@ -167,36 +129,6 @@ public:
 	void init(Histos *histograms, const TString system, const float momentum);
 	void newEvent(bool first = false);
 	void analyze(Particle*, const int);
-	static Float_t choose_dedx(Particle* particle)
-	{
-		static Int_t vtpc1_part;
-		static Int_t vtpc2_part;
-		static Int_t mtpc_part;
-
-		vtpc1_part = 0;
-		vtpc2_part = 0;
-		mtpc_part = 0;
-
-		vtpc1_part = particle->GetNdEdxVtpc1();
-		vtpc2_part = particle->GetNdEdxVtpc2();
-		mtpc_part = particle->GetNdEdxMtpc();
-
-		//std::cout << "dE/dx: VTPC1 part: " << vtpc1_part << "\tVTPC2 part: " << vtpc2_part << "\tMTPC part: " << mtpc_part << std::endl;
-		if((vtpc1_part == 0) && (vtpc2_part == 0) && (mtpc_part == 0))
-		{
-			std::cout << "WTF? Particle with no dE/dx information!" << std::endl;
-			return 0;
-		}
-		else
-		{
-			if(mtpc_part > 0)
-				return (particle->GetdEdxMtpc());
-			else if(vtpc2_part >= vtpc1_part)
-				return (particle->GetdEdxVtpc2());
-			else
-				return (particle->GetdEdxVtpc1());
-		}
-	}
 	static float calc_beta_sym(float b_momentum)	//Calculation of c.m.s. beta with assumption of symmetric system
 	{
 		return (b_momentum/(TMath::Sqrt(b_momentum*b_momentum+nucleon_mass*nucleon_mass)+nucleon_mass));
