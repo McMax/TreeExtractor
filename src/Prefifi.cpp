@@ -172,10 +172,11 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 					if((angle_diff = TMath::Abs(angle-angle_j)) > TMath::Pi())
 						angle_diff = 2*TMath::Pi()-angle_diff;
 					y_diff = TMath::Abs(y1-y2);
+					eta_diff = TMath::Abs(eta1-eta2);
 
 //Filling dydphi and detadphi histograms
-					histos.histDyDphiAll->Fill(angle_diff, (y_diff = TMath::Abs(y1-y2)));
-					histos.histDetaDphiAll->Fill(angle_diff, (eta_diff = TMath::Abs(eta1-eta2)));
+					histos.histDyDphiAll->Fill(angle_diff, y_diff);
+					histos.histDetaDphiAll->Fill(angle_diff, eta_diff);
 
 //Filling with automatic reflection (ALICE style)
 					Fill4Times(histos.histDetaDphiAllReflected, eta_diff, angle_diff);

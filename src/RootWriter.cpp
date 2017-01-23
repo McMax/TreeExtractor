@@ -20,9 +20,9 @@ void Histos::init(const float momentum)
 		detadphibins[1] = 25;
 	}
 
-	histCharged = new TH1I("histCharged","Multiplicity of charged;N",20,0,20);
-	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",20,0,20);
-	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",20,0,20);
+	histCharged = new TH1I("histCharged","Multiplicity of charged;N",50,0,50);
+	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",40,0,40);
+	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",40,0,40);
 	histMeanCharge = new TH1F("histMeanCharge","Mean charge;charge",23,-1.15,1.15);
 	histAngle = new TH1F("histAngle","Azimuthal angle;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
 	histAngleNegNotrot = new TH1F("histAngleNegNotrot","Azimuthal angle (notrot), neg.;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
@@ -81,7 +81,6 @@ void Histos::init(const float momentum)
 	histDetaDphiPos = new TH2F("histDetaDphiPos","#Delta#eta#Delta#phi, pos.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
 	histDetaDphiNeg = new TH2F("histDetaDphiNeg","#Delta#eta#Delta#phi, neg.;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
 	histDetaDphiUnlike = new TH2F("histDetaDphiUnlike","#Delta#eta#Delta#phi, unlike-sign;#Delta#phi [rad];#Delta#eta",192,0,TMath::Pi(),192,0,6);
-
 
 	histDetaDphiAllReflected = new TH2F("histDetaDphiAllReflected","#Delta#eta#Delta#phi (Reflected);#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
 	histDetaDphiPosReflected = new TH2F("histDetaDphiPosReflected","#Delta#eta#Delta#phi (Reflected), pos.;#Delta#phi [rad];#Delta#eta",detadphibins[0],-(TMath::Pi()/2),1.5*TMath::Pi(),detadphibins[1],-3,3);
