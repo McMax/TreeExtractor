@@ -51,12 +51,7 @@ int merge(TString output_filename, const vector<string> datafiles)
 			for(UInt_t part = 0; part < event->GetNpa(); part++)
 			{
 				particle = event->GetParticle(part);
-
-				output_tree.AddParticle(
-						particle->GetCharge(), particle->GetBx(), particle->GetBy(),
-						particle->GetPx(), particle->GetPy(), particle->GetPz(),
-						particle->GetdEdx(), particle->GetdEdxVtpc1(), particle->GetdEdxVtpc2(), particle->GetdEdxMtpc(),
-						particle->GetNdEdx(), particle->GetNdEdxVtpc1(), particle->GetNdEdxVtpc2(), particle->GetNdEdxMtpc());
+				output_tree.AddParticle(*particle);
 
 				//cout << "Pid: " << particle->GetPid() << ", Eid: " << particle->GetEid() << ", px= " << particle->GetPx() << ", py= " << particle->GetPy() << endl;
 				//PID will be incremented internally by ParticleTree
