@@ -131,6 +131,22 @@ struct Histos
 	TH1I	*histnDedxMtpcPos;
 	TH1I	*histnDedxMtpcNeg;
 
+	TH1I	*histnClustersVtpc1;
+	TH1I	*histnClustersVtpc1Pos;
+	TH1I	*histnClustersVtpc1Neg;
+
+	TH1I	*histnClustersVtpc2;
+	TH1I	*histnClustersVtpc2Pos;
+	TH1I	*histnClustersVtpc2Neg;
+
+	TH1I	*histnClustersGtpc;
+	TH1I	*histnClustersGtpcPos;
+	TH1I	*histnClustersGtpcNeg;
+
+	TH1I	*histnClustersMtpc;
+	TH1I	*histnClustersMtpcPos;
+	TH1I	*histnClustersMtpcNeg;
+
 	TH3I	*histPartPopMatrixPos;
 	TH3I	*histPartPopMatrixNeg;
 
