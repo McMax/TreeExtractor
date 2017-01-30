@@ -115,21 +115,25 @@ void Histos::init(const float momentum)
 	histnDedxMtpcPos = new TH1I("histnDedxMtpcPos","No. of dE/dx points (MTPC, pos. charged)",151,0,150);
 	histnDedxMtpcNeg = new TH1I("histnDedxMtpcNeg","No. of dE/dx points (MTPC, neg. charged)",151,0,150);
 
-	histnClustersVtpc1 = new TH1I("histnClustersVtpc1", "Number of clusters in VTPC1", 81, 0, 80);
-	histnClustersVtpc1Pos = new TH1I("histnClustersVtpc1Pos", "Number of clusters in VTPC1 (pos. charged)", 81, 0, 80);
-	histnClustersVtpc1Neg = new TH1I("histnClustersVtpc1Neg", "Number of clusters in VTPC1 (neg. charged)", 81, 0, 80);;
+	histnClusters = new TH1I("histnClusters", "Number of all fitted clusters", 301, 0, 300);
+	histnClustersPos = new TH1I("histnClustersPos", "Number of clusters all fitted (pos. charged)", 301, 0, 300);
+	histnClustersNeg = new TH1I("histnClustersNeg", "Number of clusters all fitted (neg. charged)", 301, 0, 300);;
 
-	histnClustersVtpc2 = new TH1I("histnClustersVtpc2", "Number of clusters in VTPC2", 81, 0, 80);
-	histnClustersVtpc2Pos = new TH1I("histnClustersVtpc2Pos", "Number of clusters in VTPC2 (pos. charged)", 81, 0, 80);
-	histnClustersVtpc2Neg = new TH1I("histnClustersVtpc2Neg", "Number of clusters in VTPC2 (neg. charged)", 81, 0, 80);;
+	histnClustersVtpc1 = new TH1I("histnClustersVtpc1", "Number of fitted clusters in VTPC1", 81, 0, 80);
+	histnClustersVtpc1Pos = new TH1I("histnClustersVtpc1Pos", "Number of fitted clusters in VTPC1 (pos. charged)", 81, 0, 80);
+	histnClustersVtpc1Neg = new TH1I("histnClustersVtpc1Neg", "Number of fitted clusters in VTPC1 (neg. charged)", 81, 0, 80);;
 
-	histnClustersGtpc = new TH1I("histnClustersGtpc", "Number of clusters in GTPC", 81, 0, 80);
-	histnClustersGtpcPos = new TH1I("histnClustersGtpcPos", "Number of clusters in GTPC (pos. charged)", 81, 0, 80);
-	histnClustersGtpcNeg = new TH1I("histnClustersGtpcNeg", "Number of clusters in GTPC (neg. charged)", 81, 0, 80);;
+	histnClustersVtpc2 = new TH1I("histnClustersVtpc2", "Number of fitted clusters in VTPC2", 81, 0, 80);
+	histnClustersVtpc2Pos = new TH1I("histnClustersVtpc2Pos", "Number of fitted clusters in VTPC2 (pos. charged)", 81, 0, 80);
+	histnClustersVtpc2Neg = new TH1I("histnClustersVtpc2Neg", "Number of fitted clusters in VTPC2 (neg. charged)", 81, 0, 80);;
 
-	histnClustersMtpc = new TH1I("histnClustersMtpc", "Number of clusters in MTPC", 101, 0, 100);
-	histnClustersMtpcPos = new TH1I("histnClustersMtpcPos", "Number of clusters in MTPC (pos. charged)", 101, 0, 100);
-	histnClustersMtpcNeg = new TH1I("histnClustersMtpcNeg", "Number of clusters in MTPC (neg. charged)", 101, 0, 100);;
+	histnClustersGtpc = new TH1I("histnClustersGtpc", "Number of fitted clusters in GTPC", 81, 0, 80);
+	histnClustersGtpcPos = new TH1I("histnClustersGtpcPos", "Number of fitted clusters in GTPC (pos. charged)", 81, 0, 80);
+	histnClustersGtpcNeg = new TH1I("histnClustersGtpcNeg", "Number of fitted clusters in GTPC (neg. charged)", 81, 0, 80);;
+
+	histnClustersMtpc = new TH1I("histnClustersMtpc", "Number of fitted clusters in MTPC", 101, 0, 100);
+	histnClustersMtpcPos = new TH1I("histnClustersMtpcPos", "Number of fitted clusters in MTPC (pos. charged)", 101, 0, 100);
+	histnClustersMtpcNeg = new TH1I("histnClustersMtpcNeg", "Number of fitted clusters in MTPC (neg. charged)", 101, 0, 100);;
 
 	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
 	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
@@ -258,6 +262,9 @@ void Histos::write()
 	histnDedxMtpc->Write();
 	histnDedxMtpcPos->Write();
 	histnDedxMtpcNeg->Write();
+	histnClusters->Write();
+	histnClustersPos->Write();
+	histnClustersNeg->Write();
 	histnClustersVtpc1->Write();
 	histnClustersVtpc1Pos->Write();
 	histnClustersVtpc1Neg->Write();
@@ -365,6 +372,9 @@ void Histos::clear()
 	delete histnDedxMtpc;
 	delete histnDedxMtpcPos;
 	delete histnDedxMtpcNeg;
+	delete histnClusters;
+	delete histnClustersPos;
+	delete histnClustersNeg;
 	delete histnClustersVtpc1;
 	delete histnClustersVtpc1Pos;
 	delete histnClustersVtpc1Neg;
@@ -531,6 +541,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	histos->histnDedxVtpc1->Fill(p,particle->GetNdEdxVtpc1());
 	histos->histnDedxVtpc2->Fill(p,particle->GetNdEdxVtpc2());
 	histos->histnDedxMtpc->Fill(p,particle->GetNdEdxMtpc());
+	histos->histnClusters->Fill(particle->GetNClustersVtpc1() + particle->GetNClustersVtpc2() + particle->GetNClustersGtpc() + particle->GetNClustersMtpc());
 	histos->histnClustersVtpc1->Fill(particle->GetNClustersVtpc1());
 	histos->histnClustersVtpc2->Fill(particle->GetNClustersVtpc2());
 	histos->histnClustersGtpc->Fill(particle->GetNClustersGtpc());
@@ -563,6 +574,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histnDedxVtpc1Pos->Fill(p,particle->GetNdEdxVtpc1());
 		histos->histnDedxVtpc2Pos->Fill(p,particle->GetNdEdxVtpc2());
 		histos->histnDedxMtpcPos->Fill(p,particle->GetNdEdxMtpc());
+		histos->histnClustersPos->Fill(particle->GetNClustersVtpc1() + particle->GetNClustersVtpc2() + particle->GetNClustersGtpc() + particle->GetNClustersMtpc());
 		histos->histnClustersVtpc1Pos->Fill(particle->GetNClustersVtpc1());
 		histos->histnClustersVtpc2Pos->Fill(particle->GetNClustersVtpc2());
 		histos->histnClustersGtpcPos->Fill(particle->GetNClustersGtpc());
@@ -597,6 +609,7 @@ void Particles::analyze(Particle *particle, const int ener)
 		histos->histnDedxVtpc1Neg->Fill(p,particle->GetNdEdxVtpc1());
 		histos->histnDedxVtpc2Neg->Fill(p,particle->GetNdEdxVtpc2());
 		histos->histnDedxMtpcNeg->Fill(p,particle->GetNdEdxMtpc());
+		histos->histnClustersNeg->Fill(particle->GetNClustersVtpc1() + particle->GetNClustersVtpc2() + particle->GetNClustersGtpc() + particle->GetNClustersMtpc());
 		histos->histnClustersVtpc1Neg->Fill(particle->GetNClustersVtpc1());
 		histos->histnClustersVtpc2Neg->Fill(particle->GetNClustersVtpc2());
 		histos->histnClustersGtpcNeg->Fill(particle->GetNClustersGtpc());
