@@ -20,9 +20,9 @@ void Histos::init(const float momentum)
 		detadphibins[1] = 25;
 	}
 
-	histCharged = new TH1I("histCharged","Multiplicity of charged;N",50,0,50);
-	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",40,0,40);
-	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",40,0,40);
+	histCharged = new TH1I("histCharged","Multiplicity of charged;N",51,-0.5,50.5);
+	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",41,-0.5,40.5);
+	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",41,-0.5,40.5);
 	histMeanCharge = new TH1F("histMeanCharge","Mean charge;charge",23,-1.15,1.15);
 	histAngle = new TH1F("histAngle","Azimuthal angle;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
 	histAngleNegNotrot = new TH1F("histAngleNegNotrot","Azimuthal angle (notrot), neg.;#phi [rad]",50,-TMath::Pi(), TMath::Pi());
@@ -115,21 +115,21 @@ void Histos::init(const float momentum)
 	histnDedxMtpcPos = new TH1I("histnDedxMtpcPos","No. of dE/dx points (MTPC, pos. charged)",151,0,150);
 	histnDedxMtpcNeg = new TH1I("histnDedxMtpcNeg","No. of dE/dx points (MTPC, neg. charged)",151,0,150);
 
-	histnClusters = new TH1I("histnClusters", "Number of all clusters", 301, 0, 300);
-	histnClustersPos = new TH1I("histnClustersPos", "Number of clusters all (pos. charged)", 301, 0, 300);
-	histnClustersNeg = new TH1I("histnClustersNeg", "Number of clusters all (neg. charged)", 301, 0, 300);;
-	histnClustersVtpc1 = new TH1I("histnClustersVtpc1", "Number of clusters in VTPC1", 81, 0, 80);
-	histnClustersVtpc1Pos = new TH1I("histnClustersVtpc1Pos", "Number of clusters in VTPC1 (pos. charged)", 81, 0, 80);
-	histnClustersVtpc1Neg = new TH1I("histnClustersVtpc1Neg", "Number of clusters in VTPC1 (neg. charged)", 81, 0, 80);;
-	histnClustersVtpc2 = new TH1I("histnClustersVtpc2", "Number of clusters in VTPC2", 81, 0, 80);
-	histnClustersVtpc2Pos = new TH1I("histnClustersVtpc2Pos", "Number of clusters in VTPC2 (pos. charged)", 81, 0, 80);
-	histnClustersVtpc2Neg = new TH1I("histnClustersVtpc2Neg", "Number of clusters in VTPC2 (neg. charged)", 81, 0, 80);;
-	histnClustersGtpc = new TH1I("histnClustersGtpc", "Number of clusters in GTPC", 81, 0, 80);
-	histnClustersGtpcPos = new TH1I("histnClustersGtpcPos", "Number of clusters in GTPC (pos. charged)", 81, 0, 80);
-	histnClustersGtpcNeg = new TH1I("histnClustersGtpcNeg", "Number of clusters in GTPC (neg. charged)", 81, 0, 80);;
-	histnClustersMtpc = new TH1I("histnClustersMtpc", "Number of clusters in MTPC", 101, 0, 100);
-	histnClustersMtpcPos = new TH1I("histnClustersMtpcPos", "Number of clusters in MTPC (pos. charged)", 101, 0, 100);
-	histnClustersMtpcNeg = new TH1I("histnClustersMtpcNeg", "Number of clusters in MTPC (neg. charged)", 101, 0, 100);;
+	histnClusters = new TH1I("histnClusters", "Number of all clusters", 301, -0.5, 300.5);
+	histnClustersPos = new TH1I("histnClustersPos", "Number of clusters all (pos. charged)", 301, -0.5, 300.5);
+	histnClustersNeg = new TH1I("histnClustersNeg", "Number of clusters all (neg. charged)", 301, -0.5, 300.5);;
+	histnClustersVtpc1 = new TH1I("histnClustersVtpc1", "Number of clusters in VTPC1", 81, -0.5, 80.5);
+	histnClustersVtpc1Pos = new TH1I("histnClustersVtpc1Pos", "Number of clusters in VTPC1 (pos. charged)", 81, -0.5, 80.5);
+	histnClustersVtpc1Neg = new TH1I("histnClustersVtpc1Neg", "Number of clusters in VTPC1 (neg. charged)", 81, -0.5, 80.5);;
+	histnClustersVtpc2 = new TH1I("histnClustersVtpc2", "Number of clusters in VTPC2", 81, -0.5, 80.5);
+	histnClustersVtpc2Pos = new TH1I("histnClustersVtpc2Pos", "Number of clusters in VTPC2 (pos. charged)", 81, -0.5, 80.5);
+	histnClustersVtpc2Neg = new TH1I("histnClustersVtpc2Neg", "Number of clusters in VTPC2 (neg. charged)", 81, -0.5, 80.5);;
+	histnClustersGtpc = new TH1I("histnClustersGtpc", "Number of clusters in GTPC", 81, -0.5, 80.5);
+	histnClustersGtpcPos = new TH1I("histnClustersGtpcPos", "Number of clusters in GTPC (pos. charged)", 81, -0.5, 80.5);
+	histnClustersGtpcNeg = new TH1I("histnClustersGtpcNeg", "Number of clusters in GTPC (neg. charged)", 81, -0.5, 80.5);;
+	histnClustersMtpc = new TH1I("histnClustersMtpc", "Number of clusters in MTPC", 101, -0.5, 100.5);
+	histnClustersMtpcPos = new TH1I("histnClustersMtpcPos", "Number of clusters in MTPC (pos. charged)", 101, -0.5, 100.5);
+	histnClustersMtpcNeg = new TH1I("histnClustersMtpcNeg", "Number of clusters in MTPC (neg. charged)", 101, -0.5, 100.5);;
 
 	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
 	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
