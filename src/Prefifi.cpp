@@ -13,6 +13,7 @@
 
 #include "Prefifi.h"
 #include "RootWriter.h"
+#include "ClusterGraphs.h"
 #include "Event.h"
 #include "Particle.h"
 
@@ -59,18 +60,21 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 
 	Particles particles;
 	Histos histos;
+	ClusterGraphs clustergraphs;
 	TFile *root_output_file;
 
 	histos.init(beam_momentum);
 	particles.init(&histos, system, beam_momentum);
 	particles.newEvent(true);
 	root_output_file = new TFile(output_filename,"recreate");
+	clustergraphs.setOtherHistFile(root_output_file);
 //End of preparation
 
 	cout << "Writing events" << endl;
 
 //Loop over events
-	for(ev=0; ev<treeNentries; ++ev)
+	//for(ev=0; ev<treeNentries; ++ev)
+	for(ev=0; ev<10000; ++ev)
 	{
 		particletree->GetEntry(ev);
 		
@@ -174,6 +178,9 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 					y_diff = TMath::Abs(y1-y2);
 					eta_diff = TMath::Abs(eta1-eta2);
 
+					if((angle_diff < 0.00552) && (eta_diff < 0.00792))
+						clustergraphs.addGraph(ev, particleA, particleB);
+
 //Filling dydphi and detadphi histograms
 					histos.histDyDphiAll->Fill(angle_diff, y_diff);
 					histos.histDetaDphiAll->Fill(angle_diff, eta_diff);
@@ -229,7 +236,7 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 		//debugfile << "----------" << endl;
 
 		//cout << "\rEvent " << ev;
-		if(!(ev%5000))
+		if(!(ev%500))
 			cout << "Event " << ev << endl;
 
 		particles.newEvent();
@@ -256,6 +263,7 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 	root_output_file->cd();
 	histos.write();
 	histos.clear();
+	clustergraphs.closeFile();
 	root_output_file->Close();
 }
 

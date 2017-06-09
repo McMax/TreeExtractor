@@ -9,7 +9,7 @@ SRC_DIR = $(TOPDIR)/src
 OBJ_DIR = $(TOPDIR)/lib
 INC_DIR = $(TOPDIR)/inc
 
-PEV_DIR = $(TOPDIR)/../Particle_Event
+PEV_DIR = $(TOPDIR)/../Particle_Event_ClusPos
 PEV_LIB = $(PEV_DIR)/lib
 PEV_SRC = $(PEV_DIR)/src
 PEV_INC = $(PEV_DIR)/inc
@@ -20,7 +20,7 @@ PEV_OBJECTS = $(PEV_LIB)/Particle.o $(PEV_LIB)/Event.o $(PEV_LIB)/ParticleTree.o
 
 all: extractor merger
 
-extractor: $(OBJ_DIR)/Extractor.o $(OBJ_DIR)/Prefifi.o $(OBJ_DIR)/RootWriter.o $(PEV_OBJECTS)
+extractor: $(OBJ_DIR)/Extractor.o $(OBJ_DIR)/ClusterGraphs.o $(OBJ_DIR)/Prefifi.o $(OBJ_DIR)/RootWriter.o $(PEV_OBJECTS)
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 merger: $(OBJ_DIR)/Merger.o $(PEV_OBJECTS)
@@ -34,4 +34,4 @@ $(PEV_OBJECTS):
 	@echo "No base libs. Create them"
 
 clean:
-	@rm -rf $(PROGRAM) ./lib
+	@rm -rf extractor merger ./lib

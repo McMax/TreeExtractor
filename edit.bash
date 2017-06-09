@@ -1,2 +1,2 @@
 #!/bin/bash
-vim -p src/* inc/* Makefile Makefile.lxplus
+vim -p src/* inc/* Makefile
