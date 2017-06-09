@@ -167,36 +167,6 @@ public:
 	void init(Histos *histograms, const TString system, const float momentum);
 	void newEvent(bool first = false);
 	void analyze(Particle*, const int);
-	static Float_t choose_dedx(Particle* particle)
-	{
-		static Int_t vtpc1_part;
-		static Int_t vtpc2_part;
-		static Int_t mtpc_part;
-
-		vtpc1_part = 0;
-		vtpc2_part = 0;
-		mtpc_part = 0;
-
-		vtpc1_part = particle->GetNdEdxVtpc1();
-		vtpc2_part = particle->GetNdEdxVtpc2();
-		mtpc_part = particle->GetNdEdxMtpc();
-
-		//std::cout << "dE/dx: VTPC1 part: " << vtpc1_part << "\tVTPC2 part: " << vtpc2_part << "\tMTPC part: " << mtpc_part << std::endl;
-		if((vtpc1_part == 0) && (vtpc2_part == 0) && (mtpc_part == 0))
-		{
-			std::cout << "WTF? Particle with no dE/dx information!" << std::endl;
-			return 0;
-		}
-		else
-		{
-			if(mtpc_part > 0)
-				return (particle->GetdEdxMtpc());
-			else if(vtpc2_part >= vtpc1_part)
-				return (particle->GetdEdxVtpc2());
-			else
-				return (particle->GetdEdxVtpc1());
-		}
-	}
 	static float calc_beta_sym(float b_momentum)	//Calculation of c.m.s. beta with assumption of symmetric system
 	{
 		return (b_momentum/(TMath::Sqrt(b_momentum*b_momentum+nucleon_mass*nucleon_mass)+nucleon_mass));
