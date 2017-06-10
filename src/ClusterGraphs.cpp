@@ -1,6 +1,7 @@
 #include "ClusterGraphs.h"
 #include "Particle.h"
 #include "TFile.h"
+#include "TPaveText.h"
 
 
 ClusterGraphs::ClusterGraphs()
@@ -18,7 +19,7 @@ void ClusterGraphs::setOtherHistFile(TFile* hist_file)
 	other_hist_file = hist_file;
 }
 
-void ClusterGraphs::addGraph(Int_t event_id, Particle* particle1, Particle* particle2)
+void ClusterGraphs::addGraph(Int_t event_id, Particle* particle1, Particle* particle2, AdditionalInfo ai)
 {
 	//First graph
 	cluster_positions = particle1->GetClustersPositions();
@@ -62,12 +63,25 @@ void ClusterGraphs::addGraph(Int_t event_id, Particle* particle1, Particle* part
 	TGraph *cluster_graph2 = new TGraph(cluster_positions->GetEntries(), z2, x2); //Z is drawn as horizontal axis and X as vertical
 	cluster_graph2->SetName(TString::Format("%d", particle2->GetPid()));
 
+	TPaveText *text = new TPaveText(-700,150,-200,450,"NB");
+	text->SetTextColor(kRed);
+	text->AddText(TString::Format("ch=%d, p=(%.3f,%.3f,%.3f)",(particle1->isPositive()) ? 1 : -1,particle1->GetPx(),particle1->GetPy(),particle1->GetPz()));
+	text->AddText(TString::Format("p_{z}^{cms}=%.3f, #eta^{cms}=%.3f, #phi=%.3f",ai.pz_cms1, ai.eta_cms1, ai.phi1));
+	text->AddText("");
+	text->SetTextColor(kBlue);
+	text->AddText(TString::Format("ch=%d, p=(%.3f,%.3f,%.3f)",(particle2->isPositive()) ? 1 : -1,particle2->GetPx(),particle2->GetPy(),particle2->GetPz()));
+	text->AddText(TString::Format("p_{z}^{cms}=%.3f, #eta^{cms}=%.3f, #phi=%.3f",ai.pz_cms2, ai.eta_cms2, ai.phi2));
+	text->AddText("");
+	text->SetTextColor(kBlack);
+	text->AddText(TString::Format("#Delta#eta=%.4f, #Delta#phi=%.4f",ai.deta,ai.dphi));
+
 	//Saving to file
 	path.Form("e%d_p%d_p%d", event_id, particle1->GetPid(), particle2->GetPid());
 	clusters_graphs_file->mkdir(path);
 	clusters_graphs_file->cd(path);
 	cluster_graph1->Write();
 	cluster_graph2->Write();
+	text->Write();
 
 	other_hist_file->cd();
 }

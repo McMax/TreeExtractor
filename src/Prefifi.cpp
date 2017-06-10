@@ -68,6 +68,7 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 	particles.newEvent(true);
 	root_output_file = new TFile(output_filename,"recreate");
 	clustergraphs.setOtherHistFile(root_output_file);
+	AdditionalInfo ai;
 //End of preparation
 
 	cout << "Writing events" << endl;
@@ -179,7 +180,17 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 					eta_diff = TMath::Abs(eta1-eta2);
 
 					if((angle_diff < 0.00552) && (eta_diff < 0.00792))
-						clustergraphs.addGraph(ev, particleA, particleB);
+					{
+						ai.pz_cms1 = pz_cms1;
+						ai.pz_cms2 = pz_cms2;
+						ai.eta_cms1 = eta1;
+						ai.eta_cms2 = eta2;
+						ai.phi1 = angle;
+						ai.phi2 = angle_j;
+						ai.deta = eta_diff;
+						ai.dphi = angle_diff;
+						clustergraphs.addGraph(ev, particleA, particleB, ai);
+					}
 
 //Filling dydphi and detadphi histograms
 					histos.histDyDphiAll->Fill(angle_diff, y_diff);

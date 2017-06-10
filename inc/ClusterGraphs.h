@@ -2,6 +2,18 @@
 #include "TNtuple.h"
 #include "RootWriter.h"
 
+struct AdditionalInfo
+{
+	Float_t pz_cms1;
+	Float_t pz_cms2;
+	Float_t eta_cms1;
+	Float_t eta_cms2;
+	Float_t phi1;
+	Float_t phi2;
+	Float_t deta;
+	Float_t dphi;
+};
+
 class ClusterGraphs
 {
 	TFile *clusters_graphs_file;			//File for storing graphs
@@ -19,5 +31,6 @@ public:
 
 	void closeFile();
 	void setOtherHistFile(TFile*);
-	void addGraph(Int_t, Particle*, Particle*);
+	void addGraph(Int_t, Particle*, Particle*, AdditionalInfo);
 };
+
