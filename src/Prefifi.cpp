@@ -74,8 +74,7 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 	cout << "Writing events" << endl;
 
 //Loop over events
-	//for(ev=0; ev<treeNentries; ++ev)
-	for(ev=0; ev<10000; ++ev)
+	for(ev=0; ev<treeNentries; ++ev)
 	{
 		particletree->GetEntry(ev);
 		

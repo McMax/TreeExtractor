@@ -23,6 +23,7 @@ class ClusterGraphs
 			*x2, *y2, *z2;
 
 	TString path;
+	TString localpath;
 	TFile *other_hist_file;
 
 public:
