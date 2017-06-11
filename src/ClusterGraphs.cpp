@@ -39,6 +39,10 @@ void ClusterGraphs::addGraph(Int_t event_id, Particle* particle1, Particle* part
 		z1[clus] = clus_z;
 	}
 
+	TGraph *cluster_graph_xz1 = new TGraph(cluster_positions->GetEntries(), z1, x1); //Z is drawn as horizontal axis and X as vertical
+	TGraph *cluster_graph_yz1 = new TGraph(cluster_positions->GetEntries(), z1, y1); //Z is drawn as horizontal axis and Y as vertical
+	TGraph *cluster_graph_xy1 = new TGraph(cluster_positions->GetEntries(), x1, y1);
+
 	//Second particle
 	cluster_positions = particle2->GetClustersPositions();
 	cluster_positions->SetBranchAddress("x",&clus_x);
@@ -57,29 +61,27 @@ void ClusterGraphs::addGraph(Int_t event_id, Particle* particle1, Particle* part
 		z2[clus] = clus_z;
 	}
 
+	TGraph *cluster_graph_xz2 = new TGraph(cluster_positions->GetEntries(), z2, x2);
+	TGraph *cluster_graph_yz2 = new TGraph(cluster_positions->GetEntries(), z2, y2);
+	TGraph *cluster_graph_xy2 = new TGraph(cluster_positions->GetEntries(), x2, y2);
+
 	//-----------------------------------------------------
 	//Drawing clusters
 
 	//XZ plane
-	TGraph *cluster_graph_xz1 = new TGraph(cluster_positions->GetEntries(), z1, x1); //Z is drawn as horizontal axis and X as vertical
 	cluster_graph_xz1->SetName(TString::Format("%d", particle1->GetPid()));
-	TGraph *cluster_graph_xz2 = new TGraph(cluster_positions->GetEntries(), z2, x2);
 	cluster_graph_xz2->SetName(TString::Format("%d", particle2->GetPid()));
 
 	//YZ plane
-	TGraph *cluster_graph_yz1 = new TGraph(cluster_positions->GetEntries(), z1, y1); //Z is drawn as horizontal axis and Y as vertical
 	cluster_graph_yz1->SetName(TString::Format("%d", particle1->GetPid()));
-	TGraph *cluster_graph_yz2 = new TGraph(cluster_positions->GetEntries(), z2, y2);
 	cluster_graph_yz2->SetName(TString::Format("%d", particle2->GetPid()));
 
 	//XY plane
-	TGraph *cluster_graph_xy1 = new TGraph(cluster_positions->GetEntries(), x1, y1);
 	cluster_graph_xy1->SetName(TString::Format("%d", particle1->GetPid()));
-	TGraph *cluster_graph_xy2 = new TGraph(cluster_positions->GetEntries(), x2, y2);
 	cluster_graph_xy2->SetName(TString::Format("%d", particle2->GetPid()));
 
 
-	TPaveText *text = new TPaveText(-700,150,-200,450,"NB");
+	TPaveText *text = new TPaveText();
 	text->SetName("info");
 	text->SetTextColor(kRed);
 	text->AddText(TString::Format("ch=%d, p=(%.3f,%.3f,%.3f)",(particle1->isPositive()) ? 1 : -1,particle1->GetPx(),particle1->GetPy(),particle1->GetPz()));
