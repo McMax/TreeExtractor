@@ -2,6 +2,7 @@
 #include "TNtuple.h"
 #include "RootWriter.h"
 
+
 struct AdditionalInfo
 {
 	Float_t pz_cms1;
@@ -26,6 +27,18 @@ class ClusterGraphs
 	TString localpath;
 	TFile *other_hist_file;
 
+	enum TPCs
+	{
+		eVTPC1 = 0,
+		eGTPC  = 1,
+		eVTPC2 = 2,
+		eMTPCR = 3,
+		eMTPCL = 4
+	};
+
+	Int_t nClusters1[5];
+	Int_t nClusters2[5];
+
 public:
 	
 	ClusterGraphs();
@@ -33,5 +46,5 @@ public:
 	void closeFile();
 	void setOtherHistFile(TFile*);
 	void addGraph(Int_t, Particle*, Particle*, AdditionalInfo);
+	void countClusters(Float_t, Float_t, Float_t, Int_t*);
 };
-
