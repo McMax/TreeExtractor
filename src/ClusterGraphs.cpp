@@ -41,7 +41,7 @@ void ClusterGraphs::setOtherHistFile(TFile* hist_file)
 	other_hist_file = hist_file;
 }
 
-void ClusterGraphs::addGraph(Int_t event_id, Particle* particle1, Particle* particle2, AdditionalInfo ai)
+void ClusterGraphs::addGraph(Int_t event_id, UInt_t na61run, UInt_t na61event, Particle* particle1, Particle* particle2, AdditionalInfo ai)
 {
 	//First particle
 	cluster_positions = particle1->GetClustersPositions();
@@ -115,16 +115,18 @@ void ClusterGraphs::addGraph(Int_t event_id, Particle* particle1, Particle* part
 	cluster_graph_xy1->SetName(TString::Format("%d", particle1->GetPid()));
 	cluster_graph_xy2->SetName(TString::Format("%d", particle2->GetPid()));
 
-
 	TPaveText *text = new TPaveText();
 	text->SetName("info");
+	text->AddText(TString::Format("run=%d, NA61 event: %d", na61run, na61event));
 	text->AddText(TString::Format("ch=%d, p=(%.3f,%.3f,%.3f)",(particle1->isPositive()) ? 1 : -1,particle1->GetPx(),particle1->GetPy(),particle1->GetPz()));
 	text->AddText(TString::Format("p_{z}^{cms}=%.3f, #eta^{cms}=%.3f, #phi=%.3f",ai.pz_cms1, ai.eta_cms1, ai.phi1));
 	text->AddText(TString::Format("nVTPC1=%d, nGTPC=%d, nVTPC2=%d, nMTPCR=%d, nMTPCL=%d", nClusters1[eVTPC1], nClusters1[eGTPC], nClusters1[eVTPC2], nClusters1[eMTPCR], nClusters1[eMTPCL]));
+	text->AddText(TString::Format("ppVTPC1=%d, ppGTPC=%d, ppVTPC2=%d, ppMTPC=%d", particle1->GetPPvtpc1(), particle1->GetPPgtpc(), particle1->GetPPvtpc2(), particle1->GetPPmtpc()));
 	text->AddText("");
 	text->AddText(TString::Format("ch=%d, p=(%.3f,%.3f,%.3f)",(particle2->isPositive()) ? 1 : -1,particle2->GetPx(),particle2->GetPy(),particle2->GetPz()));
 	text->AddText(TString::Format("p_{z}^{cms}=%.3f, #eta^{cms}=%.3f, #phi=%.3f",ai.pz_cms2, ai.eta_cms2, ai.phi2));
 	text->AddText(TString::Format("nVTPC1=%d, nGTPC=%d, nVTPC2=%d, nMTPCR=%d, nMTPCL=%d", nClusters2[eVTPC1], nClusters2[eGTPC], nClusters2[eVTPC2], nClusters2[eMTPCR], nClusters2[eMTPCL]));
+	text->AddText(TString::Format("ppVTPC1=%d, ppGTPC=%d, ppVTPC2=%d, ppMTPC=%d", particle2->GetPPvtpc1(), particle2->GetPPgtpc(), particle2->GetPPvtpc2(), particle2->GetPPmtpc()));
 	text->AddText("");
 	text->AddText(TString::Format("#Delta#eta=%.4f, #Delta#phi=%.4f",ai.deta,ai.dphi));
 

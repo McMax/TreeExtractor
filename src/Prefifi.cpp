@@ -188,7 +188,7 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 						ai.phi2 = angle_j;
 						ai.deta = eta_diff;
 						ai.dphi = angle_diff;
-						clustergraphs.addGraph(ev, particleA, particleB, ai);
+						clustergraphs.addGraph(ev, event->GetNA61Run(), event->GetNA61Event(), particleA, particleB, ai);
 					}
 
 //Filling dydphi and detadphi histograms

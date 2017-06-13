@@ -45,6 +45,6 @@ public:
 
 	void closeFile();
 	void setOtherHistFile(TFile*);
-	void addGraph(Int_t, Particle*, Particle*, AdditionalInfo);
+	void addGraph(Int_t, UInt_t, UInt_t, Particle*, Particle*, AdditionalInfo);
 	void countClusters(Float_t, Float_t, Float_t, Int_t*);
 };
