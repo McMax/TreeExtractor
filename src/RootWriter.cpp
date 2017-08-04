@@ -115,8 +115,8 @@ void Histos::init(const float momentum)
 	histnDedxMtpcPos = new TH1I("histnDedxMtpcPos","No. of dE/dx points (MTPC, pos. charged)",151,0,150);
 	histnDedxMtpcNeg = new TH1I("histnDedxMtpcNeg","No. of dE/dx points (MTPC, neg. charged)",151,0,150);
 
-	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
-	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",300,0,150,150,0,3,50,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",300,0,150,150,0,3,50,-TMath::Pi(),TMath::Pi());
 
 	LogBinning(histDedx);
 	LogBinning(histDedxPos);
