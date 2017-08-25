@@ -64,7 +64,12 @@ void mainanalyze(TTree *particletree, const TString system, const float beam_mom
 	TFile *root_output_file;
 
 	histos.init(beam_momentum);
-	particles.init(&histos, system, beam_momentum);
+	if((particles.init(&histos, system, beam_momentum)) == -1)
+	{
+		std::cout << "System not recognized. Exiting." << std::endl;
+		return;
+	}
+
 	particles.newEvent(true);
 	root_output_file = new TFile(output_filename,"recreate");
 //End of preparation

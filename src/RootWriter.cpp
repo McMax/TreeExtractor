@@ -59,7 +59,7 @@ void Histos::init(const float momentum)
 	histPzcmsAll = new TH1F("histPzcmsAll","Longitudinal momentum, CMS;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsNeg = new TH1F("histPzcmsNeg","Longitudinal momentum, CMS, neg.;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsPos = new TH1F("histPzcmsPos","Longitudinal momentum, CMS, pos.;p_{z} [GeV/c]",200,-5,10);
-	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",300, 0, 150);
+	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",400, 0, 200);
 	histMeanPt = new TH1F("histMeanPt","Mean transverse momentum (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtNeg = new TH1F("histMeanPtNeg","Mean transverse momentum, neg. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtPos = new TH1F("histMeanPtPos","Mean transverse momentum, pos. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
@@ -104,8 +104,8 @@ void Histos::init(const float momentum)
 
 	histTTAverageDistance = new TH1D("histTTAverageDistance","Two track average distance;distance [cm]",500,0,25);
 
-	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",300,0,150,150,0,3,50,-TMath::Pi(),TMath::Pi());
-	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",300,0,150,150,0,3,50,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",400,0,200,300,0,3,50,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",400,0,200,300,0,3,50,-TMath::Pi(),TMath::Pi());
 
 	LogBinning(histDedx);
 	LogBinning(histDedxPos);
@@ -323,7 +323,7 @@ Float_t Particles::beta = 0;
 Float_t Particles::gamma = 0;
 Float_t Particles::gamma_beta_e = 0;
 
-void Particles::init(Histos *histograms, const TString system, const float momentum)
+int Particles::init(Histos *histograms, const TString system, const float momentum)
 {
 	histos = histograms;
 	angle = 0.;
@@ -346,14 +346,16 @@ void Particles::init(Histos *histograms, const TString system, const float momen
 		beta = calc_beta_sym(momentum);
 	else
 	{
-		std::cout << "System not recognized. Exiting." << std::endl;
-		return;
+		//std::cout << "System not recognized. Exiting." << std::endl;
+		return -1;
 	}
 	gamma = calc_gamma(momentum);
 	y_cms = 0.5*TMath::Log((1+beta)/(1-beta));
 	std::cout << "Beta factor: " << beta << std::endl;
 	std::cout << "Gamma factor: " << gamma << std::endl;
 	std::cout << "y_cms = " << y_cms << std::endl;
+
+	return 0;
 }
 
 void Particles::newEvent(bool first)
