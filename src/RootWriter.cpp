@@ -104,8 +104,8 @@ void Histos::init(const float momentum)
 
 	histTTAverageDistance = new TH1D("histTTAverageDistance","Two track average distance;distance [cm]",500,0,25);
 
-	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",300,0,150,150,0,3,50,-TMath::Pi(),TMath::Pi());
-	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",300,0,150,150,0,3,50,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",320,0,160,150,0,3,50,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",320,0,160,150,0,3,50,-TMath::Pi(),TMath::Pi());
 
 	LogBinning(histDedx);
 	LogBinning(histDedxPos);
