@@ -150,7 +150,7 @@ public:
 
 	Particles() {}
 
-	void init(Histos *histograms, const TString system, const float momentum);
+	int init(Histos *histograms, const TString system, const float momentum);
 	void newEvent(bool first = false);
 	void analyze(Particle*, const int);
 
