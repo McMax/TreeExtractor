@@ -20,7 +20,7 @@ void Histos::init(const float momentum)
 		detadphibins[1] = 25;
 	}
 
-	histCharged = new TH1I("histCharged","Multiplicity of charged;N",50,0,50);
+	histCharged = new TH1I("histCharged","Multiplicity of charged;N",100,0,100);
 	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",40,0,40);
 	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",40,0,40);
 	histMeanCharge = new TH1F("histMeanCharge","Mean charge;charge",23,-1.15,1.15);
