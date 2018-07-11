@@ -46,7 +46,7 @@ int merge(TString output_filename, const vector<string> datafiles)
 			input_tree->GetEntry(ev);
 			++global_event;
 
-			output_tree.BeginEvent();	//EID will be incremented internally by ParticleTree
+			output_tree.BeginEvent(event->GetNA61Run(), event->GetNA61Event());	//EID will be incremented internally by ParticleTree
 			
 			for(UInt_t part = 0; part < event->GetNpa(); part++)
 			{
