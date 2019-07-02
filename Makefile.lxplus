@@ -1,15 +1,15 @@
 CC	= g++
 LD	= g++
 
-CCFLAGS = `root-config --cflags` -Wall -I$(INC_DIR) -I$(PEV_INC) -I${T61}/T61DST/inc
-LDFLAGS = `root-config --libs --ldflags` -Wall -L./lib -L$(PEV_LIB) -L${NA49_LIB} -lT61DST 
+CCFLAGS = `shine-offline-config --cppflags` -m32 -Wall -I./inc -I$(PEV_INC)
+LDFLAGS = `shine-offline-config --ldflags` -m32 -Wall -L./lib -I$(PEV_LIB)
 
 TOPDIR = .
 SRC_DIR = $(TOPDIR)/src
 OBJ_DIR = $(TOPDIR)/lib
 INC_DIR = $(TOPDIR)/inc
 
-PEV_DIR = $(TOPDIR)/../Particle_Event
+PEV_DIR = $(TOPDIR)/../Particle_Event_GENBOD
 PEV_LIB = $(PEV_DIR)/lib
 PEV_SRC = $(PEV_DIR)/src
 PEV_INC = $(PEV_DIR)/inc
@@ -20,9 +20,12 @@ SOURCES := $(shell find $(SRC_DIR) -type f -name "*.cpp")
 OBJECTS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
 PEV_OBJECTS = $(PEV_LIB)/Particle.o $(PEV_LIB)/Event.o $(PEV_LIB)/ParticleTree.o $(PEV_LIB)/Dict.o
 
-all: $(PROGRAM)
+all: extractor merger
 
-$(PROGRAM): $(OBJECTS) $(PEV_OBJECTS)
+extractor: $(OBJ_DIR)/Extractor.o $(OBJ_DIR)/Prefifi.o $(OBJ_DIR)/RootWriter.o $(PEV_OBJECTS)
+	$(LD) -o $@ $^ $(LDFLAGS)
+
+merger: $(OBJ_DIR)/Merger.o $(PEV_OBJECTS)
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
@@ -33,4 +36,4 @@ $(PEV_OBJECTS):
 	@echo "No base libs. Create them"
 
 clean:
-	@rm -rf $(PROGRAM) ./lib
+	@rm -rf extractor merger ./lib

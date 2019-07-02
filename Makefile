@@ -1,5 +1,5 @@
-CC	= g++-4.9
-LD	= g++-4.9
+CC	= g++
+LD	= g++
 
 CCFLAGS = -O2 `root-config --cflags` -Wall -I./inc -I$(PEV_INC)
 LDFLAGS = -O2 `root-config --libs` -Wall -L./lib -I$(PEV_LIB)
