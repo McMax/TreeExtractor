@@ -20,7 +20,7 @@ void Histos::init(const float momentum)
 		detadphibins[1] = 25;
 	}
 
-	histCharged = new TH1I("histCharged","Multiplicity of charged;N",50,0,50);
+	histCharged = new TH1I("histCharged","Multiplicity of charged;N",100,0,100);
 	histChargedNeg = new TH1I("histChargedNeg","Multiplicity of negatively charged;N",40,0,40);
 	histChargedPos = new TH1I("histChargedPos","Multiplicity of positively charged;N",40,0,40);
 	histMeanCharge = new TH1F("histMeanCharge","Mean charge;charge",23,-1.15,1.15);
@@ -34,6 +34,7 @@ void Histos::init(const float momentum)
 	histThetacms = new TH1F("histThetacms","Polar angle, CMS;#theta [rad]", 100, -TMath::Pi(), 2*TMath::Pi());
 	histThetacmsNeg = new TH1F("histThetacmsNeg","Polar angle, CMS, neg.;#theta [rad]", 50, -TMath::Pi(), 2*TMath::Pi());
 	histThetacmsPos = new TH1F("histThetacmsPos","Polar angle, CMS, pos.;#theta [rad]", 50, -TMath::Pi(), 2*TMath::Pi());
+	histYprot = new TH1F("histYprot","Rapidity with proton mass;y_{p}",100,-2,8);
 	histYpi = new TH1F("histYpi","Rapidity with #pi mass;y_{#pi}",100,-2,8);
 	histYpiNeg = new TH1F("histYpiNeg","Rapidity with #pi mass, neg.;y_{#pi}",100,-2,8);
 	histYpiPos = new TH1F("histYpiPos","Rapidity with #pi mass, pos.;y_{#pi}",100,-2,8);
@@ -56,7 +57,7 @@ void Histos::init(const float momentum)
 	histPzcmsAll = new TH1F("histPzcmsAll","Longitudinal momentum, CMS;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsNeg = new TH1F("histPzcmsNeg","Longitudinal momentum, CMS, neg.;p_{z} [GeV/c]",200,-5,10);
 	histPzcmsPos = new TH1F("histPzcmsPos","Longitudinal momentum, CMS, pos.;p_{z} [GeV/c]",200,-5,10);
-	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",300, 0, 150);
+	histPtot = new TH1F("histPtot","Total momentum;p_{tot} [GeV/c]",400, 0, 200);
 	histMeanPt = new TH1F("histMeanPt","Mean transverse momentum (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtNeg = new TH1F("histMeanPtNeg","Mean transverse momentum, neg. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
 	histMeanPtPos = new TH1F("histMeanPtPos","Mean transverse momentum, pos. (ev. without 0 mult.);M(p_{T}) [GeV/c]",100,0,2);
@@ -83,8 +84,8 @@ void Histos::init(const float momentum)
 
 	histInvMass = new TH1D("histInvMass","Invariant mass (assumed #pi mass);m_{inv} [GeV/c^{2}]",5000,0,5);
 
-	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
-	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,40,0,2,36,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixPos = new TH3I("histPartPopMatrixPos","Particle population matrix, pos. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",400,0,300,150,0,3,50,-TMath::Pi(),TMath::Pi());
+	histPartPopMatrixNeg = new TH3I("histPartPopMatrixNeg","Particle population matrix, neg. charged; p_{tot} [GeV/c]; p_{T} [GeV/c]; #phi [rad]",150,0,150,150,0,3,50,-TMath::Pi(),TMath::Pi());
 }
 
 void Histos::write()
@@ -103,6 +104,7 @@ void Histos::write()
 	histThetacms->Write();
 	histThetacmsPos->Write();
 	histThetacmsNeg->Write();
+	histYprot->Write();
 	histYpi->Write();
 	histYpiPos->Write();
 	histYpiNeg->Write();
@@ -168,6 +170,7 @@ void Histos::clear()
 	delete 	histThetacms;
 	delete 	histThetacmsPos;
 	delete 	histThetacmsNeg;
+	delete 	histYprot;
 	delete 	histYpi;
 	delete 	histYpiPos;
 	delete 	histYpiNeg;
@@ -237,7 +240,7 @@ void Particles::init(Histos *histograms, const TString system, const float momen
 	histos = histograms;
 	angle = 0.;
 	theta = theta_cms = 0.;
-	y_pi = y_cms = y_pi_cms = y_proton_cms = 0.;
+	y_pi = y_cms = y_pi_cms = y_proton = 0.;
 	eta = eta_cms = 0.;
 	pz_cms = pt = 0.;
 	particle_charge = All;
@@ -332,7 +335,7 @@ void Particles::analyze(Particle *particle, const int ener)
 	theta = TMath::ATan2(pt,pz);
 	y_pi = 0.5*TMath::Log((E_pi+pz)/(E_pi-pz));
 	y_pi_cms = y_pi - y_cms;
-	y_proton_cms = 0.5*TMath::Log((E_proton+pz)/(E_proton-pz)) - y_cms;
+	y_proton = 0.5*TMath::Log((E_proton+pz)/(E_proton-pz));
 	theta_cms = TMath::ATan2(pt,pz_cms);
 
 	eta  = -TMath::Log(TMath::Tan(theta/2.));
@@ -343,6 +346,7 @@ void Particles::analyze(Particle *particle, const int ener)
 
 	mean_pt[All] += pt;
 
+	histos->histYprot->Fill(y_proton);
 	histos->histYpi->Fill(y_pi);
 	histos->histYcms->Fill(y_pi_cms);
 	histos->histEta->Fill(eta);

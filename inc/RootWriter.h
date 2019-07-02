@@ -40,6 +40,7 @@ struct Histos
 	TH1F	*histThetacmsNeg;
 	TH1F	*histThetacmsPos;
 
+	TH1F	*histYprot;
 	TH1F	*histYpi;
 	TH1F	*histYpiNeg;
 	TH1F	*histYpiPos;
@@ -109,7 +110,7 @@ class Particles
 	Float_t	angle,
 			theta, theta_cms,
 			y_pi, y_pi_cms,
-			y_proton_cms,
+			y_proton,
 			eta, eta_cms,
 			E_pi, E_proton,
 			px, py, pz, p, pt, pz_cms,
